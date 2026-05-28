@@ -1,0 +1,1457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<!-- stardust:provenance
+  writtenBy:         stardust:prototype (variant A-rich, iteration 2: lenis + C-cinematic hero)
+  writtenAt:         2026-05-28T04:00:00Z
+  page:              home
+  variant:           A-rich (image-richer + kinetic surface-fork of A)
+  parentVariant:     A
+  pageUrl:           https://wheelercat.com/
+  composedFrom:
+    - "nav (utility + main 7-item + mega): A-verbatim"
+    - "hero composition + motion: C-cinematic (WHEELER monogram unmask + word-clip-path reveals + data-anim entrance) + Compact_Track_Loader bg (per H)"
+    - "signage marquee top-of-page: C-cinematic"
+    - "finance cards: A's 3-up grid + C-cinematic motion (data-anim slide-up + data-flip on 60/500 numerals)"
+    - "service tiles: image-fade-on-hover (kept) + data-anim entrance (NEW per user — same as finance cards)"
+    - "blog cards: data-anim entrance (NEW per user — same as finance cards)"
+    - "brand logos strip: A-verbatim's 5-logo component"
+    - "locations: G-style yellow eyebrow band + narrative proofs (with data-countup on 18/75/24)"
+    - "footer: A's mega footer"
+  motion:
+    runtime: lenis-based canonical motion runtime (embedded verbatim from skills/prototype/reference/motion-runtime.md)
+    lenisAssets: { js: lenis.min.js (local relative), css: lenis.min.css (local relative) }
+    register: kinetic-display
+    registerSource: user-direction
+    registerTuning: { parallax.translate: 30, cards.slide: 48, cards.stagger: 0.16, wordmark.clip: 80 }
+    moves:
+      - "top signage marquee (.hero-marquee + .marquee__track, 30s loop, parallax up on scroll)"
+      - "WHEELER monogram letter-by-letter unmask (data-split on .hero__monogram)"
+      - "hero headline word-clip-path reveals (.display-head + .word spans)"
+      - "hero eyebrow + supporting + actions slide-up (data-anim)"
+      - "finance card slide-up (data-anim, stagger 0.16)"
+      - "finance numerals split-flap (data-flip='60', data-flip='500')"
+      - "service tile slide-up (data-anim — same as finance cards per user)"
+      - "service tile image-fade-on-hover (kept from previous iteration)"
+      - "blog card slide-up (data-anim — same as finance cards per user)"
+      - "locations stat numerals count-up (data-countup='18'/'75'/'24')"
+      - "section heads word-clip-path reveals (.display-head .word)"
+    reducedMotionFallback: "@media (prefers-reduced-motion: reduce) + canonical runtime's prefersReducedMotion branch neutralizes everything (no marquee scroll, no parallax, no splits, no countups animated, no flips animated, no clip-path reveals)"
+    noScriptFallback: "<noscript><style>...</style></noscript>" inline in <head>"
+  paletteSource:     captured Mode A
+  brandFaithfulInversions:
+    - pure-white-as-page-ground
+    - pure-#272727-headings
+    - hex-format-not-OKLCH
+    - saturated-yellow (Cat brand-protected)
+  derivedColors:     ["#E6B800 yellow hover", "#1A1A1A dark hover"]
+  imagesUsed:
+    hero: "assets/media/Compact_Track_Loader-3b9bd4.webp (per H — no-text equipment portrait)"
+    serviceTileHovers:
+      - "FIELD SERVICE: I7A0069-f55d9f.webp"
+      - "SHOP SERVICE: Wheeler_Campus-0d3589.webp"
+      - "PARTS.CAT.COM: CM2022040-2b9745.webp"
+      - "MAINTENANCE SERVICE: Excavators-24bfa6.webp"
+      - "EQUIPMENT REBUILDS: reliable-v3-scaled-c2c1e1.jpg"
+      - "REQUEST SERVICE ONLINE: aerial_resource-e5e159.webp"
+    blogCards:
+      - "Preventative Equipment Maintenance: Excavators-24bfa6.webp"
+      - "Aerial Lift Maintenance: aerial_resource-e5e159.webp"
+      - "Landscaping Equipment Guide: landscape_blog-7260b0.webp"
+    brandLogos: "Campbell / JLG / Monson / Gardner / SFS (all captured)"
+  voiceClassification:
+    - { section: header, classification: captured-verbatim }
+    - { section: hero, classification: captured-verbatim (headline + CTAs) + direction-authorized (supporting line + WHEELER monogram per C-cinematic move) }
+    - { section: signage-marquee, classification: direction-authorized chrome (kinetic-display register signature) }
+    - { section: finance, classification: captured-verbatim }
+    - { section: services, classification: captured-verbatim }
+    - { section: blog-cards, classification: captured-verbatim (titles match captured wheelercat.com blog index per user screenshot) }
+    - { section: brand-logos, classification: captured-verbatim (real logos, no PLACEHOLDER) }
+    - { section: locations, classification: direction-authorized narrative-proof + captured branch names }
+    - { section: footer, classification: captured-verbatim }
+  unsourcedContent: []
+  wcagContrast:
+    - "#272727 on #FFFFFF: 14.0:1 AAA"
+    - "#454545 on #FFFFFF: 9.7:1 AAA"
+    - "#FFFFFF on #272727: 14.7:1 AAA"
+    - "#272727 on #FFCC00: 12.6:1 AAA"
+    - "#FFFFFF on darkened-hover-photo (rgba(18,18,18,0.78) overlay): ~12:1 AAA"
+    - "REFUSED: white on yellow (1.95:1)"
+  stardustVersion:   0.10.0
+-->
+<noscript><style>
+  /* No-JS fallback: force all motion-hidden initial states to visible end state */
+  [data-anim], [data-tile-anim], [data-split] span {
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+    clip-path: none !important;
+  }
+  .word { clip-path: none !important; transform: none !important; }
+  [data-countup], [data-flip] { visibility: visible !important; }
+  .hero__inner > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+</style></noscript>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Wheeler Cat - Construction Equipment, Tool & Trailer Rental & Sales</title>
+<meta name="description" content="Wheeler Cat offers Construction Equipment, Tool & Trailer Rental & Sales across 18 locations in Utah and parts of Arizona, Nevada & Wyoming.">
+<link rel="stylesheet" href="lenis.min.css">
+<style>
+:root {
+  --color-page: #FFFFFF;
+  --color-body: #454545;
+  --color-heading: #272727;
+  --color-cat-yellow: #FFCC00;
+  --color-cat-yellow-hover: #E6B800;
+  --color-surface-dark: #272727;
+  --color-surface-dark-hover: #1A1A1A;
+  --color-warm-stone: #E5E3DF;
+  --color-text-on-dark: #FFFFFF;
+  --color-text-on-yellow: #272727;
+  --color-overlay: rgba(18,18,18,0.55);
+  --color-overlay-strong: rgba(18,18,18,0.78);
+
+  --fs-100: 1rem;
+  --fs-125: 1.25rem;
+  --fs-156: 1.563rem;
+  --fs-195: 1.953rem;
+  --fs-244: 2.441rem;
+  --fs-305: 3.052rem;
+  --fs-381: 3.815rem;
+  --fs-label: 0.8rem;
+  --fs-monogram: clamp(3.5rem, 11vw, 9rem);
+
+  --sp-xs: 4px;
+  --sp-sm: 8px;
+  --sp-md: 16px;
+  --sp-lg: 24px;
+  --sp-xl: 32px;
+  --sp-xxl: 48px;
+  --sp-section: 64px;
+
+  --r-primary: 5px;
+  --r-card: 8px;
+  --r-pill: 999px;
+
+  --container-max: 1400px;
+  --grid-gap: 24px;
+
+  --shadow-card: rgba(0,0,0,0.18) 0px 6px 16px 0px;
+  --shadow-card-strong: rgba(0,0,0,0.8) 0px 6px 16px 0px;
+
+  --font-display: "Roboto Condensed", "Roboto", system-ui, sans-serif;
+  --font-body: "Roboto", system-ui, sans-serif;
+  --font-icon: "icomoon";
+
+  --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@font-face { font-family: "Roboto Condensed"; font-weight: 400 700; font-style: normal; font-display: swap; src: url("assets/fonts/ieVl2ZhZI2eCN5jzbjEETS9weq8-19K7DQ.woff2") format("woff2"); }
+@font-face { font-family: "Roboto"; font-weight: 300 700; font-style: normal; font-display: swap; src: url("assets/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2") format("woff2"); }
+@font-face { font-family: "Roboto"; font-weight: 700; font-style: normal; font-display: swap; src: url("assets/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2") format("woff2"); }
+@font-face { font-family: "icomoon"; src: url("assets/fonts/icomoon.ttf") format("truetype"); font-weight: normal; font-style: normal; font-display: block; }
+@font-face {
+  font-family: "Oswald";
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+  src: url("assets/fonts/TK3IWkUHHAIjg75cFRf3bXL8LICs1_Fv40pKlN4NNSeSASz7FmlWHYg.woff2") format("woff2");
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: var(--fs-100);
+  line-height: 1.5;
+  color: var(--color-body);
+  background: var(--color-page);
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+button { font: inherit; cursor: pointer; }
+
+.container { width: 100%; max-width: var(--container-max); margin: 0 auto; padding-left: var(--sp-lg); padding-right: var(--sp-lg); }
+.burger { display: none; }
+
+/* Type */
+.display, .headline, .title, .sub-title, .label {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-heading);
+  margin: 0;
+  text-wrap: balance;
+}
+.display { font-size: clamp(2.441rem, 5vw, var(--fs-381)); line-height: 1.05; letter-spacing: 0.02em; }
+.headline { font-size: clamp(1.953rem, 3.5vw, var(--fs-305)); line-height: 1.1; letter-spacing: 0.02em; }
+.title { font-size: var(--fs-195); line-height: 1.15; letter-spacing: 0.015em; }
+.sub-title { font-size: var(--fs-156); line-height: 1.2; letter-spacing: 0.015em; }
+.label { font-size: var(--fs-label); line-height: 1.2; letter-spacing: 0.08em; }
+.body-copy { font-size: var(--fs-100); line-height: 1.55; color: var(--color-body); margin: 0; max-width: 65ch; text-wrap: pretty; }
+
+/* Display-head word-clip-path reveals (C-cinematic pattern) */
+.display-head .word { display: inline-block; overflow: hidden; will-change: clip-path, transform; }
+
+/* Icons */
+.icon {
+  font-family: var(--font-icon) !important;
+  font-style: normal; font-weight: normal; font-variant: normal;
+  text-transform: none; line-height: 1;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  speak: never; display: inline-block;
+}
+.icon-menu::before     { content: "\e904"; }
+.icon-map-pin::before  { content: "\e906"; }
+.icon-new::before      { content: "\e907"; }
+.icon-used::before     { content: "\e90c"; }
+.icon-rent::before     { content: "\e909"; }
+.icon-order::before    { content: "\e908"; }
+.icon-service::before  { content: "\e90a"; }
+.icon-phone::before    { content: "\e90b"; }
+.icon-facebook::before { content: "\e900"; }
+.icon-instagram::before{ content: "\e902"; }
+.icon-linkedin::before { content: "\e903"; }
+.icon-youtube::before  { content: "\e90d"; }
+.icon-twitter::before  { content: "\e905"; }
+.icon-left-arrow::before { content: "\e901"; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: var(--sp-sm);
+  font-family: var(--font-display); font-weight: 700; font-size: 0.875rem;
+  letter-spacing: 0.06em; text-transform: uppercase;
+  padding: 12px 24px; border-radius: var(--r-primary);
+  border: 1px solid transparent;
+  transition: background 200ms var(--ease-out), color 200ms var(--ease-out), border-color 200ms var(--ease-out);
+  cursor: pointer; text-decoration: none;
+}
+.btn-primary { background: var(--color-cat-yellow); color: var(--color-text-on-yellow); border-color: var(--color-cat-yellow); }
+.btn-primary:hover, .btn-primary:focus-visible { background: var(--color-surface-dark); color: var(--color-cat-yellow); border-color: var(--color-surface-dark); outline: none; }
+.btn-secondary { background: transparent; color: var(--color-heading); border-color: var(--color-heading); padding: 10px 20px; }
+.btn-secondary:hover, .btn-secondary:focus-visible { background: var(--color-surface-dark); color: var(--color-text-on-dark); outline: none; }
+.btn-ghost-light { background: transparent; color: var(--color-text-on-dark); border-color: var(--color-text-on-dark); padding: 10px 20px; }
+.btn-ghost-light:hover { background: var(--color-cat-yellow); color: var(--color-text-on-yellow); border-color: var(--color-cat-yellow); }
+
+/* ───────── TOP UTILITY STRIP (yellow stripe — 2 visible + "More ▾" dropdown) ───────── */
+.utility-strip {
+  background: var(--color-cat-yellow);
+  color: var(--color-text-on-yellow);
+  border-bottom: 1px solid rgba(39,39,39,0.15);
+  position: relative;
+  z-index: 51;
+}
+.utility-strip__inner {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding: 8px 0;
+  gap: var(--sp-lg);
+  flex-wrap: wrap;
+  position: relative;
+}
+.utility-strip__list {
+  display: inline-flex;
+  gap: var(--sp-lg);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+.utility-strip__list a,
+.utility-strip__more-trigger {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-text-on-yellow);
+  transition: opacity 150ms var(--ease-out);
+  background: transparent;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.utility-strip__list a:hover, .utility-strip__list a:focus-visible,
+.utility-strip__more-trigger:hover, .utility-strip__more-trigger:focus-visible {
+  opacity: 0.65;
+  outline: none;
+}
+.utility-strip__more {
+  position: relative;
+}
+.utility-strip__more-trigger::after {
+  content: "▾";
+  font-size: 0.6rem;
+  margin-left: 2px;
+  opacity: 0.7;
+}
+.utility-strip__more-menu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  background: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
+  min-width: 220px;
+  padding: var(--sp-sm) 0;
+  border-top: 3px solid var(--color-cat-yellow);
+  box-shadow: 0 12px 32px rgba(0,0,0,0.3);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-6px);
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+  z-index: 60;
+  list-style: none;
+  margin: 0;
+}
+.utility-strip__more:hover .utility-strip__more-menu,
+.utility-strip__more:focus-within .utility-strip__more-menu {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.utility-strip__more-menu li { display: block; }
+.utility-strip__more-menu a {
+  display: block;
+  padding: 8px var(--sp-lg);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.85rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(255,255,255,0.85);
+  opacity: 1;
+}
+.utility-strip__more-menu a:hover, .utility-strip__more-menu a:focus-visible {
+  color: var(--color-cat-yellow);
+  background: rgba(255,204,0,0.06);
+  opacity: 1;
+}
+
+/* ───────── HEADER ───────── */
+.site-header { position: sticky; top: 0; z-index: 50; background: var(--color-surface-dark); color: var(--color-text-on-dark); }
+
+.main-header { background: var(--color-surface-dark); }
+.main-header__inner { display: flex; justify-content: space-between; align-items: stretch; padding: 0; gap: var(--sp-md); }
+.main-header__logo { display: inline-flex; align-items: center; padding: 14px 0; }
+.main-header__logo img { height: 56px; width: auto; }
+.main-nav__phone {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  background: var(--color-cat-yellow);
+  color: var(--color-text-on-yellow);
+  padding: 0 var(--sp-md);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.9rem;
+  letter-spacing: 0.04em;
+}
+.main-nav__phone:hover { background: var(--color-cat-yellow-hover); }
+
+.burger { background: transparent; border: 1px solid var(--color-text-on-dark); color: var(--color-text-on-dark); width: 44px; height: 44px; border-radius: var(--r-primary); align-items: center; justify-content: center; font-size: 1.5rem; }
+.burger:focus-visible { outline: 2px solid var(--color-cat-yellow); outline-offset: 2px; }
+
+/* ───────── DEPARTMENT ROW (dark grey bottom layer — captured 10 dept links) ───────── */
+.mega-nav { background: #1a1a1a; border-top: 1px solid rgba(255,255,255,0.06); }
+.mega-nav__inner {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: var(--sp-lg);
+  padding: 10px 0;
+}
+.mega-nav__inner a {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-on-dark);
+  transition: color 150ms var(--ease-out);
+}
+.mega-nav__inner a:hover, .mega-nav__inner a:focus-visible {
+  color: var(--color-cat-yellow);
+  outline: none;
+}
+
+/* ───────── PATTERN A · 4-VERB PRIMARY NAV (inline in the black main-header) ───────── */
+.primary-verbs {
+  display: flex;
+  align-items: stretch;
+  flex: 1;
+  justify-content: center;
+}
+.verb {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 14px var(--sp-xl);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-on-dark);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  text-decoration: none;
+  transition: background 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+.verb:last-child { border-right: 1px solid rgba(255,255,255,0.08); }
+.verb:hover, .verb:focus-visible {
+  background: #1a1a1a;
+  color: var(--color-cat-yellow);
+  outline: none;
+}
+.verb .icon { font-size: 18px; color: var(--color-cat-yellow); }
+.verb .verb-sub {
+  font-size: 0.62rem;
+  letter-spacing: 0.12em;
+  color: rgba(255,255,255,0.55);
+  font-weight: 400;
+  transition: color 200ms;
+}
+.verb:hover .verb-sub, .verb:focus-visible .verb-sub { color: rgba(255,204,0,0.7); }
+
+/* Verb dropdown — opens below the main-header into a dark panel */
+.verb__dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  background: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
+  min-width: 260px;
+  padding: var(--sp-md) 0;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 200ms var(--ease-out), transform 200ms var(--ease-out);
+  z-index: 40;
+  border-top: 3px solid var(--color-cat-yellow);
+  box-shadow: 0 16px 36px rgba(0,0,0,0.4);
+  list-style: none;
+  margin: 0;
+}
+.verb:hover .verb__dropdown, .verb:focus-within .verb__dropdown {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.verb__dropdown li { display: block; }
+.verb__dropdown a {
+  display: block;
+  padding: 10px var(--sp-lg);
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.9rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  color: rgba(255,255,255,0.85);
+  transition: color 150ms, background 150ms;
+}
+.verb__dropdown a:hover, .verb__dropdown a:focus-visible {
+  color: var(--color-cat-yellow);
+  background: rgba(255,204,0,0.05);
+}
+
+/* ───────── HERO — B's typography + Compact_Track_Loader bg + load-only fade-in ───────── */
+.hero {
+  position: relative;
+  min-height: 660px;
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(to right,
+                      rgba(18,18,18,0.85) 0%,
+                      rgba(18,18,18,0.65) 40%,
+                      rgba(18,18,18,0.30) 75%,
+                      rgba(18,18,18,0.10) 100%),
+                    url("assets/media/Compact_Track_Loader-3b9bd4.webp");
+  background-size: cover;
+  background-position: center;
+  color: var(--color-text-on-dark);
+  padding: calc(var(--sp-section) * 1.5) 0;
+  overflow: hidden;
+}
+/* Override the centered .container behavior so hero copy hugs the viewport's left edge.
+   Padding scales 24px → 96px with viewport so it never feels cramped on narrow screens
+   nor floats on widescreens. */
+.hero .container {
+  max-width: none;
+  padding-left: clamp(var(--sp-lg), 5vw, 96px);
+  padding-right: var(--sp-lg);
+}
+.hero__inner {
+  max-width: 1100px;
+  margin-left: 0;
+}
+/* Supporting text + CTAs stay at a comfortable reading width, but the headline
+   is allowed to span wider so it scales bigger across both lines. */
+.hero__supporting, .hero__actions { max-width: 56ch; }
+.hero__eyebrow {
+  color: var(--color-cat-yellow);
+  display: inline-block;
+  margin-bottom: var(--sp-md);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-cat-yellow);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+}
+.hero__headline {
+  color: var(--color-text-on-dark);
+  /* Oswald: more compressed than Roboto Condensed; matches captured wheelercat hero proportions */
+  font-family: "Oswald", "Roboto Condensed", "Roboto", system-ui, sans-serif;
+  font-weight: 700;
+  font-size: clamp(2.4rem, 7.2vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+  margin: 0 0 var(--sp-lg);
+}
+.hero__headline-line { display: block; }
+.hero__headline-line--accent { color: var(--color-cat-yellow); }
+.hero__supporting {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.4vw, 1.25rem);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: var(--sp-xl);
+  color: var(--color-text-on-dark);
+  max-width: 64ch;
+}
+.hero__sup-accent { color: var(--color-cat-yellow); }
+.hero__sup-italic { font-style: italic; }
+.hero__actions { display: inline-flex; gap: var(--sp-md); flex-wrap: wrap; }
+
+/* White pill CTA — for the dark hero */
+.btn-pill-light {
+  background: var(--color-text-on-dark);
+  color: var(--color-text-on-yellow);
+  border-color: var(--color-text-on-dark);
+  border-radius: var(--r-pill);
+  padding: 14px 28px;
+  letter-spacing: 0.08em;
+}
+.btn-pill-light:hover, .btn-pill-light:focus-visible {
+  background: var(--color-cat-yellow);
+  color: var(--color-text-on-yellow);
+  border-color: var(--color-cat-yellow);
+  outline: none;
+}
+
+/* Hero load-only fade-in (NOT scroll-driven) */
+@keyframes hero-fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.hero__inner > * {
+  opacity: 0;
+  animation: hero-fade-in 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+.hero__eyebrow    { animation-delay: 100ms; }
+.hero__headline   { animation-delay: 250ms; }
+.hero__supporting { animation-delay: 450ms; }
+.hero__actions    { animation-delay: 650ms; }
+
+/* ───────── FINANCE BAND ───────── */
+.finance { background: var(--color-page); padding: var(--sp-section) 0; }
+.finance__head { text-align: center; margin-bottom: var(--sp-xxl); }
+.finance__head .label { color: var(--color-cat-yellow); display: inline-block; margin-bottom: var(--sp-sm); padding-bottom: 4px; border-bottom: 1px solid var(--color-cat-yellow); }
+.finance__grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-lg); }
+.finance-card {
+  background: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
+  border-radius: var(--r-primary);
+  padding: var(--sp-xl);
+  box-shadow: var(--shadow-card-strong);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  min-height: 320px;
+  position: relative;
+  overflow: hidden;
+}
+.finance-card::before { content: ""; position: absolute; inset: 0 0 auto 0; height: 4px; background: var(--color-cat-yellow); }
+.finance-card__eyebrow { color: var(--color-cat-yellow); display: inline-block; padding-bottom: 3px; border-bottom: 1px solid var(--color-cat-yellow); align-self: flex-start; }
+.finance-card__title { color: var(--color-text-on-dark); font-size: var(--fs-156); line-height: 1.15; text-wrap: balance; }
+.finance-card__title [data-flip] {
+  color: var(--color-cat-yellow);
+  display: inline-block;
+  font-variant-numeric: tabular-nums;
+  min-width: 1.2em;
+  text-align: center;
+}
+.finance-card__body { color: rgba(255,255,255,0.85); }
+.finance-card__cta { margin-top: auto; align-self: flex-start; }
+
+/* ───────── SERVICES — image-fade-on-hover (kept) + data-anim entrance (NEW) ───────── */
+.services { background: var(--color-page); padding: var(--sp-section) 0; }
+.services__head { text-align: center; margin-bottom: var(--sp-xxl); }
+.services__eyebrow { color: var(--color-cat-yellow); display: inline-block; margin-bottom: var(--sp-sm); padding-bottom: 4px; border-bottom: 1px solid var(--color-cat-yellow); }
+.services__title { color: var(--color-heading); }
+.services__grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--sp-md); }
+
+.service-tile {
+  position: relative;
+  background: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
+  border-radius: var(--r-primary);
+  padding: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  min-height: 240px;
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+}
+.service-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out-expo);
+  z-index: -2;
+}
+.service-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  /* Gradient overlay: heavier at the bottom (where the title sits) so text stays AAA-legible,
+     lighter at the top so the equipment photo reads. Lighter than the previous flat 0.78. */
+  background: linear-gradient(to top,
+    rgba(18,18,18,0.82) 0%,
+    rgba(18,18,18,0.55) 50%,
+    rgba(18,18,18,0.30) 100%);
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out-expo);
+  z-index: -1;
+}
+.service-tile:hover, .service-tile:focus-visible { outline: none; }
+/* Reveal on hover OR focus OR sticky .is-revealed class (set by JS once and never removed). */
+.service-tile:hover::before, .service-tile:focus-visible::before, .service-tile.is-revealed::before { opacity: 1; }
+.service-tile:hover::after,  .service-tile:focus-visible::after,  .service-tile.is-revealed::after  { opacity: 1; }
+
+.service-tile--field::before    { background-image: url("assets/media/I7A0069-f55d9f.webp"); }
+.service-tile--shop::before     { background-image: url("assets/media/Wheeler_Campus-0d3589.webp"); }
+.service-tile--parts::before    { background-image: url("assets/media/CM2022040-2b9745.webp"); }
+.service-tile--maint::before    { background-image: url("assets/media/Excavators-24bfa6.webp"); }
+.service-tile--rebuilds::before { background-image: url("assets/media/reliable-v3-scaled-c2c1e1.jpg"); }
+.service-tile--online::before   { background-image: url("assets/media/aerial_resource-e5e159.webp"); }
+
+.service-tile__icon { font-size: 40px; color: var(--color-cat-yellow); line-height: 1; transition: transform 300ms var(--ease-out); }
+.service-tile:hover .service-tile__icon { transform: scale(1.1); }
+.service-tile__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-text-on-dark);
+  margin-top: auto;
+  text-wrap: balance;
+}
+.services__footer { margin-top: var(--sp-xxl); text-align: center; }
+
+/* ───────── BLOG CARDS ───────── */
+.blog-cards { background: var(--color-warm-stone); padding: var(--sp-section) 0; }
+.blog-cards__head { text-align: center; margin-bottom: var(--sp-xxl); }
+.blog-cards__eyebrow { color: var(--color-heading); display: inline-block; margin-bottom: var(--sp-sm); padding-bottom: 4px; border-bottom: 1px solid var(--color-cat-yellow); }
+.blog-cards__title { color: var(--color-heading); }
+.blog-cards__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--sp-md); }
+.blog-card {
+  position: relative;
+  aspect-ratio: 2 / 3;
+  border-radius: var(--r-card);
+  overflow: hidden;
+  color: var(--color-text-on-dark);
+  display: flex;
+  align-items: flex-end;
+  text-decoration: none;
+  isolation: isolate;
+}
+.blog-card:focus-visible { outline: 2px solid var(--color-cat-yellow); outline-offset: 4px; }
+.blog-card__bg {
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  transition: transform 900ms cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: transform;
+  z-index: 0;
+}
+.blog-card:hover .blog-card__bg,
+.blog-card:focus-visible .blog-card__bg {
+  transform: scale(1.08);
+}
+.blog-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(18,18,18,0.92) 0%, rgba(18,18,18,0.6) 40%, rgba(18,18,18,0.05) 70%, rgba(18,18,18,0) 100%);
+  z-index: 1;
+}
+.blog-card__inner { position: relative; z-index: 2; padding: var(--sp-xl) var(--sp-lg); width: 100%; }
+.blog-card__title {
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.2rem;
+  line-height: 1.2;
+  color: var(--color-text-on-dark);
+  margin: 0 0 var(--sp-md);
+  text-wrap: balance;
+}
+.blog-card__more {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-cat-yellow);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: gap 200ms var(--ease-out);
+}
+.blog-card__more::after {
+  content: "›";
+  font-family: var(--font-body);
+  font-weight: 700;
+  font-size: 1.25rem;
+  line-height: 0.7;
+  transition: transform 200ms var(--ease-out);
+}
+.blog-card:hover .blog-card__more { gap: 10px; }
+.blog-card:hover .blog-card__more::after { transform: translateX(2px); }
+
+.blog-card--maint     .blog-card__bg { background-image: url("assets/media/Excavators-24bfa6.webp"); }
+.blog-card--aerial    .blog-card__bg { background-image: url("assets/media/aerial_resource-e5e159.webp"); }
+.blog-card--landscape .blog-card__bg { background-image: url("assets/media/landscape_blog-7260b0.webp"); }
+.blog-card--cva       .blog-card__bg { background-image: url("assets/media/CM2022040-2b9745.webp"); }
+
+/* ───────── BRAND LOGOS ───────── */
+.brand-logos { background: var(--color-page); padding: var(--sp-xxl) 0; border-top: 1px solid rgba(39,39,39,0.08); border-bottom: 1px solid rgba(39,39,39,0.08); }
+.brand-logos__head { text-align: center; margin-bottom: var(--sp-xl); }
+.brand-logos__eyebrow { font-family: var(--font-display); font-weight: 700; font-size: var(--fs-label); letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-body); display: inline-block; padding-bottom: 4px; border-bottom: 1px solid var(--color-cat-yellow); }
+.logo-track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-xl);
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+.logo-track img { max-height: 64px; width: auto; margin: 0 auto; filter: grayscale(100%); opacity: 0.7; transition: opacity 220ms var(--ease-out), filter 220ms var(--ease-out); }
+.logo-track img:hover { filter: grayscale(0%); opacity: 1; }
+
+/* ───────── LOCATIONS (G-version: yellow eyebrow ribbon + DARK ground below) ───────── */
+.locations { background: var(--color-surface-dark); color: var(--color-text-on-dark); padding: 0 0 var(--sp-section); }
+.locations__eyebrow-band {
+  background: var(--color-cat-yellow);
+  color: var(--color-text-on-yellow);
+  padding: 12px 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.85rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  text-align: center;
+  margin-bottom: var(--sp-xxl);
+}
+.locations__proof { font-size: var(--fs-125); line-height: 1.5; color: rgba(255,255,255,0.85); text-align: center; max-width: 70ch; margin: 0 auto var(--sp-xxl); }
+.locations__proof strong { color: var(--color-text-on-dark); font-weight: 700; }
+.locations__proof [data-countup] { font-family: var(--font-display); font-weight: 700; color: var(--color-cat-yellow); font-variant-numeric: tabular-nums; display: inline-block; min-width: 1em; text-align: right; }
+.branch-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-md) var(--sp-xl); max-width: 900px; margin: 0 auto; list-style: none; padding: 0; }
+.branch-grid li { padding: var(--sp-sm) 0; border-bottom: 1px solid rgba(255,255,255,0.12); font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; letter-spacing: 0.02em; text-transform: uppercase; color: var(--color-text-on-dark); display: flex; align-items: center; gap: var(--sp-sm); }
+.branch-grid li .icon { font-size: 0.9rem; color: var(--color-cat-yellow); }
+.locations__more { text-align: center; margin-top: var(--sp-xl); font-size: 0.9rem; color: rgba(255,255,255,0.65); }
+.locations__more a { color: var(--color-cat-yellow); text-decoration: underline; }
+
+/* ───────── FOOTER ───────── */
+.site-footer { background: var(--color-surface-dark); color: var(--color-text-on-dark); padding: var(--sp-section) 0 var(--sp-xl); }
+.footer__grid { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: var(--sp-xxl); margin-bottom: var(--sp-xxl); }
+.footer__brand img { max-width: 220px; }
+.footer__brand p { margin-top: var(--sp-md); color: rgba(255,255,255,0.7); font-size: 0.9rem; max-width: 38ch; }
+.footer__col h2 { font-family: var(--font-display); font-weight: 700; font-size: 1.05rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-on-dark); margin: 0 0 var(--sp-md); }
+.footer__col ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: var(--sp-sm); }
+.footer__col a { color: rgba(255,255,255,0.78); font-size: 0.92rem; transition: color 150ms var(--ease-out); }
+.footer__col a:hover { color: var(--color-cat-yellow); }
+.footer__address { font-size: 0.92rem; line-height: 1.55; color: rgba(255,255,255,0.78); font-style: normal; }
+.footer__phone { display: inline-flex; align-items: center; gap: var(--sp-sm); margin-top: var(--sp-md); color: var(--color-cat-yellow); font-family: var(--font-display); font-weight: 700; font-size: 1.1rem; letter-spacing: 0.04em; }
+.footer__social { display: flex; gap: var(--sp-md); margin-top: var(--sp-sm); }
+.footer__social a { width: 40px; height: 40px; display: inline-flex; align-items: center; justify-content: center; border: 1px solid rgba(255,255,255,0.3); border-radius: var(--r-pill); color: var(--color-text-on-dark); font-size: 1rem; }
+.footer__social a:hover { background: var(--color-cat-yellow); color: var(--color-text-on-yellow); border-color: var(--color-cat-yellow); }
+.footer__legal { padding-top: var(--sp-lg); border-top: 1px solid rgba(255,255,255,0.12); display: flex; justify-content: space-between; gap: var(--sp-md); font-size: 0.8rem; color: rgba(255,255,255,0.55); flex-wrap: wrap; }
+.footer__legal ul { display: flex; gap: var(--sp-lg); list-style: none; margin: 0; padding: 0; }
+
+/* ───────── RESPONSIVE ───────── */
+@media (max-width: 1100px) and (min-width: 769px) {
+  .verb { padding: 14px var(--sp-md); font-size: 0.85rem; }
+  .verb .verb-sub { font-size: 0.55rem; }
+  .main-nav__phone { padding: 0 12px; font-size: 0.8rem; }
+}
+@media (max-width: 1024px) {
+  :root { --sp-section: 48px; }
+  .services__grid { grid-template-columns: repeat(3, 1fr); }
+  .blog-cards__grid { grid-template-columns: repeat(2, 1fr); }
+  .footer__grid { grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: var(--sp-xl); }
+  .logo-track { grid-template-columns: repeat(3, 1fr); }
+}
+@media (max-width: 768px) {
+  .primary-verbs, .main-nav__phone { display: none; }
+  .burger { display: inline-flex; }
+  /* When burger is toggled .is-open, the verbs stack vertically in a drawer */
+  .main-nav.is-open.primary-verbs {
+    display: flex;
+    position: absolute;
+    top: 100%; left: 0; right: 0;
+    background: var(--color-surface-dark);
+    flex-direction: column;
+    gap: 0;
+    padding: var(--sp-md) 0;
+    border-top: 1px solid rgba(255,255,255,0.1);
+    z-index: 60;
+  }
+  .main-nav.is-open.primary-verbs .verb {
+    flex-direction: row;
+    justify-content: flex-start;
+    padding: var(--sp-md) var(--sp-lg);
+    width: 100%;
+    font-size: 1rem;
+    border-left: 0;
+    gap: var(--sp-md);
+  }
+  .main-nav.is-open.primary-verbs .verb .verb-sub {
+    margin-left: auto;
+    font-size: 0.65rem;
+  }
+  .main-nav.is-open.primary-verbs .verb__dropdown {
+    position: static;
+    box-shadow: none;
+    border-top: 0;
+    background: rgba(0,0,0,0.3);
+    transform: none;
+    opacity: 1;
+    pointer-events: auto;
+    padding-left: var(--sp-md);
+    display: none;
+  }
+  .main-nav.is-open.primary-verbs .verb:hover .verb__dropdown,
+  .main-nav.is-open.primary-verbs .verb:focus-within .verb__dropdown { display: block; }
+  .main-header { position: relative; }
+  .main-header__inner { padding: 0; align-items: center; }
+  .utility-strip__list { gap: var(--sp-md); font-size: 0.65rem; justify-content: center; }
+  .utility-strip__inner { justify-content: center; }
+  .mega-nav__inner { gap: var(--sp-md); padding: 8px var(--sp-md); font-size: 0.7rem; }
+  .finance__grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-cards__grid { grid-template-columns: repeat(2, 1fr); }
+  .footer__grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 640px) {
+  :root { --sp-section: 32px; }
+  .hero { min-height: 540px; padding: var(--sp-xl) 0; }
+  .hero__supporting { font-size: 1rem; }
+  .finance__grid { grid-template-columns: 1fr; }
+  .services__grid { grid-template-columns: repeat(2, 1fr); }
+  .blog-cards__grid { grid-template-columns: 1fr; }
+  .blog-card { aspect-ratio: 16 / 10; }
+  .logo-track { grid-template-columns: repeat(2, 1fr); gap: var(--sp-md); }
+  .branch-grid { grid-template-columns: repeat(2, 1fr); }
+  .footer__grid { grid-template-columns: 1fr; gap: var(--sp-xl); }
+  .footer__legal { flex-direction: column; }
+}
+
+/* Reduced motion */
+@media (prefers-reduced-motion: reduce) {
+  [data-anim], [data-tile-anim], [data-split] span {
+    opacity: 1 !important; transform: none !important; filter: none !important; clip-path: none !important;
+  }
+  .word { clip-path: none !important; transform: none !important; }
+  .service-tile::before, .service-tile::after { transition: opacity 1ms !important; }
+  .hero__inner > * { animation: none !important; opacity: 1 !important; transform: none !important; }
+  .blog-card__bg { transition: none !important; }
+}
+
+:focus-visible { outline: 2px solid var(--color-cat-yellow); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<a href="#main" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;background:var(--color-cat-yellow);color:var(--color-text-on-yellow);padding:8px 16px;z-index:100;" onfocus="this.style.left='8px';this.style.top='8px';this.style.width='auto';this.style.height='auto';" onblur="this.style.left='-9999px';">Skip to main content</a>
+
+<!-- TOP UTILITY STRIP — 2 visible links + "More ▾" dropdown for the rest -->
+<div class="utility-strip" data-section="utility-strip" data-intent="secondary-nav" data-layout="full-bleed">
+  <div class="container utility-strip__inner">
+    <ul class="utility-strip__list">
+      <li><a href="/login/">Customer Login</a></li>
+      <li><a href="/sponsorships/">Sponsorships</a></li>
+      <li class="utility-strip__more">
+        <button type="button" class="utility-strip__more-trigger" aria-haspopup="true" aria-expanded="false">More</button>
+        <ul class="utility-strip__more-menu" role="menu">
+          <li><a href="/online-payments/" role="menuitem">Online Payments</a></li>
+          <li><a href="/rental-portal/" role="menuitem">Rental Portal</a></li>
+          <li><a href="https://parts.cat.com/" role="menuitem">Parts.Cat.com</a></li>
+          <li><a href="/sis2/" role="menuitem">SIS 2.0</a></li>
+          <li><a href="/visionlink/" role="menuitem">Vision Link</a></li>
+          <li><a href="/employee-login/" role="menuitem">Employee Login</a></li>
+        </ul>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<header class="site-header" id="nav" data-section="header" data-intent="navigate" data-layout="full-width-dark" data-nav-collapse="hamburger">
+  <div class="main-header">
+    <div class="container main-header__inner">
+      <a class="main-header__logo" href="/" aria-label="Wheeler Machinery Co. — home">
+        <img src="assets/logo.png" alt="Wheeler Machinery Co.">
+      </a>
+      <button class="burger" aria-controls="primary-nav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="icon icon-menu" aria-hidden="true"></span>
+      </button>
+      <nav class="main-nav primary-verbs" id="primary-nav" aria-label="primary intents">
+        <a class="verb" href="/new/" tabindex="0">
+          <span class="icon icon-new" aria-hidden="true"></span>
+          Buy
+          <span class="verb-sub">New &amp; Used</span>
+          <ul class="verb__dropdown" role="menu">
+            <li><a href="/new/" role="menuitem">New Equipment</a></li>
+            <li><a href="/used-equipment/machinery/" role="menuitem">Used Equipment</a></li>
+            <li><a href="/quotes/" role="menuitem">Request a Quote</a></li>
+            <li><a href="/credit-application/" role="menuitem">Credit Application</a></li>
+            <li><a href="/power-systems/" role="menuitem">Power Systems</a></li>
+          </ul>
+        </a>
+        <a class="verb" href="/rental/" tabindex="0">
+          <span class="icon icon-rent" aria-hidden="true"></span>
+          Rent
+          <span class="verb-sub">Equipment, Tools, Trailers</span>
+          <ul class="verb__dropdown" role="menu">
+            <li><a href="/rental/" role="menuitem">Compact Equipment Rentals</a></li>
+            <li><a href="/rental/tools/" role="menuitem">Tool Rentals</a></li>
+            <li><a href="/trailers/" role="menuitem">Trailer Rentals</a></li>
+            <li><a href="/attachments/" role="menuitem">Attachments</a></li>
+            <li><a href="/rental-portal/" role="menuitem">Rental Portal</a></li>
+          </ul>
+        </a>
+        <a class="verb" href="/service/" tabindex="0">
+          <span class="icon icon-service" aria-hidden="true"></span>
+          Service
+          <span class="verb-sub">Field, Shop, Maintenance</span>
+          <ul class="verb__dropdown" role="menu">
+            <li><a href="/request-service/" role="menuitem">Request Service Online</a></li>
+            <li><a href="/service/field/" role="menuitem">Field Service</a></li>
+            <li><a href="/service/shop/" role="menuitem">Shop Service</a></li>
+            <li><a href="/customer-value-agreements/" role="menuitem">Maintenance (CVAs)</a></li>
+            <li><a href="/equipment-rebuilds/" role="menuitem">Equipment Rebuilds</a></li>
+            <li><a href="/get-training/" role="menuitem">Get Training</a></li>
+          </ul>
+        </a>
+        <a class="verb" href="/parts/" tabindex="0">
+          <span class="icon icon-order" aria-hidden="true"></span>
+          Parts
+          <span class="verb-sub">Order &amp; Track</span>
+          <ul class="verb__dropdown" role="menu">
+            <li><a href="https://parts.cat.com/" role="menuitem">Order Parts (Parts.Cat.com)</a></li>
+            <li><a href="/parts/lookup/" role="menuitem">Parts Lookup</a></li>
+            <li><a href="/parts/track-order/" role="menuitem">Track Your Order</a></li>
+            <li><a href="/online-payments/" role="menuitem">Online Payments</a></li>
+          </ul>
+        </a>
+      </nav>
+      <a class="main-nav__phone" href="tel:801-436-3672"><span class="icon icon-phone" aria-hidden="true"></span> 801-436-3672</a>
+    </div>
+  </div>
+  <!-- DEPARTMENT ROW — captured 10 dept links restored on dark grey -->
+  <div class="mega-nav" data-section="mega-nav" data-intent="department-nav" data-layout="full-bleed">
+    <div class="container mega-nav__inner">
+      <a href="/quotes/">Quotes</a>
+      <a href="/specials/">Offers</a>
+      <a href="/attachments/">Attachments</a>
+      <a href="/trailers/">Trailers</a>
+      <a href="/power-systems/">Power Systems</a>
+      <a href="/parts/">Parts</a>
+      <a href="/service/">Service</a>
+      <a href="/technology/">Technology</a>
+      <a href="/support/">Support</a>
+      <a href="/jobs/">Jobs</a>
+    </div>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- HERO — "Redefining Commitment" two-tone treatment + white pill CTA -->
+  <section class="hero" data-section="hero" data-intent="services-commitment" data-layout="full-bleed" data-media="image">
+    <div class="container hero__inner">
+      <span class="label hero__eyebrow">Wheeler · Services Commitment</span>
+      <h1 class="display hero__headline">
+        <span class="hero__headline-line hero__headline-line--accent">REDEFINING</span>
+        <span class="hero__headline-line">COMMITMENT</span>
+      </h1>
+      <p class="hero__supporting">
+        <span class="hero__sup-accent">PARTNER WITH WHEELER</span> FOR YOUR EQUIPMENT MAINTENANCE AND GET<br>
+        <em class="hero__sup-italic"><span class="hero__sup-accent">GUARANTEED PARTS AVAILABILITY, PRIORITIZED SERVICE, FASTER REBUILDS,</span> AND MORE.</em>
+      </p>
+      <div class="hero__actions">
+        <a class="btn btn-pill-light" href="/services-commitment/">Learn More About Our Services Commitment</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINANCE BAND — 3-up + data-anim entrance + data-flip on 60/500 numerals -->
+  <section class="finance" data-section="finance" data-intent="promo-offers" data-layout="grid" data-items="3">
+    <div class="container">
+      <div class="finance__head">
+        <span class="label" data-anim>Finance</span>
+        <h2 class="headline" style="margin-top: var(--sp-md);" data-anim>CURRENT FINANCE OFFERS</h2>
+      </div>
+      <div class="finance__grid">
+        <article class="finance-card" data-anim>
+          <span class="label finance-card__eyebrow">Finance</span>
+          <h3 class="title finance-card__title">0% FOR UP TO <span data-flip="60">60</span> MONTHS + $<span data-flip="500">500</span> TOWARD CVA</h3>
+          <p class="body-copy finance-card__body">On select Cat compact machines. Cat Vehicle Agreement bonus included.</p>
+          <a class="btn btn-primary finance-card__cta" href="/specials/">Learn More</a>
+        </article>
+        <article class="finance-card" data-anim>
+          <span class="label finance-card__eyebrow">Finance</span>
+          <h3 class="title finance-card__title">FINANCING &amp; FUEL PAYBACK OFFERS</h3>
+          <p class="body-copy finance-card__body">Combined fuel-payback programs across active Cat machinery.</p>
+          <a class="btn btn-primary finance-card__cta" href="/specials/">Learn More</a>
+        </article>
+        <article class="finance-card" data-anim>
+          <span class="label finance-card__eyebrow">Finance</span>
+          <h3 class="title finance-card__title">CAT® CARD IS NOW CAT® COMMERCIAL ACCOUNT</h3>
+          <p class="body-copy finance-card__body">Streamlined parts &amp; service purchasing on a single Cat account.</p>
+          <a class="btn btn-primary finance-card__cta" href="/specials/">Learn More</a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- SERVICES — image-fade-on-hover + data-anim (same motion as finance per user) -->
+  <section class="services" id="services" data-section="services" data-intent="service-tiles" data-layout="grid" data-items="6">
+    <div class="container">
+      <div class="services__head">
+        <span class="label services__eyebrow" data-anim>Service &amp; Support</span>
+        <h2 class="headline services__title" style="margin-top: var(--sp-md);" data-anim>YOUR HEAVY MACHINERY EXPERTS</h2>
+      </div>
+      <div class="services__grid">
+        <a class="service-tile service-tile--field" href="/service/" data-anim>
+          <span class="service-tile__icon icon icon-service" aria-hidden="true"></span>
+          <span class="service-tile__title">Field Service</span>
+        </a>
+        <a class="service-tile service-tile--shop" href="/service/" data-anim>
+          <span class="service-tile__icon icon icon-service" aria-hidden="true"></span>
+          <span class="service-tile__title">Shop Service</span>
+        </a>
+        <a class="service-tile service-tile--parts" href="https://parts.cat.com/" data-anim>
+          <span class="service-tile__icon icon icon-order" aria-hidden="true"></span>
+          <span class="service-tile__title">Parts.Cat.com</span>
+        </a>
+        <a class="service-tile service-tile--maint" href="/customer-value-agreements/" data-anim>
+          <span class="service-tile__icon icon icon-new" aria-hidden="true"></span>
+          <span class="service-tile__title">Maintenance Service</span>
+        </a>
+        <a class="service-tile service-tile--rebuilds" href="/equipment-rebuilds/" data-anim>
+          <span class="service-tile__icon icon icon-used" aria-hidden="true"></span>
+          <span class="service-tile__title">Equipment Rebuilds</span>
+        </a>
+        <a class="service-tile service-tile--online" href="/request-service/" data-anim>
+          <span class="service-tile__icon icon icon-phone" aria-hidden="true"></span>
+          <span class="service-tile__title">Request Service Online</span>
+        </a>
+      </div>
+      <div class="services__footer" data-anim>
+        <a class="btn btn-primary" href="/service/">Browse More Services</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BLOG CARDS — data-anim (same motion as finance per user) -->
+  <section class="blog-cards" data-section="blog-cards" data-intent="resources" data-layout="grid" data-items="3">
+    <div class="container">
+      <div class="blog-cards__head">
+        <span class="label blog-cards__eyebrow" data-anim>Resources</span>
+        <h2 class="headline blog-cards__title" style="margin-top: var(--sp-md);" data-anim>FROM THE WHEELER FIELD NOTES</h2>
+      </div>
+      <div class="blog-cards__grid">
+        <a class="blog-card blog-card--maint" href="/blog/preventative-equipment-maintenance/" data-anim>
+          <div class="blog-card__bg" aria-hidden="true"></div>
+          <div class="blog-card__inner">
+            <h3 class="blog-card__title">The Value of Preventative Equipment Maintenance</h3>
+            <span class="blog-card__more">Read More</span>
+          </div>
+        </a>
+        <a class="blog-card blog-card--aerial" href="/blog/aerial-lift-maintenance/" data-anim>
+          <div class="blog-card__bg" aria-hidden="true"></div>
+          <div class="blog-card__inner">
+            <h3 class="blog-card__title">Aerial Lift Maintenance Tips and Checklist</h3>
+            <span class="blog-card__more">Read More</span>
+          </div>
+        </a>
+        <a class="blog-card blog-card--landscape" href="/blog/landscaping-equipment-guide/" data-anim>
+          <div class="blog-card__bg" aria-hidden="true"></div>
+          <div class="blog-card__inner">
+            <h3 class="blog-card__title">Landscaping Equipment Guide</h3>
+            <span class="blog-card__more">Read More</span>
+          </div>
+        </a>
+        <a class="blog-card blog-card--cva" href="/customer-value-agreements/" data-anim>
+          <div class="blog-card__bg" aria-hidden="true"></div>
+          <div class="blog-card__inner">
+            <h3 class="blog-card__title">Customer Value Agreements: What's Included</h3>
+            <span class="blog-card__more">Read More</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- BRAND LOGOS -->
+  <section class="brand-logos" data-section="brand-logos" data-intent="brand-proof" data-layout="logo-strip" data-items="5">
+    <div class="container">
+      <div class="brand-logos__head" data-anim>
+        <span class="brand-logos__eyebrow">Trusted Partners</span>
+      </div>
+      <div class="logo-track">
+        <img src="assets/media/Campbell-Companies-HorzV2-68ea90.webp" alt="Campbell Companies" data-anim>
+        <img src="assets/media/JLG_logo-1-1-60b1d8.jpeg" alt="JLG" data-anim>
+        <img src="assets/media/MonsonLogo-8a32ac.webp" alt="Monson" data-anim>
+        <img src="assets/media/Gardner-Logo-1a36da.webp" alt="Gardner" data-anim>
+        <img src="assets/media/SFS-e7162d.webp" alt="SFS" data-anim>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOCATIONS — G-version: thin yellow eyebrow ribbon + proof + branch grid -->
+  <section class="locations" data-section="locations-proof" data-intent="locations-stats" data-layout="stack" data-items="15">
+    <div class="locations__eyebrow-band">FIND YOUR NEAREST BRANCH</div>
+    <div class="container">
+      <p class="locations__proof"><strong>18 branches</strong> across Utah, Arizona, Nevada &amp; Wyoming &mdash; <strong>same-day field service</strong> and <strong>24/7 phone support</strong> since 1951.</p>
+      <ul class="branch-grid" aria-label="Wheeler Cat branch locations">
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Salt Lake City (HQ)</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Lindon</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Sandy</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Cedar City, UT</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Ely</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Hurricane</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Kaysville</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Logan</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Moab</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Ogden</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Park City</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Salina</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Tooele</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>Vernal</li>
+        <li><span class="icon icon-map-pin" aria-hidden="true"></span>West Valley</li>
+      </ul>
+      <p class="locations__more">Plus 3 additional locations &middot; <a href="/about/locations/">View all 18 branches</a></p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer" data-section="footer" data-intent="navigate" data-layout="mega">
+  <div class="container">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <img src="assets/logo.png" alt="Wheeler Machinery Co.">
+        <p>Wheeler Cat offers Construction Equipment, Tool &amp; Trailer Rental &amp; Sales across 18 locations in Utah and parts of Arizona, Nevada &amp; Wyoming.</p>
+      </div>
+      <div class="footer__col">
+        <h2>Quick Links</h2>
+        <ul>
+          <li><a href="/new/">Sales</a></li>
+          <li><a href="/rental/">Rentals</a></li>
+          <li><a href="/parts/">Cat Parts</a></li>
+          <li><a href="/service/">Service</a></li>
+          <li><a href="/about/locations/">Locations</a></li>
+          <li><a href="/contact-us/">Contact</a></li>
+          <li><a href="/about/">About</a></li>
+          <li><a href="/sponsorships/">Sponsorship</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h2>Contact Us</h2>
+        <address class="footer__address">
+          4901 West 2100 South,<br>
+          Salt Lake City,<br>
+          UT 84120
+        </address>
+        <a class="footer__phone" href="tel:801-436-3672"><span class="icon icon-phone" aria-hidden="true"></span> 801-436-3672</a>
+      </div>
+      <div class="footer__col">
+        <h2>Connect With Us</h2>
+        <div class="footer__social">
+          <a href="#" aria-label="Facebook"><span class="icon icon-facebook" aria-hidden="true"></span></a>
+          <a href="#" aria-label="Instagram"><span class="icon icon-instagram" aria-hidden="true"></span></a>
+          <a href="#" aria-label="LinkedIn"><span class="icon icon-linkedin" aria-hidden="true"></span></a>
+          <a href="#" aria-label="YouTube"><span class="icon icon-youtube" aria-hidden="true"></span></a>
+          <a href="#" aria-label="Twitter"><span class="icon icon-twitter" aria-hidden="true"></span></a>
+        </div>
+      </div>
+    </div>
+    <div class="footer__legal">
+      <span>Copyright © 2026. All Rights Reserved. A Campbell Company</span>
+      <ul>
+        <li><a href="/sitemap/">Sitemap</a></li>
+        <li><a href="/legal/">Legal</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Hamburger nav a11y sync + Escape close
+  (function () {
+    var burger = document.querySelector('.burger');
+    var nav = document.getElementById('primary-nav');
+    if (!burger || !nav) return;
+    burger.addEventListener('click', function () {
+      var open = nav.classList.toggle('is-open');
+      burger.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape' && nav.classList.contains('is-open')) {
+        nav.classList.remove('is-open');
+        burger.setAttribute('aria-expanded', 'false');
+        burger.focus();
+      }
+    });
+  })();
+
+  // Service tile: sticky-reveal on first hover/focus. Once revealed, image stays.
+  (function () {
+    document.querySelectorAll('.service-tile').forEach(function (tile) {
+      var reveal = function () { tile.classList.add('is-revealed'); };
+      tile.addEventListener('mouseenter', reveal, { once: true });
+      tile.addEventListener('focusin',    reveal, { once: true });
+    });
+  })();
+
+  // Utility-strip "More ▾" — sync aria-expanded with hover/focus state of the parent <li>.
+  (function () {
+    var more = document.querySelector('.utility-strip__more');
+    var trigger = more && more.querySelector('.utility-strip__more-trigger');
+    if (!more || !trigger) return;
+    var setExpanded = function (open) { trigger.setAttribute('aria-expanded', open ? 'true' : 'false'); };
+    more.addEventListener('mouseenter', function () { setExpanded(true); });
+    more.addEventListener('mouseleave', function () { setExpanded(false); });
+    more.addEventListener('focusin',  function () { setExpanded(true); });
+    more.addEventListener('focusout', function (e) {
+      if (!more.contains(e.relatedTarget)) setExpanded(false);
+    });
+  })();
+</script>
+
+<script src="lenis.min.js"></script>
+<script>
+/* Canonical motion runtime — kinetic-display register
+   Embedded verbatim from skills/prototype/reference/motion-runtime.md
+   Tuned animConfig per kinetic-display:
+     parallax.translate: 30, fade: 0.55
+     cards.slide: 48, stagger: 0.16
+     wordmark.clip: 80
+*/
+(function () {
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ── Lenis bootstrap ────────────────────────────────────────────
+  const lenis = new Lenis({ lerp: 0.1, smoothWheel: !prefersReducedMotion });
+  window.__lenis = lenis;
+  (function raf(t) { lenis.raf(t); requestAnimationFrame(raf); })(performance.now());
+
+  // ── Nav scrolled state ─────────────────────────────────────────
+  const nav = document.getElementById('nav');
+  if (nav) lenis.on('scroll', ({ scroll }) => {
+    nav.classList.toggle('scrolled', scroll > 40);
+  });
+
+  // ── Helpers ────────────────────────────────────────────────────
+  const clamp = (v, lo, hi) => v < lo ? lo : v > hi ? hi : v;
+  const easeOut3 = t => 1 - Math.pow(1 - t, 3);
+  const getDocTop = el => el.getBoundingClientRect().top + (window.__lenis ? window.__lenis.scroll : window.scrollY);
+
+  // ── Register-specific configuration (kinetic-display) ──────────
+  const animConfig = {
+    parallax:      { translate: 30, fade: 0.55, rangeStart: 0, range: 80 },
+    plansParallax: { translate: 16, rangeStart: 0, range: 80 },
+    cards:         { trigger: 0.85, range: 0.32, slide: 48, stagger: 0.16 },
+    wordmark:      { range: 0.6, clip: 80 },
+  };
+
+  // ── data-split: pre-process letter spans ───────────────────────
+  document.querySelectorAll('[data-split]').forEach((el) => {
+    const text = el.textContent;
+    el.textContent = '';
+    text.split('').forEach((ch) => {
+      const s = document.createElement('span');
+      s.textContent = ch === ' ' ? ' ' : ch;
+      s.style.opacity = '0';
+      s.style.transform = 'translateY(60%)';
+      s.style.filter = 'blur(8px)';
+      el.appendChild(s);
+    });
+  });
+
+  // ── Register lists ─────────────────────────────────────────────
+  const animList = [];
+  const headWords = [];
+  const splitLetters = [];
+
+  function measure() {
+    animList.forEach(({ el }) => { el.style.opacity = el.style.transform = el.style.willChange = ''; });
+    animList.length = 0;
+    headWords.length = 0;
+    splitLetters.length = 0;
+
+    document.querySelectorAll('[data-anim], [data-tile-anim]').forEach((el) => {
+      const parent = el.closest('section, .logo-track, .blog-cards__grid, .services__grid, .finance__grid');
+      let stagger = 0;
+      if (parent) {
+        const peers = parent.querySelectorAll('[data-anim], [data-tile-anim]');
+        const idx = Array.prototype.indexOf.call(peers, el);
+        stagger = (idx % 8) * animConfig.cards.stagger;
+      }
+      el.style.opacity = '0';
+      el.style.transform = el.hasAttribute('data-tile-anim')
+        ? `translateY(28px) rotateX(8deg)`
+        : `translateY(${animConfig.cards.slide}px)`;
+      el.style.willChange = 'opacity, transform';
+      animList.push({ el, triggerTop: getDocTop(el), staggerDelay: stagger });
+    });
+
+    document.querySelectorAll('.display-head').forEach((head) => {
+      const words = head.querySelectorAll('.word');
+      const top = getDocTop(head);
+      words.forEach((w, i) => {
+        w.style.clipPath = 'inset(0 100% 0 0)';
+        w.style.transform = 'translateY(110%)';
+        w.style.willChange = 'clip-path, transform';
+        headWords.push({ el: w, triggerTop: top, staggerDelay: i * 0.15 });
+      });
+    });
+
+    document.querySelectorAll('[data-split]').forEach((el) => {
+      const top = getDocTop(el);
+      el.querySelectorAll('span').forEach((s, i) => {
+        splitLetters.push({ el: s, triggerTop: top, staggerDelay: i * 0.05 });
+      });
+    });
+  }
+
+  // ── [data-countup] ─────────────────────────────────────────────
+  const countSeen = new WeakSet();
+  const countObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting || countSeen.has(entry.target)) return;
+      countSeen.add(entry.target);
+      const target = +entry.target.getAttribute('data-countup');
+      const duration = target > 20 ? 1400 : target > 5 ? 900 : 600;
+      const start = performance.now();
+      (function step(now) {
+        const t = clamp((now - start) / duration, 0, 1);
+        entry.target.textContent = String(Math.round(easeOut3(t) * target));
+        if (t < 1) requestAnimationFrame(step);
+      })(performance.now());
+    });
+  }, { threshold: 0.4 });
+  document.querySelectorAll('[data-countup]').forEach((el) => countObserver.observe(el));
+
+  // ── [data-flip]: split-flap reveal ─────────────────────────────
+  const flipObserver = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting || entry.target.dataset.flipped === '1') return;
+      entry.target.dataset.flipped = '1';
+      const target = +entry.target.getAttribute('data-flip');
+      const total = 8 + Math.floor(Math.random() * 4);
+      let i = 0;
+      (function flap() {
+        if (i >= total) { entry.target.textContent = String(target); return; }
+        entry.target.textContent = String(Math.floor(Math.random() * 10));
+        i++;
+        setTimeout(flap, 60);
+      })();
+    });
+  }, { threshold: 0.5 });
+  document.querySelectorAll('[data-flip]').forEach((el) => flipObserver.observe(el));
+
+  // ── rAF loop: scroll-progress reveals ─────────────────────────
+
+  (function tick() {
+    if (prefersReducedMotion) { requestAnimationFrame(tick); return; }
+    const sY = window.__lenis ? window.__lenis.scroll : window.scrollY;
+    const vh = window.innerHeight;
+
+    // Scroll-progress entrances for [data-anim]/[data-tile-anim]
+    for (let i = 0; i < animList.length; i++) {
+      const item = animList[i];
+      const { trigger, range, slide } = animConfig.cards;
+      const raw = (sY + vh * trigger - item.triggerTop) / (vh * range);
+      const p = easeOut3(clamp(raw - item.staggerDelay, 0, 1));
+      item.el.style.opacity = String(p);
+      if (item.el.hasAttribute('data-tile-anim')) {
+        item.el.style.transform = `translateY(${(1 - p) * 28}px) rotateX(${(1 - p) * 8}deg)`;
+      } else {
+        item.el.style.transform = `translateY(${(1 - p) * slide}px)`;
+      }
+    }
+
+    // Display-head word reveals
+    for (let i = 0; i < headWords.length; i++) {
+      const item = headWords[i];
+      const raw = (sY + vh * 0.85 - item.triggerTop) / (vh * 0.30);
+      const p = easeOut3(clamp(raw - item.staggerDelay, 0, 1));
+      item.el.style.clipPath = `inset(0 ${(1 - p) * 100}% 0 0)`;
+      item.el.style.transform = `translateY(${(1 - p) * 110}%)`;
+    }
+
+    // [data-split] letter reveals (WHEELER monogram)
+    for (let i = 0; i < splitLetters.length; i++) {
+      const item = splitLetters[i];
+      const raw = (sY + vh * 0.85 - item.triggerTop) / (vh * 0.35);
+      const p = easeOut3(clamp(raw - item.staggerDelay, 0, 1));
+      item.el.style.opacity = String(p);
+      item.el.style.transform = `translateY(${(1 - p) * 60}%)`;
+      item.el.style.filter = `blur(${(1 - p) * 8}px)`;
+    }
+
+    requestAnimationFrame(tick);
+  })();
+
+  measure();
+  window.addEventListener('load',   () => requestAnimationFrame(measure), { once: true });
+  window.addEventListener('resize', measure, { passive: true });
+
+  // Reduced-motion: force final states
+  if (prefersReducedMotion) {
+    document.querySelectorAll('[data-anim], [data-tile-anim], [data-split] span').forEach((el) => {
+      el.style.opacity = '1';
+      el.style.transform = 'none';
+      el.style.filter = 'none';
+      el.style.clipPath = 'none';
+    });
+    document.querySelectorAll('.word').forEach((el) => {
+      el.style.clipPath = 'none';
+      el.style.transform = 'none';
+    });
+    document.querySelectorAll('[data-countup]').forEach((el) => { el.textContent = el.getAttribute('data-countup'); });
+    document.querySelectorAll('[data-flip]').forEach((el) => { el.textContent = el.getAttribute('data-flip'); });
+  }
+})();
+</script>
+
+</body>
+</html>

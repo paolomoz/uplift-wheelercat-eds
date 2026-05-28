@@ -1,0 +1,59 @@
+.brand-logos {
+  background: var(--color-page);
+  padding: var(--sp-xxl) 0;
+  border-top: 1px solid rgb(39 39 39 / 8%);
+  border-bottom: 1px solid rgb(39 39 39 / 8%);
+}
+
+.brand-logos .brand-logos__container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--sp-lg);
+  padding-right: var(--sp-lg);
+}
+
+.brand-logos .brand-logos__head {
+  text-align: center;
+  margin-bottom: var(--sp-xl);
+}
+
+.brand-logos .brand-logos__eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-label);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-body);
+  display: inline-block;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-cat-yellow);
+}
+
+.brand-logos .logo-track {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: var(--sp-xl);
+  align-items: center;
+  max-width: 1080px;
+  margin: 0 auto;
+}
+
+.brand-logos .logo-track img {
+  max-height: 64px;
+  width: auto;
+  margin: 0 auto;
+  filter: grayscale(100%);
+  opacity: 0.7;
+  transition:
+    opacity 220ms var(--ease-out),
+    filter 220ms var(--ease-out);
+}
+
+.brand-logos .logo-track img:hover {
+  filter: grayscale(0%);
+  opacity: 1;
+}
+
+@media (max-width: 1024px) { .brand-logos .logo-track { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px)  { .brand-logos .logo-track { grid-template-columns: repeat(2, 1fr); gap: var(--sp-md); } }

@@ -1,0 +1,94 @@
+.hero {
+  position: relative;
+  min-height: 660px;
+  display: flex;
+  align-items: center;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  color: var(--color-text-on-dark);
+  padding: calc(var(--sp-section) * 1.5) clamp(var(--sp-lg), 5vw, 96px);
+  overflow: hidden;
+}
+
+.hero .hero__inner {
+  max-width: 1100px;
+  margin-left: 0;
+  width: 100%;
+}
+
+.hero .hero__eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  color: var(--color-cat-yellow);
+  display: inline-block;
+  margin-bottom: var(--sp-md);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-cat-yellow);
+  font-size: 0.9rem;
+  letter-spacing: 0.12em;
+}
+
+.hero .hero__headline {
+  color: var(--color-text-on-dark);
+  font-family: var(--font-hero);
+  font-weight: 700;
+  font-size: clamp(2.4rem, 7.2vw, 8rem);
+  line-height: 0.9;
+  letter-spacing: 0;
+  margin: 0 0 var(--sp-lg);
+  text-transform: uppercase;
+}
+
+.hero .hero__headline-line { display: block; }
+.hero .hero__headline-line--accent { color: var(--color-cat-yellow); }
+
+.hero .hero__supporting {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(0.95rem, 1.4vw, 1.25rem);
+  line-height: 1.35;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin: 0 0 var(--sp-xl);
+  color: var(--color-text-on-dark);
+  max-width: 64ch;
+}
+
+.hero .hero__actions {
+  display: inline-flex;
+  gap: var(--sp-md);
+  flex-wrap: wrap;
+}
+
+/* Hero CTA uses the global .btn-accent (white pill) — see styles.css. */
+
+/* Fade-in on first paint */
+@keyframes hero-fade-in {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.hero .hero__inner > * {
+  opacity: 0;
+  animation: hero-fade-in 800ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.hero .hero__eyebrow    { animation-delay: 100ms; }
+.hero .hero__headline   { animation-delay: 250ms; }
+.hero .hero__supporting { animation-delay: 450ms; }
+.hero .hero__actions    { animation-delay: 650ms; }
+
+@media (max-width: 640px) {
+  .hero { min-height: 540px; padding: var(--sp-xl) var(--sp-lg); }
+  .hero .hero__supporting { font-size: 1rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero .hero__inner > * {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}

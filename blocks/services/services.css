@@ -1,0 +1,124 @@
+.services {
+  background: var(--color-page);
+  padding: var(--sp-section) 0;
+}
+
+.services .services__container {
+  width: 100%;
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding-left: var(--sp-lg);
+  padding-right: var(--sp-lg);
+}
+
+.services .services__head { text-align: center; margin-bottom: var(--sp-xxl); }
+
+.services .services__eyebrow {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: var(--fs-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-cat-yellow);
+  display: inline-block;
+  margin-bottom: var(--sp-sm);
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--color-cat-yellow);
+}
+
+.services .services__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(1.953rem, 3.5vw, var(--fs-305));
+  line-height: 1.1;
+  letter-spacing: 0.02em;
+  color: var(--color-heading);
+  margin: var(--sp-md) 0 0;
+  text-transform: uppercase;
+}
+
+.services .services__grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--sp-md);
+}
+
+.services .service-tile {
+  position: relative;
+  background: var(--color-surface-dark);
+  color: var(--color-text-on-dark);
+  border-radius: var(--r-primary);
+  padding: var(--sp-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-md);
+  min-height: 240px;
+  text-decoration: none;
+  overflow: hidden;
+  isolation: isolate;
+  transition: transform 250ms var(--ease-out);
+}
+
+.services .service-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out-expo);
+  z-index: -2;
+}
+
+.services .service-tile::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top,
+    rgb(18 18 18 / 82%) 0%,
+    rgb(18 18 18 / 55%) 50%,
+    rgb(18 18 18 / 30%) 100%);
+  opacity: 0;
+  transition: opacity 400ms var(--ease-out-expo);
+  z-index: -1;
+}
+
+.services .service-tile:hover::before,
+.services .service-tile:focus-visible::before,
+.services .service-tile:hover::after,
+.services .service-tile:focus-visible::after { opacity: 1; }
+
+.services .service-tile--field::before    { background-image: url("/img/wheelercat-home/I7A0069-f55d9f.webp"); }
+.services .service-tile--shop::before     { background-image: url("/img/wheelercat-home/Wheeler_Campus-0d3589.webp"); }
+.services .service-tile--parts::before    { background-image: url("/img/wheelercat-home/CM2022040-2b9745.webp"); }
+.services .service-tile--maint::before    { background-image: url("/img/wheelercat-home/Excavators-24bfa6.webp"); }
+.services .service-tile--rebuilds::before { background-image: url("/img/wheelercat-home/reliable-v3-scaled-c2c1e1.jpg"); }
+.services .service-tile--online::before   { background-image: url("/img/wheelercat-home/aerial_resource-e5e159.webp"); }
+
+.services .service-tile__icon {
+  font-size: 40px;
+  color: var(--color-cat-yellow);
+  line-height: 1;
+  transition: transform 300ms var(--ease-out);
+}
+
+.services .service-tile:hover .service-tile__icon { transform: scale(1.1); }
+
+.services .service-tile__title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  color: var(--color-text-on-dark);
+  margin-top: auto;
+  text-wrap: balance;
+}
+
+.services .services__footer {
+  margin-top: var(--sp-xxl);
+  text-align: center;
+}
+
+@media (max-width: 1024px) { .services .services__grid { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 640px) { .services .services__grid { grid-template-columns: repeat(2, 1fr); } }
