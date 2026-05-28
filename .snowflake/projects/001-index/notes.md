@@ -124,3 +124,75 @@ Vendored under `assets/wheelercat-home/fonts/` and referenced via `@font-face` r
 ### Differences from prior runs
 
 (none — this is run 001)
+
+## Phase: Round-trip
+
+### Local
+
+Started `npx -y @adobe/aem-cli up --html-folder drafts --no-open`.
+Loaded `http://localhost:3000/drafts/wheelercat-home-index` via Playwright.
+
+Result (via custom check-overlay script — playwright-cli binary unavailable so dom-equality.mjs couldn't run):
+
+| Check | Expected | Got |
+|---|---|---|
+| `main.dataset.overlay` | `wheelercat-home` | ✅ wheelercat-home |
+| `main section[class]` count | 6 | ✅ 6 |
+| Section first-classes | hero, finance, services, blog-cards, brand-logos, locations | ✅ match |
+| `body.appear` class | true | ✅ true |
+| Hero eyebrow slot | "Wheeler · Services Commitment" | ✅ |
+| Hero headline accent slot | "REDEFINING" | ✅ |
+| Finance title slot | "CURRENT FINANCE OFFERS" | ✅ |
+| Service tile count | 6 | ✅ 6 |
+| Blog card count | 4 | ✅ 4 |
+| Footer link count | 16 (fragment loaded) | ✅ 16 |
+| Hero background-image slot resolved | true (contains "Compact_Track_Loader") | ✅ |
+| Console errors | 0 | ✅ 0 |
+
+### Production
+
+Pushed substrate + artifacts to `main`; PUT DA doc to `/index.html`; triggered preview + publish.
+
+URLs:
+- Preview: https://main--uplift-wheelercat-eds--paolomoz.aem.page/
+- Live: https://main--uplift-wheelercat-eds--paolomoz.aem.live/
+- DA editor: https://da.live/edit#/paolomoz/uplift-wheelercat-eds/index
+
+Sanity probes (all 200):
+- `/templates/wheelercat-home.html`
+- `/styles/wheelercat-home.css`
+- `/scripts/wheelercat-home-animations.js`
+- `/scripts/wheelercat-home-lenis.min.js`
+- `/fragments/wheelercat-home/{header,footer}.html`
+- `/assets/wheelercat-home/media/Compact_Track_Loader-3b9bd4.webp`
+- `/assets/wheelercat-home/logo.png`
+
+Production overlay verification matched local 1:1. All 33 slots populated, 6 sections rendered, 0 console errors. Lenis smooth-scroll active. Animation runtime (`[data-flip]` numerals, `[data-anim]` entrances, `[data-countup]`) running.
+
+Screenshots: `diff/production-viewport.jpg` + 6 per-section screenshots.
+
+## Phase: Reflect
+
+### Decisions surfaced as findings worth keeping
+
+1. **CSS extraction `sed` range must EXCLUDE the `<style>` and `</style>` lines.** Phase 3.5 says "Strip the `<style>` and `</style>` wrapper lines — emit only the inner content," but the rule is buried inside a paragraph. On the first attempt I used `sed -n '99,887p'` which included the wrapper tags as the first and last lines of the output. Browsers parsed `<style>` as an invalid CSS selector and silently bailed on the rest of the file. The fix was trivial (`sed -n '100,886p'`) but the failure was completely invisible at the wire step (lint passed, the file was 790 lines on disk) and only surfaced as a totally-unstyled production page. **PROMOTE: lint or self-check the extracted CSS file for `<style>` / `</style>` tokens, fail loudly.** [promoted]
+
+2. **AEM URL normalization converts `_` to `-` in filenames.** Discovered during the first (pre-snowflake) run where filenames like `Compact_Track_Loader-3b9bd4.webp` were uploaded to DA but AEM admin probed for `compact-track-loader-3b9bd4.webp`. For this snowflake run I avoided the issue by keeping the asset filenames as-is in the vendor strategy (root-relative `/assets/wheelercat-home/media/...` URLs in template/CSS — Code Sync serves them under exactly the same path the source used, no rename happens). Worth keeping as a learning for `da-media` strategy runs. [promoted]
+
+3. **playwright-cli binary not available** on this host. The bundled `dom-equality.mjs` script `spawn`s `playwright-cli` (not the `playwright` npm package). I substituted my own short Playwright script for the structural verification. The skill's scripts assume playwright-cli is reachable on PATH; the substrate or skill could detect and fall back. [promoted]
+
+4. **`<span class="hero__sup-accent">`-style branding accents inside paragraphs** can't be made authorable via DA cells (class is stripped). Workaround for this run: bake the supporting paragraph into the template (not a slot). User loses the ability to edit the copy. Long-term fix would be CSS-on-structure as described in da-content §3.9.
+
+5. **BEM-modifier-driven background images** (service tiles, blog cards) are NOT slottable in the page-level overlay because each variant class needs its own CSS rule. Kept template-baked for this run. If authors need to swap blog card images, refactor into background-image slots on each `.blog-card__bg` element.
+
+### Timings
+
+| phase            | elapsed (mm:ss) |
+|------------------|-----------------|
+| 0 prereq         | 0:30            |
+| 1 capture        | 1:00            |
+| 2 analyze        | 2:00            |
+| 3 generate       | 5:00            |
+| 4 wire           | 2:00 (npm install + lint fix) |
+| 5 roundtrip      | 8:00 (incl. one CSS bug fix + republish) |
+
