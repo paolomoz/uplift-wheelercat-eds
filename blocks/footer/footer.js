@@ -1,20 +1,18 @@
-import { getMetadata } from '../../scripts/aem.js';
-import { loadFragment } from '../fragment/fragment.js';
-
 /**
- * loads and decorates the footer
- * @param {Element} block The footer block element
+ * Loads the template-specific footer fragment from the code bus.
+ * Each overlay-controlled page sets main.dataset.overlay = <template>
+ * during loadEager; we read it here to pick the right fragment.
+ * Fragments live at /fragments/<template>/footer.html.
  */
 export default async function decorate(block) {
-  // load footer as fragment
-  const footerMeta = getMetadata('footer');
-  const footerPath = footerMeta ? new URL(footerMeta, window.location).pathname : '/footer';
-  const fragment = await loadFragment(footerPath);
-
-  // decorate footer DOM
-  block.textContent = '';
-  const footer = document.createElement('div');
-  while (fragment.firstElementChild) footer.append(fragment.firstElementChild);
-
-  block.append(footer);
+  const template = document.querySelector('main')?.dataset?.overlay;
+  if (!template) return;
+  const path = `/fragments/${template}/footer.html`;
+  const resp = await fetch(`${window.hlx.codeBasePath}${path}`);
+  if (!resp.ok) {
+    // eslint-disable-next-line no-console
+    console.warn(`[footer] fragment not found at ${path}`);
+    return;
+  }
+  block.innerHTML = await resp.text();
 }

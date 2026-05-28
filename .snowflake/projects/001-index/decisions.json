@@ -1,0 +1,208 @@
+{
+  "levelParam": "auto",
+  "conversionLevel": "page",
+  "feasibility": {
+    "recommendation": "page",
+    "rationale": "Cross-section JS coupling: a single rAF tick loop in the motion runtime scans the whole DOM for [data-anim], .display-head .word, [data-split] elements, and runs IntersectionObservers for countup/flip. Lenis smooth-scroll is page-level. CSS uses global :root tokens. Sections are visually independent and content-mappable, but JS independence fails — block-level would require splitting the animation runtime and re-wiring Lenis per section. Page-level overlay preserves the entire runtime as-is.",
+    "sections": [
+      {
+        "name": "hero",
+        "level": "page",
+        "checks": {
+          "structure": "pass",
+          "cssScope": "pass",
+          "contentModel": "pass",
+          "jsIndependence": "fail — hero relies on global rAF tick loop for .hero__inner > * fade-in (CSS only) but eyebrow/title use global motion runtime registers",
+          "visualIndependence": "pass"
+        }
+      },
+      {
+        "name": "finance",
+        "level": "page",
+        "checks": {
+          "structure": "pass",
+          "cssScope": "pass",
+          "contentModel": "pass — 3 cards with title (with [data-flip] numerals), body, cta",
+          "jsIndependence": "fail — [data-flip] driven by global IntersectionObserver",
+          "visualIndependence": "pass"
+        }
+      },
+      {
+        "name": "services",
+        "level": "page",
+        "checks": {
+          "structure": "pass",
+          "cssScope": "pass",
+          "contentModel": "pass — 6 tiles with icon + title; tile bg images via CSS variant classes (.service-tile--field etc.)",
+          "jsIndependence": "fail — sticky-reveal listener + global rAF",
+          "visualIndependence": "pass"
+        }
+      },
+      {
+        "name": "blog-cards",
+        "level": "page",
+        "checks": {
+          "structure": "pass",
+          "cssScope": "pass",
+          "contentModel": "pass — 4 cards with bg image + title + 'Read More'; bg via CSS variant classes",
+          "jsIndependence": "fail — global rAF",
+          "visualIndependence": "pass"
+        }
+      },
+      {
+        "name": "brand-logos",
+        "level": "page",
+        "checks": {
+          "structure": "pass",
+          "cssScope": "pass",
+          "contentModel": "pass — 5 imgs",
+          "jsIndependence": "pass",
+          "visualIndependence": "pass"
+        }
+      },
+      {
+        "name": "locations",
+        "level": "page",
+        "checks": {
+          "structure": "pass",
+          "cssScope": "pass",
+          "contentModel": "pass — eyebrow band + proof paragraph with [data-countup] stats + 15 branch li + more link",
+          "jsIndependence": "fail — [data-countup] driven by global IntersectionObserver",
+          "visualIndependence": "pass"
+        }
+      }
+    ]
+  },
+  "templateName": "wheelercat-home",
+  "synthesizeMain": false,
+  "sections": [
+    {
+      "firstClass": "hero",
+      "originalTag": "section",
+      "rewriteToSection": false,
+      "slots": [
+        { "name": "eyebrow", "type": "text", "selector": ".hero__eyebrow" },
+        { "name": "headline-accent", "type": "text", "selector": ".hero__headline-line--accent" },
+        { "name": "headline-main", "type": "text", "selector": ".hero__headline-line:not(.hero__headline-line--accent)" },
+        { "name": "supporting", "type": "text", "selector": ".hero__supporting" },
+        { "name": "cta", "type": "link", "selector": ".hero__actions a" },
+        { "name": "background", "type": "background-image", "selector": ".hero" }
+      ]
+    },
+    {
+      "firstClass": "finance",
+      "originalTag": "section",
+      "rewriteToSection": false,
+      "slots": [
+        { "name": "eyebrow", "type": "text", "selector": ".finance__head .label" },
+        { "name": "title", "type": "text", "selector": ".finance__head .headline" },
+        { "name": "card-1.eyebrow", "type": "text", "selector": ".finance__grid > article:nth-child(1) .finance-card__eyebrow" },
+        { "name": "card-1.title", "type": "text", "selector": ".finance__grid > article:nth-child(1) .finance-card__title" },
+        { "name": "card-1.body", "type": "text", "selector": ".finance__grid > article:nth-child(1) .finance-card__body" },
+        { "name": "card-1.cta", "type": "link", "selector": ".finance__grid > article:nth-child(1) .finance-card__cta" },
+        { "name": "card-2.eyebrow", "type": "text", "selector": ".finance__grid > article:nth-child(2) .finance-card__eyebrow" },
+        { "name": "card-2.title", "type": "text", "selector": ".finance__grid > article:nth-child(2) .finance-card__title" },
+        { "name": "card-2.body", "type": "text", "selector": ".finance__grid > article:nth-child(2) .finance-card__body" },
+        { "name": "card-2.cta", "type": "link", "selector": ".finance__grid > article:nth-child(2) .finance-card__cta" },
+        { "name": "card-3.eyebrow", "type": "text", "selector": ".finance__grid > article:nth-child(3) .finance-card__eyebrow" },
+        { "name": "card-3.title", "type": "text", "selector": ".finance__grid > article:nth-child(3) .finance-card__title" },
+        { "name": "card-3.body", "type": "text", "selector": ".finance__grid > article:nth-child(3) .finance-card__body" },
+        { "name": "card-3.cta", "type": "link", "selector": ".finance__grid > article:nth-child(3) .finance-card__cta" }
+      ]
+    },
+    {
+      "firstClass": "services",
+      "originalTag": "section",
+      "rewriteToSection": false,
+      "slots": [
+        { "name": "eyebrow", "type": "text", "selector": ".services__eyebrow" },
+        { "name": "title", "type": "text", "selector": ".services__title" },
+        { "name": "tile-1.title", "type": "text", "selector": ".services__grid > a:nth-child(1) .service-tile__title" },
+        { "name": "tile-1.link", "type": "link-href", "selector": ".services__grid > a:nth-child(1)" },
+        { "name": "tile-2.title", "type": "text", "selector": ".services__grid > a:nth-child(2) .service-tile__title" },
+        { "name": "tile-2.link", "type": "link-href", "selector": ".services__grid > a:nth-child(2)" },
+        { "name": "tile-3.title", "type": "text", "selector": ".services__grid > a:nth-child(3) .service-tile__title" },
+        { "name": "tile-3.link", "type": "link-href", "selector": ".services__grid > a:nth-child(3)" },
+        { "name": "tile-4.title", "type": "text", "selector": ".services__grid > a:nth-child(4) .service-tile__title" },
+        { "name": "tile-4.link", "type": "link-href", "selector": ".services__grid > a:nth-child(4)" },
+        { "name": "tile-5.title", "type": "text", "selector": ".services__grid > a:nth-child(5) .service-tile__title" },
+        { "name": "tile-5.link", "type": "link-href", "selector": ".services__grid > a:nth-child(5)" },
+        { "name": "tile-6.title", "type": "text", "selector": ".services__grid > a:nth-child(6) .service-tile__title" },
+        { "name": "tile-6.link", "type": "link-href", "selector": ".services__grid > a:nth-child(6)" },
+        { "name": "footer-cta", "type": "link", "selector": ".services__footer a" }
+      ]
+    },
+    {
+      "firstClass": "blog-cards",
+      "originalTag": "section",
+      "rewriteToSection": false,
+      "slots": [
+        { "name": "eyebrow", "type": "text", "selector": ".blog-cards__eyebrow" },
+        { "name": "title", "type": "text", "selector": ".blog-cards__title" },
+        { "name": "card-1.title", "type": "text", "selector": ".blog-cards__grid > a:nth-child(1) .blog-card__title" },
+        { "name": "card-1.link", "type": "link-href", "selector": ".blog-cards__grid > a:nth-child(1)" },
+        { "name": "card-2.title", "type": "text", "selector": ".blog-cards__grid > a:nth-child(2) .blog-card__title" },
+        { "name": "card-2.link", "type": "link-href", "selector": ".blog-cards__grid > a:nth-child(2)" },
+        { "name": "card-3.title", "type": "text", "selector": ".blog-cards__grid > a:nth-child(3) .blog-card__title" },
+        { "name": "card-3.link", "type": "link-href", "selector": ".blog-cards__grid > a:nth-child(3)" },
+        { "name": "card-4.title", "type": "text", "selector": ".blog-cards__grid > a:nth-child(4) .blog-card__title" },
+        { "name": "card-4.link", "type": "link-href", "selector": ".blog-cards__grid > a:nth-child(4)" }
+      ]
+    },
+    {
+      "firstClass": "brand-logos",
+      "originalTag": "section",
+      "rewriteToSection": false,
+      "slots": [
+        { "name": "eyebrow", "type": "text", "selector": ".brand-logos__eyebrow" },
+        { "name": "logo-1", "type": "image", "selector": ".logo-track img:nth-child(1)" },
+        { "name": "logo-2", "type": "image", "selector": ".logo-track img:nth-child(2)" },
+        { "name": "logo-3", "type": "image", "selector": ".logo-track img:nth-child(3)" },
+        { "name": "logo-4", "type": "image", "selector": ".logo-track img:nth-child(4)" },
+        { "name": "logo-5", "type": "image", "selector": ".logo-track img:nth-child(5)" }
+      ]
+    },
+    {
+      "firstClass": "locations",
+      "originalTag": "section",
+      "rewriteToSection": false,
+      "slots": [
+        { "name": "eyebrow-band", "type": "text", "selector": ".locations__eyebrow-band" },
+        { "name": "proof", "type": "text", "selector": ".locations__proof" },
+        { "name": "more", "type": "text", "selector": ".locations__more" }
+      ]
+    }
+  ],
+  "headerBoundary": {
+    "startsAt": "body > a.skip-link (line 891)",
+    "endsAt": "</header> (line 991)",
+    "includes": ["utility-strip", "site-header (main-header + mega-nav)"]
+  },
+  "footerBoundary": {
+    "startsAt": "<footer class=\"site-footer\"> (line 1166)",
+    "endsAt": "</footer> (line 1214)"
+  },
+  "headLinks": [],
+  "inlineStyleLines": [[99, 887]],
+  "inlineScriptLines": [[1216, 1257], [1260, 1454]],
+  "externalLibs": [
+    { "name": "lenis-css", "src": "lenis.min.css", "strategy": "concat-into-template-css" },
+    { "name": "lenis-js", "src": "lenis.min.js", "strategy": "vendor-as-template-lib", "vendorPath": "scripts/wheelercat-home-lenis.js" }
+  ],
+  "assetStrategy": "vendor",
+  "assetBase": "http://127.0.0.1:8123/",
+  "vendorAssetsTo": "assets/wheelercat-home/",
+  "strip": [
+    { "what": "Stardust provenance comment (lines 4-81)", "reason": "Dev-tool metadata, not delivered content" },
+    { "what": "main-header__logo img — keep static (in header fragment)", "reason": "Part of header fragment, not main slots" },
+    { "what": "skip-to-main anchor inline onfocus/onblur attributes", "reason": "Keep — accessibility feature" }
+  ],
+  "fonts": [
+    { "family": "Roboto Condensed", "src": "assets/fonts/ieVl2ZhZI2eCN5jzbjEETS9weq8-19K7DQ.woff2" },
+    { "family": "Roboto", "src": "assets/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBA.woff2" },
+    { "family": "Roboto bold", "src": "assets/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2" },
+    { "family": "icomoon", "src": "assets/fonts/icomoon.ttf" },
+    { "family": "Oswald", "src": "assets/fonts/TK3IWkUHHAIjg75cFRf3bXL8LICs1_Fv40pKlN4NNSeSASz7FmlWHYg.woff2" }
+  ],
+  "notes": "Hero background-image is on .hero (the section itself) via CSS inline-style equivalent. Approach: slot the hero section's background-image as a background-image slot pointing to the Compact_Track_Loader image. Service tile and blog-card background images use BEM modifier classes — left as page-CSS (NOT authorable) since they require parallel CSS rule changes."
+}

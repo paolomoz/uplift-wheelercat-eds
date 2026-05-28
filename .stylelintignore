@@ -1,0 +1,8 @@
+# Per-template CSS is vendor — extracted verbatim from the source
+# generator's inline <style>. Ignore everything in styles/ except the
+# boilerplate files we own.
+styles/*.css
+!styles/styles.css
+!styles/fonts.css
+!styles/lazy-styles.css
+experiments/

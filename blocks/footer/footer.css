@@ -1,20 +1,15 @@
-footer {
-  background-color: var(--light-color);
-  font-size: var(--body-font-size-xs);
-}
-
-footer .footer > div {
-  margin: auto;
-  max-width: 1200px;
-  padding: 40px 24px 24px;
-}
-
-footer .footer p {
-  margin: 0;
-}
-
-@media (width >= 900px) {
-  footer .footer > div {
-    padding: 40px 32px 24px;
-  }
-}
+/*
+ * Intentionally empty.
+ *
+ * EDS auto-loads /blocks/<blockname>/<blockname>.css for every block.
+ * The original boilerplate shipped element-level rules
+ * (footer { background-color: ... }, footer .footer > div { ... })
+ * scoped to the boilerplate's DA-authored footer markup.
+ *
+ * Our overlay model uses blocks/footer/footer.js to fetch a static
+ * /fragments/<template>/footer.html fragment, so the boilerplate
+ * rules cascade destructively into the fragment.
+ *
+ * All actual footer styling for an overlay page lives in
+ * /styles/<template>.css.
+ */
