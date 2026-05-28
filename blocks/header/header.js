@@ -4,6 +4,7 @@ import { loadFragment } from '../fragment/fragment.js';
 const { locale } = getConfig();
 
 const HEADER_PATH = '/fragments/nav/header';
+const LOGO_FALLBACK = '/img/wheelercat-home/logo.png';
 
 // Verb definitions: matches text starting with keyword, attaches icon + sub-label.
 const VERB_DEFS = [
@@ -48,19 +49,20 @@ function rebuildChrome(fragment) {
     href: a.getAttribute('href'),
   }));
 
-  // Group verbs: a link whose visible text starts with one of VERB_DEFS's
-  // keyword begins a new verb; subsequent links are its dropdown items
-  // until the next verb keyword (or end of zone).
+  // Group verbs: a link in a <p> (parent=P) whose text starts with a verb
+  // keyword opens a new verb. Subsequent links in <li> (parent=LI) are its
+  // dropdown items, until the next P-anchor breaks the group.
   const verbs = [];
   let current = null;
   for (const a of verbZone) {
     const text = a.textContent.trim();
     const href = a.getAttribute('href');
-    const def = VERB_DEFS.find((v) => text.startsWith(v.keyword));
+    const inParagraph = a.parentElement?.tagName === 'P';
+    const def = inParagraph ? VERB_DEFS.find((v) => text.startsWith(v.keyword)) : null;
     if (def) {
       current = { ...def, href, items: [] };
       verbs.push(current);
-    } else if (current) {
+    } else if (current && a.parentElement?.tagName === 'LI') {
       current.items.push({ text, href });
     }
   }
@@ -68,7 +70,8 @@ function rebuildChrome(fragment) {
   const phoneHref = phoneAnchor?.getAttribute('href') || '';
   const phoneText = phoneAnchor?.textContent.trim() || '';
   const logoHref = logoLink?.getAttribute('href') || '/';
-  const logoSrc = logoImg?.getAttribute('src') || '';
+  let logoSrc = logoImg?.getAttribute('src') || '';
+  if (!logoSrc || logoSrc === 'about:error') logoSrc = LOGO_FALLBACK;
   const logoAlt = logoImg?.getAttribute('alt') || 'Wheeler Machinery Co.';
 
   return `
