@@ -798,11 +798,12 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
 }
 .text.block p:has(br):has(em) em,
 .columns.block p:has(br):has(em) em {
-  font-family: var(--font-body);
-  font-size: 0.88rem;
-  font-style: italic;
-  font-weight: normal;
-  color: var(--color-body);
+  font-family: var(--font-body) !important;
+  font-size: 0.88rem !important;
+  font-style: italic !important;
+  font-weight: normal !important;
+  color: var(--color-body) !important;
+  letter-spacing: normal !important;
   display: block;
   line-height: 1.5;
 }
