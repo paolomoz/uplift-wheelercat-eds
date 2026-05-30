@@ -86,7 +86,12 @@
   .utility-strip__more-menu a:hover { color: var(--color-cat-yellow); background: rgba(255,204,0,0.06); }
 
   /* Header */
-  .site-header { position: sticky; top: 0; z-index: 50; background: var(--color-surface-dark); color: var(--color-text-on-dark); }
+  /* Sticky header — apply to .header-wrapper (EDS body-level wrapper).
+     If applied to .site-header instead, its containing block is the
+     equally-tall .header-wrapper and there's no scroll range to stick
+     across. */
+  .header-wrapper { position: sticky; top: 0; z-index: 50; }
+  .site-header { background: var(--color-surface-dark); color: var(--color-text-on-dark); }
   .main-header { background: var(--color-surface-dark); }
   .main-header__inner { display: flex; justify-content: space-between; align-items: stretch; padding: 0; gap: var(--sp-md); max-width: var(--container-max); margin: 0 auto; padding-left: var(--sp-lg); padding-right: var(--sp-lg); }
   .main-header__logo { display: inline-flex; align-items: center; padding: 14px 0; }
