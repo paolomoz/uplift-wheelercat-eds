@@ -1560,7 +1560,11 @@ main .section.logos-band { padding: var(--sp-xxl) 0; border-top: 1px solid rgba(
   align-items: center;
   gap: var(--sp-sm);
 }
-.cards.locations > ul > li .cards-card-body p {
+/* Specificity bump (:not pseudo-class) needed to beat the inherited
+   `.cards.block .cards-card-body p:not(.button-wrapper) { color: var(--color-body) }`
+   rule from the shared cards-block base. Without this, branch names on
+   the dark substrate render in the body-text dark color and become unreadable. */
+.cards.locations > ul > li .cards-card-body p:not(.button-wrapper) {
   margin: 0;
   font-family: var(--font-display);
   font-weight: 700;
