@@ -291,6 +291,12 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
   transition: color 150ms;
 }
 .breadcrumb.block p a:hover { color: var(--color-heading); }
+.breadcrumb.block p em {
+  color: var(--color-cat-yellow);
+  font-style: normal;
+  font-weight: 700;
+  padding: 0 var(--sp-xs);
+}
 
 /* ───── HERO BLOCK ───── */
 .section.hero-container { padding: 0; }
