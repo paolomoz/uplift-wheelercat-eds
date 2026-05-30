@@ -1417,18 +1417,17 @@ main .section.yellow-band .text.block > div > div > p {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
+  align-items: flex-start;
+  justify-content: space-between;
+  text-align: left;
   height: 100%;
   width: 100%;
-  padding: var(--sp-md);
-  gap: var(--sp-sm);
+  padding: var(--sp-lg);
+  gap: 0;
 }
 .cards.tiles > ul > li .cards-card-body p { margin: 0; }
 .cards.tiles > ul > li .cards-card-body > p:first-child {
-  font-size: 40px;
-  color: var(--color-cat-yellow);
+  font-size: 0;
   line-height: 1;
   border: none;
   padding: 0;
@@ -1436,8 +1435,27 @@ main .section.yellow-band .text.block > div > div > p {
   text-transform: none;
   letter-spacing: 0;
 }
-.cards.tiles > ul > li .cards-card-body > p:first-child .icon { font-size: 40px; color: var(--color-cat-yellow); }
-.cards.tiles > ul > li .cards-card-body > p:first-child .icon img { width: 40px; height: 40px; display: block; }
+/* Icon recolor via CSS mask — <img src=x.svg> can't inherit currentColor;
+   render the SVG as a mask with background-color = visible icon color. */
+.cards.tiles > ul > li .cards-card-body > p:first-child .icon {
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  background-color: var(--color-cat-yellow);
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+          mask-size: contain;
+}
+.cards.tiles > ul > li .cards-card-body > p:first-child .icon img { display: none; }
+.cards.tiles .icon-service { -webkit-mask-image: url('/icons/service.svg'); mask-image: url('/icons/service.svg'); }
+.cards.tiles .icon-order   { -webkit-mask-image: url('/icons/order.svg');   mask-image: url('/icons/order.svg');   }
+.cards.tiles .icon-new     { -webkit-mask-image: url('/icons/new.svg');     mask-image: url('/icons/new.svg');     }
+.cards.tiles .icon-used    { -webkit-mask-image: url('/icons/used.svg');    mask-image: url('/icons/used.svg');    }
+.cards.tiles .icon-phone   { -webkit-mask-image: url('/icons/phone.svg');   mask-image: url('/icons/phone.svg');   }
+.cards.tiles .icon-rent    { -webkit-mask-image: url('/icons/rent.svg');    mask-image: url('/icons/rent.svg');    }
 .cards.tiles > ul > li h3 {
   font-family: var(--font-display);
   font-weight: 700;
