@@ -269,6 +269,29 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
 .cards.rail p.button-wrapper a.button.primary::after { content: " ›"; }
 .cards.rail p.button-wrapper a.button.primary:hover { background: transparent; color: #fff; border-color: transparent; }
 
+/* ───── BREADCRUMB BLOCK ───── */
+.section.breadcrumb-container { padding: 0; }
+.breadcrumb.block { background: var(--color-page); border-bottom: 1px solid rgba(39,39,39,0.08); width: 100%; max-width: none !important; }
+.breadcrumb.block > div {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 12px var(--sp-lg);
+}
+.breadcrumb.block p {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-body);
+  margin: 0;
+}
+.breadcrumb.block p a {
+  color: var(--color-body);
+  transition: color 150ms;
+}
+.breadcrumb.block p a:hover { color: var(--color-heading); }
+
 /* ───── HERO BLOCK ───── */
 .section.hero-container { padding: 0; }
 .hero.block {
