@@ -155,23 +155,38 @@ function resolveTemplateName() {
 /**
  * Apply the static-page overlay to main.
  * Returns true if the overlay ran, false otherwise.
+ *
+ * Two modes, driven by whether /templates/<template>.html exists:
+ *
+ *   - overlay mode (HTML present): the template's <main> replaces the
+ *     authored content; [data-slot] markers are filled from the DA
+ *     block tables; main.dataset.overlay is set so loadSections is
+ *     skipped (template is the visual spec).
+ *
+ *   - blocks mode (HTML 404): the authored DA content stays in main
+ *     and gets standard EDS decoration; only the template CSS and
+ *     chrome theme are activated. Lets a page author with generic
+ *     EDS blocks (hero, text, cards, columns) while still inheriting
+ *     a project's design tokens and chrome.
+ *
+ * In both modes main.dataset.theme is set (chrome fragment selector).
  */
 async function applyTemplateOverlay(main) {
   const templateName = resolveTemplateName();
   if (!templateName) return false;
 
-  const slots = readBlockSlots(main);
-
-  // Load template-scoped CSS in parallel with the template HTML so
-  // styles arrive before body.appear paints. `head.html` no longer
-  // hardcodes a per-template stylesheet — each template ships its
-  // own at /styles/<template>.css.
+  // Always activate the theme — chrome fragments resolve from dataset.theme,
+  // and the per-theme stylesheet loads regardless of overlay mode.
+  main.dataset.theme = templateName;
   const cssLoaded = loadCSS(`${window.hlx.codeBasePath}/styles/${templateName}.css`);
+
+  const slots = readBlockSlots(main);
 
   const resp = await fetch(`${window.hlx.codeBasePath}/templates/${templateName}.html`);
   if (!resp.ok) {
     // eslint-disable-next-line no-console
-    console.warn(`[overlay] template not found: ${templateName}`);
+    console.info(`[overlay] no template HTML for "${templateName}" — blocks mode (CSS + chrome only)`);
+    await cssLoaded;
     return false;
   }
   const templateHtml = await resp.text();
