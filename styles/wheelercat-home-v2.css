@@ -330,10 +330,41 @@
      under the image cell. */
   .cards.photos.four > ul > li .cards-card-body { display: block; position: relative; z-index: 2; padding: var(--sp-lg); width: 100%; }
   .cards.photos.four > ul > li h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; line-height: 1.15; letter-spacing: 0; text-transform: none; color: var(--color-text-on-dark); margin: 0 0 var(--sp-sm); text-wrap: balance; }
-  .cards.photos.four > ul > li p strong > a { background: transparent; color: var(--color-cat-yellow); border: none; padding: 0; font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; }
-  .cards.photos.four > ul > li p strong > a::after { content: "›"; font-weight: 700; font-size: 1.1rem; line-height: 0.7; transition: transform 200ms; }
-  .cards.photos.four > ul > li:hover p strong > a::after { transform: translateX(2px); }
+  /* Render "Read More" as a text link with arrow, not a filled button.
+     EDS's decorateButton unwraps <strong> and adds .button.primary to the
+     <a>; target the post-decoration shape (p.button-wrapper > a.button.primary). */
   .cards.photos.four > ul > li p.button-wrapper { margin: 0; padding: 0; border: none; }
+  .cards.photos.four > ul > li p.button-wrapper a.button.primary,
+  .cards.photos.four > ul > li p strong > a {
+    background: transparent;
+    color: var(--color-cat-yellow);
+    border: none;
+    padding: 0;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+  }
+  .cards.photos.four > ul > li p.button-wrapper a.button.primary:hover,
+  .cards.photos.four > ul > li p strong > a:hover {
+    background: transparent;
+    color: var(--color-cat-yellow-hover);
+    border: none;
+  }
+  .cards.photos.four > ul > li p.button-wrapper a.button.primary::after,
+  .cards.photos.four > ul > li p strong > a::after {
+    content: "›";
+    font-weight: 700;
+    font-size: 1.1rem;
+    line-height: 0.7;
+    transition: transform 200ms;
+  }
+  .cards.photos.four > ul > li:hover p.button-wrapper a.button.primary::after,
+  .cards.photos.four > ul > li:hover p strong > a::after { transform: translateX(2px); }
 
   /* ─ .cards.logos — 5-up grayscale strip ─ */
   .cards.logos > ul { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--sp-xl); margin: var(--sp-xl) auto 0; align-items: center; max-width: 1080px; }
