@@ -299,6 +299,14 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
 .cta-bar.block p em { font-style: normal; }
 .cta-bar.block p em > a .icon { font-size: 0.85em; margin-right: 4px; }
 
+/* Dark columns.alternate: the <p> containing the icon-link should sit inline
+   next to the preceding <p class="button-wrapper"> (LEARN MORE button) */
+.section.dark .columns.alternate p:has(> em > a) {
+  display: inline-block;
+  margin: 0 0 0 var(--sp-md);
+  vertical-align: middle;
+}
+
 /* Dark columns.alternate (Fleet Training): <em><a> with phone icon → yellow text link, no pill */
 .section.dark .columns.alternate p em > a {
   display: inline-flex;
