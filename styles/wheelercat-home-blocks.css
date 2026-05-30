@@ -1478,9 +1478,33 @@ main .section.yellow-band .text.block > div > div > p {
   background: linear-gradient(to top, rgba(18,18,18,0.85) 0%, rgba(18,18,18,0.55) 60%, rgba(18,18,18,0.30) 100%);
 }
 
-/* .cards.photos.four — 4-up 2:3 portrait */
+/* .cards.photos.four — 4-up 2:3 portrait, blog-card variant.
+   Three overrides vs base .cards.photos:
+   1. justify-content: flex-end — base inherits flex-direction: column from
+      .cards.block > ul > li, so align-items: flex-end aligns on the wrong
+      axis (right, not bottom). Force justify-content to put body at bottom.
+   2. h3 text-transform: none — blog titles are Title Case in proto, not
+      uppercase like service-card titles.
+   3. Lighter gradient — blog photos are editorial; the heavy CVA-photo
+      gradient hides too much of the image. */
 .cards.photos.four > ul { grid-template-columns: repeat(4, minmax(0, 1fr)); }
-.cards.photos.four > ul > li { aspect-ratio: 2 / 3; }
+.cards.photos.four > ul > li {
+  aspect-ratio: 2 / 3;
+  justify-content: flex-end;
+  align-items: stretch;
+}
+.cards.photos.four > ul > li h3 {
+  text-transform: none;
+  font-size: 1.15rem;
+  letter-spacing: 0;
+  text-wrap: balance;
+}
+.cards.photos.four > ul > li::before {
+  background: linear-gradient(to top, rgba(18,18,18,0.92) 0%, rgba(18,18,18,0.55) 25%, rgba(18,18,18,0.15) 50%, rgba(18,18,18,0.02) 70%);
+}
+.cards.photos.four > ul > li .cards-card-body {
+  padding: var(--sp-lg);
+}
 
 /* warm-stone substrate text — eyebrow uses dark color */
 .section.warm-stone .text.block > div > div > p:first-child {
