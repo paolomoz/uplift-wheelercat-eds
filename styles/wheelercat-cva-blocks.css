@@ -203,6 +203,11 @@ a.button.secondary:hover { background: var(--color-surface-dark); color: var(--c
 p.button-wrapper { margin: 0; }
 p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
 
+/* Inside columns content cells, render consecutive buttons inline (TMR has
+   "Learn More About Rebuilds" primary + "Visit FAQ Page" secondary side by side) */
+.columns.block p.button-wrapper { display: inline-block; margin: 0 var(--sp-md) 0 0; vertical-align: middle; }
+.columns.block p.button-wrapper + p.button-wrapper { margin-top: 0; margin-left: 0; }
+
 /* Hero gets a white pill button (matches prototype's btn-pill-light) */
 .hero a.button.primary {
   background: var(--color-text-on-dark);
@@ -730,9 +735,8 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
 }
 .cta-bar.block > div {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: var(--sp-xl);
+  gap: var(--sp-md);
   flex-wrap: wrap;
   padding-left: calc(var(--sp-md) + var(--sp-lg));
   padding-right: var(--sp-lg);
@@ -748,12 +752,13 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
   letter-spacing: 0.02em;
   line-height: 1.15;
   text-transform: uppercase;
-  margin: 0;
+  margin: 0 auto 0 0;     /* push following buttons to the right */
   max-width: 28ch;
   text-wrap: balance;
+  flex: 1 1 28ch;
 }
 .cta-bar.block h2 strong { font-weight: inherit; }
-.cta-bar.block p.button-wrapper { margin: 0; }
+.cta-bar.block p.button-wrapper { margin: 0; flex: 0 0 auto; }
 .cta-bar.block a.button.primary {
   background: var(--color-text-on-dark);
   color: var(--color-text-on-yellow);
