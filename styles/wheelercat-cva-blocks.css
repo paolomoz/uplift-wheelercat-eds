@@ -92,9 +92,20 @@ main .section.full-bleed > div { max-width: none; padding: 0; }
 /* ───── ICONS ───── */
 .icon { font-family: var(--font-icon) !important; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; speak: never; display: inline-block; }
 /* EDS aem.js decorateIcons() appends an <img src="/icons/<name>.svg"> inside
-   each .icon span. We're using the icomoon font instead (the ::before content
-   above), so hide the (potentially broken) img to keep the rendering clean. */
-.icon > img { display: none; }
+   each .icon span. For chrome icons (loaded via fragments) the img isn't
+   appended; the icomoon font ::before glyph renders. For main-content icons
+   the img IS appended — we let it show (SVG with currentColor + proper sizing)
+   for any icons we provide as SVG files under /icons/. The icomoon ::before
+   acts as fallback when the SVG doesn't exist. */
+.icon > img {
+  width: 1em;
+  height: 1em;
+  vertical-align: -0.15em;
+  display: inline-block;
+}
+/* When an SVG icon is rendered (img present), hide the font ::before so we
+   don't get a doubled glyph. */
+.icon:has(> img)::before { content: none !important; }
 .icon-menu::before { content: "\e904" !important; }
 .icon-phone::before { content: "\e90b" !important; }
 .icon-new::before { content: "\e907" !important; }
