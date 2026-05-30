@@ -95,18 +95,18 @@ main .section.full-bleed > div { max-width: none; padding: 0; }
    each .icon span. We're using the icomoon font instead (the ::before content
    above), so hide the (potentially broken) img to keep the rendering clean. */
 .icon > img { display: none; }
-.icon-menu::before { content: "\e904"; }
-.icon-phone::before { content: "\e90b"; }
-.icon-new::before { content: "\e907"; }
-.icon-used::before { content: "\e90c"; }
-.icon-rent::before { content: "\e909"; }
-.icon-order::before { content: "\e908"; }
-.icon-service::before { content: "\e90a"; }
-.icon-facebook::before { content: "\e900"; }
-.icon-instagram::before{ content: "\e902"; }
-.icon-linkedin::before { content: "\e903"; }
-.icon-youtube::before { content: "\e90d"; }
-.icon-twitter::before { content: "\e905"; }
+.icon-menu::before { content: "\e904" !important; }
+.icon-phone::before { content: "\e90b" !important; }
+.icon-new::before { content: "\e907" !important; }
+.icon-used::before { content: "\e90c" !important; }
+.icon-rent::before { content: "\e909" !important; }
+.icon-order::before { content: "\e908" !important; }
+.icon-service::before { content: "\e90a" !important; }
+.icon-facebook::before { content: "\e900" !important; }
+.icon-instagram::before{ content: "\e902" !important; }
+.icon-linkedin::before { content: "\e903" !important; }
+.icon-youtube::before { content: "\e90d" !important; }
+.icon-twitter::before { content: "\e905" !important; }
 
 /* ───── CHROME (lifted from wheelercat-cva.css — fragments use these classes) ───── */
 /* Utility strip */
