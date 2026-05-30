@@ -412,7 +412,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
   position: relative;
   display: grid;
   grid-template-columns: 1fr;
-  min-height: 560px;
+  min-height: 520px;
   align-items: center;
   background: var(--color-surface-dark);
   color: var(--color-text-on-dark);
@@ -508,7 +508,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
 
 /* ───── TEXT BLOCK ───── */
 .text.block { width: 100%; max-width: 880px; margin: 0 auto; }
-.text.block.centered { text-align: center; max-width: 70ch; }
+.text.block.centered { text-align: center; max-width: 880px; }
 
 /* First paragraph as eyebrow */
 .text.block > div > div > p:first-child {
@@ -714,7 +714,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
 /* ─ PLACEHOLDER signature for tier / rail card summaries ─
    Author convention: a paragraph containing <small> (eyebrow) + <br> + <em> (italic shape)
    becomes the dashed-yellow placeholder box matching the prototype. */
-.cards.tiers .cards-card-body p:has(br):has(em) {
+.cards.tiers .cards-card-body p:has(code) {
   border: 2px dashed var(--color-cat-yellow);
   background: rgba(255,255,255,0.5);
   padding: var(--sp-sm) var(--sp-md);
@@ -723,7 +723,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
   flex: 1;
   font-style: normal;
 }
-.cards.tiers .cards-card-body p:has(br):has(em) small {
+.cards.tiers .cards-card-body p:has(code) code {
   display: block;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.6rem;
@@ -733,7 +733,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
   opacity: 0.7;
   margin-bottom: 4px;
 }
-.cards.tiers .cards-card-body p:has(br):has(em) em {
+.cards.tiers .cards-card-body p:has(code) em {
   font-family: var(--font-body);
   font-size: 0.88rem;
   font-style: italic;
@@ -744,7 +744,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
 }
 
 /* Same pattern, dark substrate variant for value-rail */
-.cards.rail .cards-card-body p:has(br):has(em) {
+.cards.rail .cards-card-body p:has(code) {
   border: 2px dashed rgba(255,204,0,0.6);
   background: rgba(255,204,0,0.05);
   padding: 6px 8px;
@@ -752,7 +752,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
   margin: 0;
   flex: 1;
 }
-.cards.rail .cards-card-body p:has(br):has(em) small {
+.cards.rail .cards-card-body p:has(code) code {
   display: block;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.55rem;
@@ -761,7 +761,7 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
   color: rgba(255,204,0,0.7);
   margin-bottom: 4px;
 }
-.cards.rail .cards-card-body p:has(br):has(em) em {
+.cards.rail .cards-card-body p:has(code) em {
   font-family: var(--font-body);
   font-size: 0.78rem;
   font-style: italic;
@@ -772,8 +772,8 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
 }
 
 /* Generic PLACEHOLDER signature for text + columns blocks (same <small><br><em> pattern) */
-.text.block p:has(br):has(em),
-.columns.block p:has(br):has(em) {
+.text.block p:has(code),
+.columns.block p:has(code) {
   display: inline-block;
   border: 2px dashed var(--color-cat-yellow);
   background: rgba(255,255,255,0.5);
@@ -784,9 +784,9 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
   text-align: left;
   font-style: normal;
 }
-.text.block.centered p:has(br):has(em) { display: inline-block; }
-.text.block p:has(br):has(em) small,
-.columns.block p:has(br):has(em) small {
+.text.block.centered p:has(code) { display: inline-block; }
+.text.block p:has(code) code,
+.columns.block p:has(code) code {
   display: block;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 0.6rem;
@@ -796,8 +796,8 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
   opacity: 0.7;
   margin-bottom: 4px;
 }
-.text.block p:has(br):has(em) em,
-.columns.block p:has(br):has(em) em {
+.text.block p:has(code) em,
+.columns.block p:has(code) em {
   font-family: var(--font-body) !important;
   font-size: 0.88rem !important;
   font-style: italic !important;
