@@ -231,6 +231,29 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
   letter-spacing: 0.08em;
 }
 
+/* Fleet Training "Call Now" link in dark columns.alternate — yellow text + phone icon,
+   no outline (it's a tel link presented as a text-style accent, not a real button). */
+.section.dark .columns.alternate a.button.secondary {
+  background: transparent;
+  color: var(--color-cat-yellow);
+  border-color: transparent;
+  padding: 14px 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-transform: none;
+}
+.section.dark .columns.alternate a.button.secondary:hover {
+  color: var(--color-cat-yellow-hover);
+  background: transparent;
+}
+.section.dark .columns.alternate a.button.secondary .icon { font-size: 0.85em; margin-right: 4px; }
+
+/* Phone icon inside buttons — generic sizing rule */
+a.button .icon { font-size: 0.9em; margin-right: 4px; }
+.cta-bar.block a.button.secondary .icon { font-size: 0.85em; margin-right: 4px; }
+
 /* Tier-card CTA inside .cards.tiers — text-style with arrow, not a filled button */
 .cards.tiers p.button-wrapper a.button.primary {
   background: transparent;
@@ -313,11 +336,15 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
 /* The hero has 2 cells in 1 row: text + picture. EDS keeps them as nested divs. */
 .hero.block > div { display: contents; }
 .hero.block > div > div:first-child {
-  /* text cell */
+  /* text cell — pad like the prototype's hero (padding on the outer, content
+     fits 1100px); since EDS hero is a single element, set max-width to include
+     the padding so the actual TEXT area matches the prototype's 1100px. */
   position: relative;
   z-index: 2;
-  padding: calc(var(--sp-section) * 1.25) clamp(var(--sp-lg), 5vw, 96px);
-  max-width: 980px;
+  --hero-pad-l: clamp(var(--sp-lg), 5vw, 96px);
+  --hero-pad-r: var(--sp-lg);
+  padding: calc(var(--sp-section) * 1.25) var(--hero-pad-r) calc(var(--sp-section) * 1.25) var(--hero-pad-l);
+  max-width: calc(1100px + var(--hero-pad-l) + var(--hero-pad-r));
 }
 .hero.block > div > div:last-child {
   /* picture cell — positioned absolutely, full-bleed bg */
@@ -497,6 +524,22 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
 
 /* ─ Tier cards variant (.cards.tiers — plan picker, 4-up, Premium elevated) ─ */
 .cards.tiers > ul { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
+
+/* Yellow icomoon glyph between tier label and h3 (per prototype). Keyed by nth-child position. */
+.cards.tiers > ul > li > .cards-card-body h3::before {
+  font-family: var(--font-icon);
+  color: var(--color-heading);
+  font-size: 36px;
+  line-height: 1;
+  display: block;
+  margin: 0 0 var(--sp-sm);
+  -webkit-font-smoothing: antialiased;
+}
+.cards.tiers > ul > li:nth-child(1) > .cards-card-body h3::before { content: "\e908"; } /* icon-order */
+.cards.tiers > ul > li:nth-child(2) > .cards-card-body h3::before { content: "\e90a"; color: var(--color-cat-yellow); } /* icon-service */
+.cards.tiers > ul > li:nth-child(3) > .cards-card-body h3::before { content: "\e907"; } /* icon-new */
+.cards.tiers > ul > li:nth-child(4) > .cards-card-body h3::before { content: "\e90c"; } /* icon-used */
+
 .cards.tiers > ul > li > .cards-card-body > p:first-child {
   /* tier label as yellow pill */
   font-family: var(--font-display);
@@ -567,6 +610,82 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
   gap: var(--sp-md);
   margin-top: var(--sp-xxl);
 }
+/* Yellow icomoon glyph at top of each value-rail card, keyed by nth-child. */
+.cards.rail > ul > li > .cards-card-body h3::before {
+  font-family: var(--font-icon);
+  color: var(--color-cat-yellow);
+  font-size: 22px;
+  line-height: 1;
+  display: block;
+  margin: 0 0 var(--sp-sm);
+  -webkit-font-smoothing: antialiased;
+}
+.cards.rail > ul > li:nth-child(1) > .cards-card-body h3::before { content: "\e908"; } /* order — Parts Availability */
+.cards.rail > ul > li:nth-child(2) > .cards-card-body h3::before { content: "\e90a"; } /* service — Repair-Time */
+.cards.rail > ul > li:nth-child(3) > .cards-card-body h3::before { content: "\e90c"; } /* used — Rebuild Benefits */
+.cards.rail > ul > li:nth-child(4) > .cards-card-body h3::before { content: "\e907"; } /* new — Digital Training */
+.cards.rail > ul > li:nth-child(5) > .cards-card-body h3::before { content: "\e909"; } /* rent — Terms */
+
+/* ─ PLACEHOLDER signature for tier / rail card summaries ─
+   Author convention: a paragraph containing <small> (eyebrow) + <br> + <em> (italic shape)
+   becomes the dashed-yellow placeholder box matching the prototype. */
+.cards.tiers .cards-card-body p:has(small) {
+  border: 2px dashed var(--color-cat-yellow);
+  background: rgba(255,255,255,0.5);
+  padding: var(--sp-sm) var(--sp-md);
+  border-radius: var(--r-primary);
+  margin: 0;
+  flex: 1;
+  font-style: normal;
+}
+.cards.tiers .cards-card-body p:has(small) small {
+  display: block;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-heading);
+  opacity: 0.7;
+  margin-bottom: 4px;
+}
+.cards.tiers .cards-card-body p:has(small) em {
+  font-family: var(--font-body);
+  font-size: 0.88rem;
+  font-style: italic;
+  font-weight: normal;
+  color: var(--color-body);
+  display: block;
+  line-height: 1.5;
+}
+
+/* Same pattern, dark substrate variant for value-rail */
+.cards.rail .cards-card-body p:has(small) {
+  border: 2px dashed rgba(255,204,0,0.6);
+  background: rgba(255,204,0,0.05);
+  padding: 6px 8px;
+  border-radius: var(--r-primary);
+  margin: 0;
+  flex: 1;
+}
+.cards.rail .cards-card-body p:has(small) small {
+  display: block;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.55rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: rgba(255,204,0,0.7);
+  margin-bottom: 4px;
+}
+.cards.rail .cards-card-body p:has(small) em {
+  font-family: var(--font-body);
+  font-size: 0.78rem;
+  font-style: italic;
+  font-weight: normal;
+  color: rgba(255,255,255,0.6);
+  display: block;
+  line-height: 1.5;
+}
+
 .cards.rail > ul > li {
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,204,0,0.18);
