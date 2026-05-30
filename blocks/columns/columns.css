@@ -1,3 +1,4 @@
+@layer base {
 .columns > div {
   display: flex;
   flex-direction: column;
@@ -30,4 +31,5 @@
     flex: 1;
     order: unset;
   }
+}
 }

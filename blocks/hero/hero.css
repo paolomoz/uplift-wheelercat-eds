@@ -1,3 +1,4 @@
+@layer base {
 .hero-container .hero-wrapper {
   max-width: unset;
   padding: 0;
@@ -34,4 +35,5 @@
   .hero {
     padding: 40px 32px;
   }
+}
 }
