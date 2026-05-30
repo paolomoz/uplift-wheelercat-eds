@@ -91,6 +91,10 @@ main .section.full-bleed > div { max-width: none; padding: 0; }
 
 /* ───── ICONS ───── */
 .icon { font-family: var(--font-icon) !important; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; -webkit-font-smoothing: antialiased; speak: never; display: inline-block; }
+/* EDS aem.js decorateIcons() appends an <img src="/icons/<name>.svg"> inside
+   each .icon span. We're using the icomoon font instead (the ::before content
+   above), so hide the (potentially broken) img to keep the rendering clean. */
+.icon > img { display: none; }
 .icon-menu::before { content: "\e904"; }
 .icon-phone::before { content: "\e90b"; }
 .icon-new::before { content: "\e907"; }
