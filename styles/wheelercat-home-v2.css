@@ -325,7 +325,10 @@
   .cards.photos.four > ul > li .cards-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out-expo); }
   .cards.photos.four > ul > li:hover .cards-card-image img { transform: scale(1.06); }
   .cards.photos.four > ul > li::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,18,18,0.92), rgba(18,18,18,0.55) 25%, rgba(18,18,18,0.15) 50%, rgba(18,18,18,0.02) 70%); z-index: 1; pointer-events: none; }
-  .cards.photos.four > ul > li .cards-card-body { position: relative; z-index: 2; padding: var(--sp-lg); width: 100%; }
+  /* Must override display: contents from @layer base — display:contents means
+     no box exists, so position/z-index/padding are ignored and text renders
+     under the image cell. */
+  .cards.photos.four > ul > li .cards-card-body { display: block; position: relative; z-index: 2; padding: var(--sp-lg); width: 100%; }
   .cards.photos.four > ul > li h3 { font-family: var(--font-display); font-weight: 700; font-size: 1.15rem; line-height: 1.15; letter-spacing: 0; text-transform: none; color: var(--color-text-on-dark); margin: 0 0 var(--sp-sm); text-wrap: balance; }
   .cards.photos.four > ul > li p strong > a { background: transparent; color: var(--color-cat-yellow); border: none; padding: 0; font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; display: inline-flex; align-items: center; gap: 4px; }
   .cards.photos.four > ul > li p strong > a::after { content: "›"; font-weight: 700; font-size: 1.1rem; line-height: 0.7; transition: transform 200ms; }
