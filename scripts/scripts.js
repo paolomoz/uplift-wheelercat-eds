@@ -180,6 +180,34 @@ async function applyTemplateOverlay(main) {
   main.dataset.theme = templateName;
   const cssLoaded = loadCSS(`${window.hlx.codeBasePath}/styles/${templateName}.css`);
 
+  // Best-effort per-theme motion script loading. If /scripts/<theme>-motion.js
+  // exists, load it (and Lenis as a prerequisite). 404 is fine — themes
+  // without motion just don't have the file. Loads AFTER theme CSS so
+  // the script can query for finished-decoration DOM.
+  (async () => {
+    const motionUrl = `${window.hlx.codeBasePath}/scripts/${templateName}-motion.js`;
+    try {
+      const probe = await fetch(motionUrl, { method: 'HEAD' });
+      if (!probe.ok) return;
+      // Load Lenis first (peer dep for any motion script)
+      await new Promise((resolve) => {
+        const lenisScript = document.createElement('script');
+        lenisScript.src = `${window.hlx.codeBasePath}/scripts/lenis.min.js`;
+        lenisScript.onload = resolve;
+        lenisScript.onerror = resolve; // tolerate missing
+        document.head.appendChild(lenisScript);
+      });
+      loadCSS(`${window.hlx.codeBasePath}/styles/lenis.min.css`);
+      const motionScript = document.createElement('script');
+      motionScript.src = motionUrl;
+      motionScript.defer = true;
+      document.body.appendChild(motionScript);
+    } catch (err) {
+      // eslint-disable-next-line no-console
+      console.info(`[motion] no per-theme motion script for "${templateName}"`);
+    }
+  })();
+
   const slots = readBlockSlots(main);
 
   const resp = await fetch(`${window.hlx.codeBasePath}/templates/${templateName}.html`);
