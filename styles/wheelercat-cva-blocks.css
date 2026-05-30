@@ -269,6 +269,56 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
 a.button .icon { font-size: 0.9em; margin-right: 4px; }
 .cta-bar.block a.button.secondary .icon { font-size: 0.85em; margin-right: 4px; }
 
+/* ─ Icon-containing anchors: EDS decorateButton skips <a> when it contains an
+   <img> (which decorateIcons appends inside .icon span). So <em><a><span icon><a></em>
+   never becomes .button.secondary. Style em > a directly per surface. ─ */
+
+/* CTA bar: <em><a> with phone icon → yellow pill (matches button.secondary style) */
+.cta-bar.block p em > a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-sm);
+  background: transparent;
+  color: var(--color-cat-yellow);
+  border: 1px solid var(--color-cat-yellow);
+  border-radius: var(--r-pill);
+  padding: 14px 28px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.875rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-style: normal;
+  text-decoration: none;
+  transition: background 200ms var(--ease-out), color 200ms var(--ease-out);
+}
+.cta-bar.block p em > a:hover {
+  background: var(--color-cat-yellow);
+  color: var(--color-text-on-yellow);
+}
+.cta-bar.block p em { font-style: normal; }
+.cta-bar.block p em > a .icon { font-size: 0.85em; margin-right: 4px; }
+
+/* Dark columns.alternate (Fleet Training): <em><a> with phone icon → yellow text link, no pill */
+.section.dark .columns.alternate p em > a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: var(--color-cat-yellow);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  font-style: normal;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+.section.dark .columns.alternate p em > a:hover { color: var(--color-cat-yellow-hover); }
+.section.dark .columns.alternate p em { font-style: normal; }
+.section.dark .columns.alternate p em > a .icon { font-size: 0.85em; }
+
 /* Tier-card CTA inside .cards.tiers — text-style with arrow, not a filled button */
 .cards.tiers p.button-wrapper a.button.primary {
   background: transparent;
