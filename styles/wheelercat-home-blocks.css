@@ -550,6 +550,10 @@ a.button .icon { font-size: 0.9em; margin-right: 4px; }
 
 /* Text block on dark substrate */
 .section.dark .text.block { max-width: 880px; margin: 0 0; text-align: left; }
+/* Explicit override — .section.dark .text.block (0,3,0) ties .text.block.centered
+   (0,3,0) and wins by source order, breaking centering on dark substrates.
+   Re-assert centered intent at equal specificity but later in the file. */
+.section.dark .text.block.centered { max-width: 880px; margin: 0 auto; text-align: center; }
 .section.dark .text.block > div > div > p:first-child {
   color: var(--color-cat-yellow);
   letter-spacing: 0.18em;
