@@ -1572,11 +1572,22 @@ main .section.logos-band { padding: var(--sp-xxl) 0; border-top: 1px solid rgba(
   color: var(--color-text-on-dark);
   text-transform: uppercase;
 }
+/* Map-pin icon — recolor to Cat Yellow via mask-image (same trick as .cards.tiles).
+   <img src=x.svg> cannot inherit currentColor; render via CSS mask + bg-color. */
 .cards.locations > ul > li .icon {
-  font-size: 0.9rem;
-  color: var(--color-cat-yellow);
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  background-color: var(--color-cat-yellow);
+  -webkit-mask-position: center;
+          mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+          mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+          mask-size: contain;
 }
-.cards.locations > ul > li .icon img { width: 0.9rem; height: 0.9rem; }
+.cards.locations > ul > li .icon img { display: none; }
+.cards.locations .icon-map-pin { -webkit-mask-image: url('/icons/map-pin.svg'); mask-image: url('/icons/map-pin.svg'); }
 
 /* HOME-SPECIFIC RESPONSIVE */
 @media (max-width: 1024px) {
