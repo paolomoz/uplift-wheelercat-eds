@@ -1541,11 +1541,21 @@ main .section.yellow-band .text.block > div > div > p {
   align-items: center;
   justify-content: center;
 }
-.cards.logos > ul > li .cards-card-image picture,
+.cards.logos > ul > li .cards-card-image picture {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .cards.logos > ul > li .cards-card-image img {
-  max-height: 64px;
-  width: auto;
+  /* Logo SVGs/PNGs have wide aspect ratios (e.g. 343x100). The shared
+     photo-card rules give the img conflicting max-width/max-height that
+     end up stretching the bitmap inside the box. Force object-fit: contain
+     so the natural aspect is preserved within the 64px-tall cap. */
+  width: 100%;
+  height: 64px;
   max-width: 100%;
+  object-fit: contain;
   display: block;
   margin: 0 auto;
   filter: grayscale(100%);
