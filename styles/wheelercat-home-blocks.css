@@ -1593,6 +1593,14 @@ main .section.logos-band { padding: var(--sp-xxl) 0; border-top: 1px solid rgba(
 .cards.locations > ul > li .icon img { display: none; }
 .cards.locations .icon-map-pin { -webkit-mask-image: url('/icons/map-pin.svg'); mask-image: url('/icons/map-pin.svg'); }
 
+/* Inter-block spacing — EDS wraps each block in .<name>-wrapper but doesn't
+   add gaps between them. A trailing CTA (text.centered) after cards/columns
+   collides into the preceding block without margin. Add explicit top spacing. */
+.cards-wrapper + .text-wrapper,
+.columns-wrapper + .text-wrapper {
+  margin-top: var(--sp-xxl);
+}
+
 /* HOME-SPECIFIC RESPONSIVE */
 @media (max-width: 1024px) {
   .cards.tiles > ul { grid-template-columns: repeat(3, minmax(0, 1fr)); }
