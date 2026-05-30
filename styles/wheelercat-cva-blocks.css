@@ -174,6 +174,9 @@ main .section { padding: var(--sp-section) 0; }
 main .section.hero-container { padding: 0; } /* hero is full-bleed */
 main .section.cta-bar-container { padding: 0; } /* cta-bar paints its own */
 
+/* Hide empty sections (typically the leftover wrapper after metadata is lifted to <head>) */
+main .section:not(:has(.block)) { display: none; }
+
 /* ───── EDS BUTTON CONVENTION (decorated from <strong><a> / <em><a>) ───── */
 a.button {
   display: inline-flex;
@@ -348,6 +351,11 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
   margin: 0 0 var(--sp-xl);
   max-width: 56ch;
   color: var(--color-text-on-dark);
+}
+/* Author convention in hero supporting: <em>...</em> wraps Cat-Yellow accent phrases. */
+.hero.block > div > div:first-child > p:not(:first-child):not(.button-wrapper) em {
+  color: var(--color-cat-yellow);
+  font-style: normal;
 }
 
 .hero.block p.button-wrapper { margin-top: 0; }
@@ -632,18 +640,25 @@ p.button-wrapper + p.button-wrapper { margin-top: var(--sp-md); }
 .section.dark .columns.block > div > div > p:not(:first-child):not(.button-wrapper) { color: rgba(255,255,255,0.85); }
 .section.dark .columns.block ul:not(.cards ul) li { color: rgba(255,255,255,0.85); }
 
-/* ─ Alternate variant (.columns.alternate — image-text alternation rows) ─ */
+/* ─ Alternate variant (.columns.alternate — image-text alternation rows) ─
+   Authoring shape (matches user's manual sample): content-cell first,
+   image-cell second. To match the prototype's pattern (Managed PM
+   = image-left, Fleet Training = image-right), reverse ODD rows so:
+     row 1 (odd, reversed):  image-left,  content-right
+     row 2 (even, default):  content-left, image-right
+*/
 .columns.alternate.block { display: block; }
 .columns.alternate.block > div {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--sp-xxl);
+  align-items: center;
   padding: var(--sp-xxl) 0;
   border-top: 1px solid rgba(255,255,255,0.08);
 }
 .columns.alternate.block > div:first-child { border-top: none; padding-top: 0; }
-.columns.alternate.block > div:nth-child(even) {
-  grid-auto-flow: dense;
-}
-.columns.alternate.block > div:nth-child(even) > div:first-child { order: 2; }
-.columns.alternate.block > div:nth-child(even) > div:last-child { order: 1; }
+.columns.alternate.block > div:nth-child(odd) > div:first-child { order: 2; }
+.columns.alternate.block > div:nth-child(odd) > div:last-child { order: 1; }
 
 /* ─ Default columns (.columns no variant — TMR-style) — single-row image-content ─ */
 .columns:not(.alternate).block > div {
