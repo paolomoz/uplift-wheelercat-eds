@@ -88,7 +88,16 @@
 
   /* EDS decorates blocks AFTER DOMContentLoaded. Wait until the blocks
      we care about are marked data-block-status="loaded" before wiring
-     click handlers — otherwise initLightbox runs on an empty selector. */
+     click handlers — otherwise initLightbox runs on an empty selector.
+     CRITICAL: guard against double-init. Both the observer and the 5s
+     safety timeout can fire — without a flag, two overlay elements get
+     appended to <body> and click handlers fight each other. */
+  let lightboxInitialized = false;
+  function safeInit() {
+    if (lightboxInitialized) return;
+    lightboxInitialized = true;
+    initLightbox();
+  }
   function waitForBlocksThenInit() {
     const blocksReady = () => {
       const hero = document.querySelector('.hero.listing.block');
@@ -97,18 +106,17 @@
           && (!gallery || gallery.dataset.blockStatus === 'loaded');
     };
     if (blocksReady() && document.querySelector('.cards.gallery.block img, .hero.listing.block img')) {
-      initLightbox();
+      safeInit();
       return;
     }
     const observer = new MutationObserver(() => {
       if (blocksReady() && document.querySelector('.cards.gallery.block img, .hero.listing.block img')) {
         observer.disconnect();
-        initLightbox();
+        safeInit();
       }
     });
     observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-block-status'] });
-    // Safety: cap wait at 5s; init regardless
-    setTimeout(() => { observer.disconnect(); initLightbox(); }, 5000);
+    setTimeout(() => { observer.disconnect(); safeInit(); }, 5000);
   }
 
   if (document.readyState === 'loading') {
