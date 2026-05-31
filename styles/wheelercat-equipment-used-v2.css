@@ -191,13 +191,18 @@
   .breadcrumb.block p a:hover { color: var(--color-heading); }
   .breadcrumb.block p em { color: var(--color-cat-yellow); font-style: normal; font-weight: 700; padding: 0 var(--sp-xs); }
 
-  /* ─ .hero.listing — 2-col product hero ─ */
+  /* ─ .hero.listing — 2-col product hero.
+     DA strips custom classes from <p>, so we target by structure:
+     - p > strong:only-child  → price band (yellow on dark)
+     - p > em > a             → Print/Share secondary action strip
+     - p > strong > a         → button.primary (CTA) via EDS decorateButton
+   */
   .hero.listing.block { display: grid; grid-template-columns: 1fr; min-height: 0; padding: var(--sp-section) 0; background: var(--color-page); color: var(--color-heading); }
   .hero.listing.block > div {
     display: grid; grid-template-columns: 5fr 7fr; gap: var(--sp-xxl);
     max-width: var(--container-max); margin: 0 auto; padding: 0 var(--sp-lg); width: 100%; align-items: start;
   }
-  .hero.listing.block > div > div:first-child { display: flex; flex-direction: column; gap: var(--sp-lg); }
+  .hero.listing.block > div > div:first-child { display: flex; flex-direction: column; gap: var(--sp-lg); align-items: flex-start; }
   /* H1 — model name */
   .hero.listing.block h1 {
     font-family: "Oswald", "Roboto Condensed", "Roboto", system-ui, sans-serif;
@@ -210,43 +215,32 @@
     text-wrap: balance;
     text-transform: uppercase;
   }
-  /* Print + Share small text-link strip (.hero-actions-secondary) */
-  .hero.listing.block .hero-actions-secondary { display: inline-flex; gap: var(--sp-md); align-self: flex-start; }
-  .hero.listing.block .hero-actions-secondary a { font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-body); border-bottom: 1px solid transparent; padding-bottom: 2px; }
-  .hero.listing.block .hero-actions-secondary a:hover { color: var(--color-heading); border-bottom-color: var(--color-cat-yellow); }
-  /* Price band */
-  .hero.listing.block .price {
+  /* Print + Share strip (paragraph with em>a links) */
+  .hero.listing.block > div > div:first-child p:has(em > a) { margin: 0; display: inline-flex; gap: var(--sp-md); flex-wrap: wrap; }
+  .hero.listing.block > div > div:first-child p:has(em > a) em { font-style: normal; }
+  .hero.listing.block > div > div:first-child p:has(em > a) em > a {
+    font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--color-body); border-bottom: 1px solid transparent; padding-bottom: 2px;
+  }
+  .hero.listing.block > div > div:first-child p:has(em > a) em > a:hover { color: var(--color-heading); border-bottom-color: var(--color-cat-yellow); }
+  /* Price band — paragraph containing only a <strong> (no <a>) */
+  .hero.listing.block > div > div:first-child p:has(> strong:only-child) {
+    margin: 0; display: inline-block; align-self: flex-start;
+    background: var(--color-surface-dark); padding: var(--sp-md) var(--sp-lg);
+    border-radius: var(--r-card);
+  }
+  .hero.listing.block > div > div:first-child p:has(> strong:only-child) strong {
     font-family: var(--font-display); font-weight: 700;
     font-size: clamp(1.953rem, 3vw, var(--fs-305));
-    color: var(--color-cat-yellow);
-    background: var(--color-surface-dark);
-    padding: var(--sp-md) var(--sp-lg);
-    border-radius: var(--r-card);
-    display: inline-block;
-    align-self: flex-start;
-    line-height: 1;
+    color: var(--color-cat-yellow); line-height: 1;
   }
-  /* Primary CTA */
-  .hero.listing.block .hero-cta a.button.primary { padding: 16px 32px; font-size: 1rem; }
-  /* RIGHT cell — image gallery */
-  .hero.listing.block > div > div:last-child { display: flex; flex-direction: column; gap: var(--sp-md); }
-  .hero.listing.block .gallery-main {
-    border-radius: var(--r-card);
-    overflow: hidden;
-    background: rgba(39,39,39,0.05);
-    aspect-ratio: 4/3;
-  }
-  .hero.listing.block .gallery-main img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .hero.listing.block .gallery-thumbs {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: var(--sp-sm);
-  }
-  .hero.listing.block .gallery-thumbs button {
-    background: transparent; border: 2px solid transparent; border-radius: var(--r-card); padding: 0;
-    cursor: pointer; aspect-ratio: 4/3; overflow: hidden; transition: border-color 150ms;
-  }
-  .hero.listing.block .gallery-thumbs button.is-active { border-color: var(--color-cat-yellow); }
-  .hero.listing.block .gallery-thumbs button:hover { border-color: var(--color-cat-yellow); }
-  .hero.listing.block .gallery-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  /* Primary CTA padding bump */
+  .hero.listing.block p.button-wrapper { margin: 0; }
+  .hero.listing.block p.button-wrapper a.button.primary { padding: 16px 32px; font-size: 1rem; border-radius: var(--r-pill); }
+  /* RIGHT cell — image */
+  .hero.listing.block > div > div:last-child { display: block; }
+  .hero.listing.block > div > div:last-child picture { display: block; border-radius: var(--r-card); overflow: hidden; background: rgba(39,39,39,0.05); }
+  .hero.listing.block > div > div:last-child img { width: 100%; height: auto; display: block; object-fit: cover; aspect-ratio: 4/3; }
 
   /* ─ .specs.grid — key-fact grid.
      DA converts <dl>/<dt>/<dd> to <ul><li><p>label</p><p>value</p></li>.
