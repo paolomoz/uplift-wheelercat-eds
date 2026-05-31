@@ -86,9 +86,34 @@
     });
   }
 
+  /* EDS decorates blocks AFTER DOMContentLoaded. Wait until the blocks
+     we care about are marked data-block-status="loaded" before wiring
+     click handlers — otherwise initLightbox runs on an empty selector. */
+  function waitForBlocksThenInit() {
+    const blocksReady = () => {
+      const hero = document.querySelector('.hero.listing.block');
+      const gallery = document.querySelector('.cards.gallery.block');
+      return (!hero || hero.dataset.blockStatus === 'loaded')
+          && (!gallery || gallery.dataset.blockStatus === 'loaded');
+    };
+    if (blocksReady() && document.querySelector('.cards.gallery.block img, .hero.listing.block img')) {
+      initLightbox();
+      return;
+    }
+    const observer = new MutationObserver(() => {
+      if (blocksReady() && document.querySelector('.cards.gallery.block img, .hero.listing.block img')) {
+        observer.disconnect();
+        initLightbox();
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['data-block-status'] });
+    // Safety: cap wait at 5s; init regardless
+    setTimeout(() => { observer.disconnect(); initLightbox(); }, 5000);
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initLightbox);
+    document.addEventListener('DOMContentLoaded', waitForBlocksThenInit);
   } else {
-    initLightbox();
+    waitForBlocksThenInit();
   }
 })();
