@@ -234,9 +234,52 @@
     font-size: clamp(1.953rem, 3vw, var(--fs-305));
     color: var(--color-cat-yellow); line-height: 1;
   }
+  /* Specs grid INSIDE hero left cell — DA converts <dl>/<dt>/<dd> to either
+     a preserved <dl> or a <ul><li><p><p></li> shape. Target both. */
+  .hero.listing.block dl,
+  .hero.listing.block ul:has(li > p + p) {
+    display: grid; grid-template-columns: repeat(2, 1fr);
+    gap: var(--sp-sm) var(--sp-lg);
+    margin: 0; padding: var(--sp-md) 0;
+    border-top: 1px solid rgba(39,39,39,0.12);
+    border-bottom: 1px solid rgba(39,39,39,0.12);
+    list-style: none;
+  }
+  .hero.listing.block dl > dt,
+  .hero.listing.block ul:has(li > p + p) > li > p:first-child {
+    font-family: var(--font-display); font-weight: 700; font-size: 0.7rem;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--color-body); margin: 0;
+  }
+  .hero.listing.block dl > dd,
+  .hero.listing.block ul:has(li > p + p) > li > p:last-child {
+    font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
+    color: var(--color-heading); margin: 0 0 var(--sp-xs); letter-spacing: 0;
+  }
+  /* When ul shape — wrap each li so dt+dd appear stacked, not side-by-side */
+  .hero.listing.block ul:has(li > p + p) > li {
+    display: block; padding: 0; background: none; border: none;
+    flex-direction: column;
+  }
+  .hero.listing.block ul:has(li > p + p) > li:hover { transform: none; box-shadow: none; }
+
   /* Primary CTA padding bump */
   .hero.listing.block p.button-wrapper { margin: 0; }
   .hero.listing.block p.button-wrapper a.button.primary { padding: 16px 32px; font-size: 1rem; border-radius: var(--r-pill); }
+
+  /* ─ .cards.gallery — photo grid for media gallery section ─ */
+  .cards.gallery > ul { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--sp-md); margin-top: var(--sp-xxl); }
+  .cards.gallery > ul > li {
+    background: rgba(39,39,39,0.05); border: none; border-radius: var(--r-card);
+    overflow: hidden; padding: 0; aspect-ratio: 4/3;
+    display: block; cursor: pointer;
+    transition: transform 200ms var(--ease-out);
+  }
+  .cards.gallery > ul > li:hover { transform: scale(1.02); box-shadow: var(--shadow-card); }
+  .cards.gallery > ul > li .cards-card-image,
+  .cards.gallery > ul > li .cards-card-body { margin: 0; line-height: 0; height: 100%; }
+  .cards.gallery > ul > li picture { display: block; width: 100%; height: 100%; position: static !important; inset: auto !important; }
+  .cards.gallery > ul > li img { width: 100%; height: 100%; object-fit: cover; display: block; }
   /* RIGHT cell — image. Boilerplate blocks/hero/hero.css sets
      `.hero picture { position: absolute; inset: 0 }` (standard hero pattern
      uses picture as background). For .hero.listing we want picture INLINE
