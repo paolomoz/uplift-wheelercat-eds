@@ -135,12 +135,17 @@ export function renderDA(data) {
   </div>
 </div>`;
 
+  /* Specs as ul/li/p — author the shape DA would convert to, bypassing
+     DA's inconsistent <dl> handling. Some pages convert <dl> cleanly to
+     <ul><li><p><p>; others escape the opening tag and strip children,
+     producing literal "<dl className=...>" text in the rendered output.
+     Always emit the post-conversion shape directly. */
   const specsItems = [];
-  if (data.hours) specsItems.push(`<dt>Hours</dt><dd>${escapeHTML(data.hours)}</dd>`);
-  if (data.serial) specsItems.push(`<dt>Serial</dt><dd>${escapeHTML(data.serial)}</dd>`);
-  if (data.rating) specsItems.push(`<dt>Rating</dt><dd>${escapeHTML(data.rating)}</dd>`);
-  if (data.location) specsItems.push(`<dt>Location</dt><dd>${escapeHTML(data.location)}</dd>`);
-  if (data.usedHotline && data.usedHotline !== 'N/A') specsItems.push(`<dt>Used Hotline</dt><dd>${escapeHTML(data.usedHotline)}</dd>`);
+  if (data.hours) specsItems.push(`<li><p>Hours</p><p>${escapeHTML(data.hours)}</p></li>`);
+  if (data.serial) specsItems.push(`<li><p>Serial</p><p>${escapeHTML(data.serial)}</p></li>`);
+  if (data.rating) specsItems.push(`<li><p>Rating</p><p>${escapeHTML(data.rating)}</p></li>`);
+  if (data.location) specsItems.push(`<li><p>Location</p><p>${escapeHTML(data.location)}</p></li>`);
+  if (data.usedHotline && data.usedHotline !== 'N/A') specsItems.push(`<li><p>Used Hotline</p><p>${escapeHTML(data.usedHotline)}</p></li>`);
 
   const hero = `<div>
   <div class="hero listing">
@@ -149,7 +154,7 @@ export function renderDA(data) {
         <h1>${escapeHTML(data.h1)}</h1>
         <p><em><a href="javascript:window.print()">Print</a></em> <em><a href="#share">Share</a></em></p>
         ${data.price ? `<p><strong>$${escapeHTML(data.price)}</strong></p>` : ''}
-        ${specsItems.length ? `<dl class="specs-inline">${specsItems.join('')}</dl>` : ''}
+        ${specsItems.length ? `<ul>${specsItems.join('')}</ul>` : ''}
         <p><strong><a href="/request-quote/?unit=${escapeHTML(slug)}">Request a Quote</a></strong></p>
       </div>
       <div>
