@@ -440,13 +440,9 @@
     color: var(--color-surface-dark);
     border-color: var(--color-page);
   }
-  /* 2nd and 3rd buttons (em > a) — outlined white pill */
-  .cta-bar.triple.block p:has(em > a) {
-    margin: 0;
-    flex: 0 0 auto;
-  }
-  .cta-bar.triple.block p:has(em > a) em > a {
-    display: inline-flex; align-items: center; justify-content: center;
+  /* Secondary buttons — EDS decorateButton converts <em><a> to
+     a.button.secondary (and unwraps <em>). Target the post-decoration shape. */
+  .cta-bar.triple.block p.button-wrapper a.button.secondary {
     background: transparent;
     color: var(--color-text-on-dark);
     border: 1px solid rgba(255,255,255,0.4);
@@ -458,11 +454,8 @@
     letter-spacing: 0.06em;
     text-transform: uppercase;
     min-width: 180px;
-    transition: background 200ms, color 200ms, border-color 200ms;
-    text-decoration: none;
-    font-style: normal;
   }
-  .cta-bar.triple.block p:has(em > a) em > a:hover {
+  .cta-bar.triple.block p.button-wrapper a.button.secondary:hover {
     background: var(--color-text-on-dark);
     color: var(--color-surface-dark);
     border-color: var(--color-text-on-dark);
