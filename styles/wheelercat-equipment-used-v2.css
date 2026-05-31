@@ -248,21 +248,25 @@
   .hero.listing.block .gallery-thumbs button:hover { border-color: var(--color-cat-yellow); }
   .hero.listing.block .gallery-thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
 
-  /* ─ .specs.grid — key-fact grid ─ */
+  /* ─ .specs.grid — key-fact grid.
+     DA converts <dl>/<dt>/<dd> to <ul><li><p>label</p><p>value</p></li>.
+     CSS targets that DOM shape. */
   .specs.grid.block { background: var(--color-page); padding: var(--sp-xxl) 0 0; }
   .specs.grid.block > div { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--sp-lg); }
-  .specs.grid.block .specs-list {
+  .specs.grid.block ul {
     display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
     gap: var(--sp-lg); margin: 0; padding: 0; list-style: none;
     border-top: 1px solid rgba(39,39,39,0.12);
     padding-top: var(--sp-xl);
   }
-  .specs.grid.block .specs-list dt {
+  .specs.grid.block ul > li { padding: 0; background: none; border: none; display: block; flex-direction: column; box-shadow: none; }
+  .specs.grid.block ul > li:hover { transform: none; box-shadow: none; }
+  .specs.grid.block ul > li > p:first-child {
     font-family: var(--font-display); font-weight: 700; font-size: 0.72rem;
     letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--color-body); margin-bottom: var(--sp-xs);
+    color: var(--color-body); margin: 0 0 var(--sp-xs);
   }
-  .specs.grid.block .specs-list dd {
+  .specs.grid.block ul > li > p:last-child {
     font-family: var(--font-display); font-weight: 700; font-size: var(--fs-156);
     color: var(--color-heading); margin: 0; letter-spacing: 0;
   }
