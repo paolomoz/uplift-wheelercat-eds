@@ -234,13 +234,19 @@
     font-size: clamp(1.953rem, 3vw, var(--fs-305));
     color: var(--color-cat-yellow); line-height: 1;
   }
-  /* Specs grid INSIDE hero left cell — DA converts <dl>/<dt>/<dd> to either
-     a preserved <dl> or a <ul><li><p><p></li> shape. Target both. */
+  /* Specs grid INSIDE hero left cell.
+     DA converts <dl>/<dt>/<dd> to <ul><li><p>label</p><p>value</p></li>.
+     The <ul> sits inside a flex-direction: column parent — without
+     width:100%, the grid columns shrink to fit content (cramped).
+     Force full width so the 2-col grid fills the cell. */
   .hero.listing.block dl,
   .hero.listing.block ul:has(li > p + p) {
-    display: grid; grid-template-columns: repeat(2, 1fr);
-    gap: var(--sp-sm) var(--sp-lg);
-    margin: 0; padding: var(--sp-md) 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-md) var(--sp-lg);
+    margin: 0;
+    padding: var(--sp-lg) 0;
+    width: 100%;
     border-top: 1px solid rgba(39,39,39,0.12);
     border-bottom: 1px solid rgba(39,39,39,0.12);
     list-style: none;
@@ -249,16 +255,19 @@
   .hero.listing.block ul:has(li > p + p) > li > p:first-child {
     font-family: var(--font-display); font-weight: 700; font-size: 0.7rem;
     letter-spacing: 0.14em; text-transform: uppercase;
-    color: var(--color-body); margin: 0;
+    color: var(--color-body); margin: 0 0 var(--sp-xs);
   }
   .hero.listing.block dl > dd,
   .hero.listing.block ul:has(li > p + p) > li > p:last-child {
-    font-family: var(--font-display); font-weight: 700; font-size: 1.05rem;
-    color: var(--color-heading); margin: 0 0 var(--sp-xs); letter-spacing: 0;
+    font-family: var(--font-display); font-weight: 700; font-size: 1.15rem;
+    color: var(--color-heading); margin: 0; letter-spacing: 0;
   }
-  /* When ul shape — wrap each li so dt+dd appear stacked, not side-by-side */
+  /* Each li is a stacked label+value cell — block layout */
   .hero.listing.block ul:has(li > p + p) > li {
-    display: block; padding: 0; background: none; border: none;
+    display: block;
+    padding: 0;
+    background: none;
+    border: none;
     flex-direction: column;
   }
   .hero.listing.block ul:has(li > p + p) > li:hover { transform: none; box-shadow: none; }
