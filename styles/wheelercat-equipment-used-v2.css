@@ -237,12 +237,15 @@
   /* Primary CTA padding bump */
   .hero.listing.block p.button-wrapper { margin: 0; }
   .hero.listing.block p.button-wrapper a.button.primary { padding: 16px 32px; font-size: 1rem; border-radius: var(--r-pill); }
-  /* RIGHT cell — image. Picture MUST have width:100% explicit; otherwise it
-     takes intrinsic content width and overflows the grid cell (cell collapses
-     to 0 since img inside picture overflows). */
+  /* RIGHT cell — image. Picture + img MUST have width:100% explicitly to
+     constrain the DA-emitted media-bus picture to the grid cell width.
+     Otherwise the picture's source elements pick a wider srcset variant
+     and the img overflows / cell collapses. */
   .hero.listing.block > div > div:last-child { display: block; aspect-ratio: 4/3; border-radius: var(--r-card); overflow: hidden; background: rgba(39,39,39,0.05); }
-  .hero.listing.block > div > div:last-child picture { display: block; width: 100%; height: 100%; }
-  .hero.listing.block > div > div:last-child img { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .hero.listing.block > div > div:last-child > p,
+  .hero.listing.block > div > div:last-child > picture,
+  .hero.listing.block > div > div:last-child > p > picture { display: block; width: 100%; height: 100%; margin: 0; }
+  .hero.listing.block > div > div:last-child img { width: 100% !important; height: 100% !important; max-width: 100% !important; display: block; object-fit: cover; }
 
   /* ─ .specs.grid — key-fact grid.
      DA converts <dl>/<dt>/<dd> to <ul><li><p>label</p><p>value</p></li>.
