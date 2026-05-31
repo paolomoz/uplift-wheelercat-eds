@@ -39,7 +39,7 @@ function titleCase(s) {
 }
 
 /* ─────────── Extraction ─────────── */
-async function extractPage(url, browser) {
+export async function extractPage(url, browser) {
   const page = await browser.newPage();
   const startedAt = Date.now();
   let httpStatus = null;
@@ -111,7 +111,7 @@ async function extractPage(url, browser) {
 }
 
 /* ─────────── Slot validation ─────────── */
-function validateSlots(data) {
+export function validateSlots(data) {
   const missing = [];
   if (!data.h1) missing.push('h1');
   if (!data.unitSlug) missing.push('unitSlug');
@@ -120,7 +120,7 @@ function validateSlots(data) {
 }
 
 /* ─────────── DA HTML render (pure interpolation, no LLM) ─────────── */
-function renderDA(data) {
+export function renderDA(data) {
   const slug = data.unitSlug;
   const mainImg = data.images[0]?.src;
   const galleryImgs = data.images.slice(1, 13); // up to 12 thumbs
@@ -246,7 +246,7 @@ ${metadata}
 }
 
 /* ─────────── DA push (optional) ─────────── */
-async function pushToDA(slug, htmlPath) {
+export async function pushToDA(slug, htmlPath) {
   const envPath = '/Users/paolo/stardust/uplift-wheelercat-eds/.env';
   const env = readFileSync(envPath, 'utf8');
   const token = env.match(/^DA_TOKEN=(.+)$/m)?.[1]?.trim();
@@ -271,7 +271,9 @@ async function pushToDA(slug, htmlPath) {
   return { ok: true, livePreview: `${EDS_PREVIEW}/${slug}` };
 }
 
-/* ─────────── Main ─────────── */
+export const config = { OUTPUT_DIR, EDS_PREVIEW, DA_ORG, DA_REPO };
+
+/* ─────────── Main (CLI) ─────────── */
 async function main() {
   const args = process.argv.slice(2);
   if (!args.length) {
@@ -330,4 +332,7 @@ async function main() {
   }
 }
 
-main();
+// Only run main when invoked directly (not when imported)
+if (import.meta.url === `file://${process.argv[1]}`) {
+  main();
+}
