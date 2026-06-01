@@ -30,6 +30,10 @@ indices:
         select: head > meta[name="category"]
         value: |
           attribute(el, "content")
+      pageType:
+        select: head > meta[name="pageType"]
+        value: |
+          attribute(el, "content")
       modelName:
         select: main h1
         value: |

@@ -1,7 +1,7 @@
 import { createOptimizedPicture, getMetadata } from '../../scripts/aem.js';
 
 const QUERY_INDEX = '/query-index.json';
-const MAX_ITEMS = 3;
+const DEFAULT_MAX = 3;
 
 let cachedIndex;
 async function loadIndex() {
@@ -37,7 +37,21 @@ function buildCard({ path, title, image, modelName }) {
   return li;
 }
 
+function dedupeBySlug(rows) {
+  const byModel = new Map();
+  rows.forEach((row) => {
+    const slug = row.path.split('/').pop();
+    const isNested = row.path.split('/').filter(Boolean).length > 1;
+    const existing = byModel.get(slug);
+    if (!existing || (isNested && !existing.isNested)) {
+      byModel.set(slug, { ...row, isNested });
+    }
+  });
+  return [...byModel.values()];
+}
+
 export async function decorateDynamic(block) {
+  const isListing = block.classList.contains('listing');
   const template = getMetadata('template');
   const category = getMetadata('category');
   const here = window.location.pathname.replace(/\/$/, '');
@@ -47,23 +61,15 @@ export async function decorateDynamic(block) {
     return;
   }
 
-  // Prefer nested paths over orphaned flat-path duplicates. A nested path
-  // has at least one slash after the leading /. We only include flat-path
-  // entries when no nested duplicate exists in the index.
   const all = await loadIndex();
-  const nestedByModel = new Map();
-  all.forEach((row) => {
-    if (row.template !== template || row.category !== category) return;
-    const slug = row.path.split('/').pop();
-    const isNested = row.path.split('/').filter(Boolean).length > 1;
-    const existing = nestedByModel.get(slug);
-    if (!existing || (isNested && !existing.isNested)) {
-      nestedByModel.set(slug, { ...row, isNested });
-    }
-  });
-  const items = [...nestedByModel.values()]
-    .filter((row) => row.path.replace(/\/$/, '') !== here)
-    .slice(0, MAX_ITEMS);
+  const candidates = all.filter((row) => row.template === template
+    && row.category === category
+    && (row.pageType || 'detail') !== 'listing'
+    && row.path.replace(/\/$/, '') !== here);
+
+  const items = dedupeBySlug(candidates)
+    .sort((a, b) => (a.modelName || a.title || a.path).localeCompare(b.modelName || b.title || b.path))
+    .slice(0, isListing ? Infinity : DEFAULT_MAX);
 
   if (items.length === 0) {
     block.closest('.section')?.remove();
@@ -75,6 +81,10 @@ export async function decorateDynamic(block) {
 
   block.innerHTML = '';
   block.append(ul);
+
+  // Surface the count for the title bar
+  const countEl = block.closest('.section')?.querySelector('[data-listing-count]');
+  if (countEl) countEl.textContent = String(items.length);
 }
 
 export default function decorate() { /* no-op for non-dynamic; cards.js handles standard styling */ }

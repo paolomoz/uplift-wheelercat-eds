@@ -662,47 +662,50 @@
     background: transparent; border: none; padding: 0; margin: 0;
   }
 
-  /* ─ .related.band (cross-sell cards) ─ already covered by .cards.categories from new-v2 theme.
-     For this template we reuse the same selector — emit <div class="cards related"> in DA. */
-  .cards.related > ul {
+  /* ─ .related.band (cross-sell cards) — also reused by .listing.dynamic
+     (category-listing pages). Both share the same photo-card shape; .listing
+     uncaps the item count and tightens the breakpoint grid below.
+     Use :is() so every rule below targets both variants without per-rule
+     comma-listing (which makes the descendant combinators bug-prone). */
+  .cards:is(.related, .listing) > ul {
     grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: var(--sp-lg);
     margin-top: var(--sp-xxl);
   }
-  .cards.related > ul > li {
+  .cards:is(.related, .listing) > ul > li {
     position: relative; aspect-ratio: 3/4; border-radius: var(--r-card);
     overflow: hidden;
     display: flex; flex-direction: column; justify-content: flex-end; align-items: stretch;
     padding: 0; border: none; background: rgba(39,39,39,0.08); isolation: isolate;
   }
-  .cards.related > ul > li .cards-card-image { position: absolute; inset: 0; z-index: 0; margin: 0; line-height: 0; }
-  .cards.related > ul > li .cards-card-image picture { position: static !important; inset: auto !important; display: block; width: 100%; height: 100%; }
-  .cards.related > ul > li .cards-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 700ms var(--ease-out); }
-  .cards.related > ul > li:hover .cards-card-image img { transform: scale(1.05); }
-  .cards.related > ul > li::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,18,18,0.92), rgba(18,18,18,0.5) 35%, rgba(18,18,18,0.1) 60%, transparent 80%); z-index: 1; pointer-events: none; }
-  .cards.related > ul > li .cards-card-body { display: block; position: relative; z-index: 2; padding: var(--sp-lg); width: 100%; color: var(--color-text-on-dark); }
-  .cards.related > ul > li h3 {
+  .cards:is(.related, .listing) > ul > li .cards-card-image { position: absolute; inset: 0; z-index: 0; margin: 0; line-height: 0; }
+  .cards:is(.related, .listing) > ul > li .cards-card-image picture { position: static !important; inset: auto !important; display: block; width: 100%; height: 100%; }
+  .cards:is(.related, .listing) > ul > li .cards-card-image img { width: 100%; height: 100%; object-fit: cover; transition: transform 700ms var(--ease-out); }
+  .cards:is(.related, .listing) > ul > li:hover .cards-card-image img { transform: scale(1.05); }
+  .cards:is(.related, .listing) > ul > li::before { content: ""; position: absolute; inset: 0; background: linear-gradient(to top, rgba(18,18,18,0.92), rgba(18,18,18,0.5) 35%, rgba(18,18,18,0.1) 60%, transparent 80%); z-index: 1; pointer-events: none; }
+  .cards:is(.related, .listing) > ul > li .cards-card-body { display: block; position: relative; z-index: 2; padding: var(--sp-lg); width: 100%; color: var(--color-text-on-dark); }
+  .cards:is(.related, .listing) > ul > li h3 {
     font-family: var(--font-display); font-weight: 700;
     font-size: 1.05rem; line-height: 1.2; letter-spacing: 0.02em;
     text-transform: uppercase; color: var(--color-text-on-dark);
     margin: 0 0 var(--sp-sm); text-wrap: balance;
   }
-  .cards.related > ul > li h3 a { color: inherit; }
-  .cards.related > ul > li p.button-wrapper { margin: 0; padding: 0; border: none; }
-  .cards.related > ul > li p.button-wrapper a.button.primary,
-  .cards.related > ul > li p strong > a {
+  .cards:is(.related, .listing) > ul > li h3 a { color: inherit; }
+  .cards:is(.related, .listing) > ul > li p.button-wrapper { margin: 0; padding: 0; border: none; }
+  .cards:is(.related, .listing) > ul > li p.button-wrapper a.button.primary,
+  .cards:is(.related, .listing) > ul > li p strong > a {
     background: transparent; color: var(--color-cat-yellow); border: none; padding: 0;
     font-family: var(--font-display); font-weight: 700; font-size: 0.72rem;
     letter-spacing: 0.1em; text-transform: uppercase;
     display: inline-flex; align-items: center; gap: 6px;
   }
-  .cards.related > ul > li p.button-wrapper a.button.primary::after,
-  .cards.related > ul > li p strong > a::after {
+  .cards:is(.related, .listing) > ul > li p.button-wrapper a.button.primary::after,
+  .cards:is(.related, .listing) > ul > li p strong > a::after {
     content: "›"; font-weight: 700; font-size: 1.25rem; line-height: 0.7;
     transition: transform 200ms;
   }
-  .cards.related > ul > li:hover p.button-wrapper a.button.primary::after,
-  .cards.related > ul > li:hover p strong > a::after { transform: translateX(2px); }
+  .cards:is(.related, .listing) > ul > li:hover p.button-wrapper a.button.primary::after,
+  .cards:is(.related, .listing) > ul > li:hover p strong > a::after { transform: translateX(2px); }
 }
 
 @layer responsive {
@@ -710,14 +713,14 @@
     .specs.at-a-glance.block { grid-template-columns: repeat(2, 1fr); }
     .specs.at-a-glance.block > div > div > p:first-child { font-size: 2rem; }
     .media.gallery.block { grid-template-columns: repeat(2, 1fr); }
-    .cards.related > ul { grid-template-columns: repeat(2, 1fr); }
+    .cards:is(.related, .listing) > ul { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 640px) {
     .specs.at-a-glance.block { grid-template-columns: 1fr; }
     .specs.accordions.block details > ul { grid-template-columns: 1fr; }
     .media.gallery.block { grid-template-columns: 1fr; }
-    .cards.related > ul { grid-template-columns: 1fr; }
-    .cards.related > ul > li { aspect-ratio: 16/10; }
+    .cards:is(.related, .listing) > ul { grid-template-columns: 1fr; }
+    .cards:is(.related, .listing) > ul > li { aspect-ratio: 16/10; }
   }
 }
 
