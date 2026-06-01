@@ -123,6 +123,15 @@ export async function decorateDynamic(block) {
     block.innerHTML = '';
     block.append(ul);
 
+    // Sticky-reveal on first hover or focus: image fades in once and stays.
+    ul.querySelectorAll(':scope > li').forEach((li) => {
+      if (!li.querySelector('.cards-card-image')) return;
+      const reveal = () => li.classList.add('revealed');
+      li.addEventListener('mouseenter', reveal, { once: true });
+      li.addEventListener('focusin', reveal, { once: true });
+      li.addEventListener('touchstart', reveal, { once: true, passive: true });
+    });
+
     document.querySelectorAll('code').forEach((el) => {
       if (el.textContent.trim() === 'LISTING_COUNT') el.outerHTML = String(items.length);
     });

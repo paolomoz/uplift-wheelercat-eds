@@ -687,29 +687,39 @@
     position: relative; aspect-ratio: 4/3; border-radius: var(--r-card);
     overflow: hidden; isolation: isolate;
     background: var(--color-surface-dark);
+    border-left: 4px solid var(--color-cat-yellow);
     display: flex; flex-direction: column; justify-content: flex-end;
-    padding: 0; border: none;
+    padding: 0; border-right: none; border-top: none; border-bottom: none;
     transition: transform 200ms var(--ease-out);
   }
   .cards.hub > ul > li:hover { transform: translateY(-2px); }
+  /* Cards default dark — image starts hidden and fades in once on hover.
+     The .revealed class is set by the block JS on first mouseenter / focus
+     and is sticky (not removed on leave) so the image stays visible. */
   .cards.hub > ul > li .cards-card-image {
     position: absolute; inset: 0; z-index: 0; margin: 0; line-height: 0;
     background: #fff;
+    opacity: 0;
+    transition: opacity 600ms var(--ease-out);
   }
+  .cards.hub > ul > li.revealed .cards-card-image { opacity: 1; }
   .cards.hub > ul > li .cards-card-image picture,
   .cards.hub > ul > li .cards-card-image img {
     width: 100%; height: 100%; object-fit: contain; display: block;
-    transition: transform 500ms var(--ease-out);
+    transition: transform 800ms var(--ease-out);
   }
-  .cards.hub > ul > li:hover .cards-card-image img { transform: scale(1.04); }
+  .cards.hub > ul > li.revealed:hover .cards-card-image img { transform: scale(1.03); }
+  /* Dark scrim over the image so text stays readable when revealed. */
   .cards.hub > ul > li::before {
     content: ""; position: absolute; inset: 0; z-index: 1;
-    background: linear-gradient(to top, rgba(18,18,18,0.92), rgba(18,18,18,0.45) 40%, transparent 70%);
+    background: linear-gradient(to top, rgba(18,18,18,0.85), rgba(18,18,18,0.55) 50%, rgba(18,18,18,0.40));
     pointer-events: none;
+    opacity: 0;
+    transition: opacity 600ms var(--ease-out);
   }
-  /* Text-only fallback (no .cards-card-image present): show the yellow accent rail */
+  .cards.hub > ul > li.revealed::before { opacity: 1; }
+  /* Text-only fallback (no .cards-card-image present): stays dark, no scrim layer */
   .cards.hub > ul > li:not(:has(.cards-card-image)) {
-    border-left: 4px solid var(--color-cat-yellow);
     padding: var(--sp-xl) var(--sp-lg);
     aspect-ratio: auto; min-height: 140px;
   }
