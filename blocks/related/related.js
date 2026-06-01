@@ -24,8 +24,19 @@ function buildCard({ path, title, image, modelName }) {
   const imageDiv = document.createElement('div');
   imageDiv.className = 'cards-card-image';
   if (image) {
-    const picture = createOptimizedPicture(image, label, false, [{ width: '750' }]);
-    imageDiv.append(picture);
+    // DA-bus media paths can use EDS optimization; external URLs render as-is.
+    const isDAMedia = /^\/media_[a-f0-9]+\./.test(image);
+    if (isDAMedia) {
+      imageDiv.append(createOptimizedPicture(image, label, false, [{ width: '750' }]));
+    } else {
+      const pic = document.createElement('picture');
+      const img = document.createElement('img');
+      img.src = image;
+      img.alt = label;
+      img.loading = 'lazy';
+      pic.append(img);
+      imageDiv.append(pic);
+    }
   }
 
   const body = document.createElement('div');
@@ -178,13 +189,46 @@ export async function decorateDynamic(block) {
     return row.template === template;
   });
 
-  const items = dedupeBySlug(candidates)
+  let items = dedupeBySlug(candidates)
     .sort((a, b) => (a.modelName || a.title || a.path).localeCompare(b.modelName || b.title || b.path))
     .slice(0, isListing ? Infinity : DEFAULT_MAX);
+
+  // For listing pages with zero direct detail children, fall back to hub
+  // behavior: list any nested listing pages under our URL prefix instead.
+  // (Parent categories like asphalt-pavers don't have detail children
+  // directly; their details live under sub-categories like
+  // track-asphalt-pavers, wheel-asphalt-pavers.)
+  let isHubFallback = false;
+  if (isListing && items.length === 0) {
+    const hubPath = here + '/';
+    const subListings = all
+      .filter(r => (r.pageType || 'detail') === 'listing')
+      .filter(r => r.path.startsWith(hubPath))
+      .filter(r => r.path !== here);
+    if (subListings.length > 0) {
+      items = subListings.sort((a, b) => (a.modelName || a.title || a.path).localeCompare(b.modelName || b.title || b.path));
+      isHubFallback = true;
+      block.classList.add('hub');
+      block.classList.remove('listing');
+    }
+  }
+
+  // Always process the LISTING_COUNT sentinel (even when items.length === 0)
+  // so the visible "X models available" text never shows the literal token.
+  document.querySelectorAll('code').forEach((el) => {
+    if (el.textContent.trim() === 'LISTING_COUNT') {
+      el.outerHTML = String(items.length);
+    }
+  });
 
   if (items.length === 0) {
     block.closest('.section')?.remove();
     return;
+  }
+
+  // When we fell back to hub mode, re-run the hub renderer for image-tile UX.
+  if (isHubFallback) {
+    return decorateDynamic(block);
   }
 
   const ul = document.createElement('ul');
@@ -192,15 +236,6 @@ export async function decorateDynamic(block) {
 
   block.innerHTML = '';
   block.append(ul);
-
-  // Surface the count by replacing the LISTING_COUNT marker token in any
-  // <code> element (DA preserves <code>'s textContent but strips inline
-  // data-* attributes, so a sentinel text token is the most reliable hook).
-  document.querySelectorAll('code').forEach((el) => {
-    if (el.textContent.trim() === 'LISTING_COUNT') {
-      el.outerHTML = String(items.length);
-    }
-  });
 }
 
 export default function decorate() { /* no-op for non-dynamic; cards.js handles standard styling */ }
