@@ -110,9 +110,11 @@
 /* ───────── chrome ───────── */
 @layer chrome {
   /* Utility strip */
-  .utility-strip { background: var(--color-cat-yellow); color: var(--color-text-on-yellow); border-bottom: 1px solid rgba(39,39,39,0.15); position: relative; z-index: 51; }
+  /* Lock height to a fixed value so font-swap line-wrapping changes don't
+     cause the strip to grow/shrink and shift everything below. */
+  .utility-strip { height: var(--utility-strip-h); background: var(--color-cat-yellow); color: var(--color-text-on-yellow); border-bottom: 1px solid rgba(39,39,39,0.15); position: relative; z-index: 51; overflow: hidden; box-sizing: border-box; }
   .utility-strip__inner { display: flex; justify-content: flex-end; align-items: center; padding: 8px 0; gap: var(--sp-lg); flex-wrap: wrap; max-width: var(--container-max); margin: 0 auto; padding-left: var(--sp-lg); padding-right: var(--sp-lg); }
-  .utility-strip__list { display: inline-flex; gap: var(--sp-lg); list-style: none; margin: 0; padding: 0; align-items: center; }
+  .utility-strip__list { display: inline-flex; gap: var(--sp-lg); list-style: none; margin: 0; padding: 0; align-items: center; flex-wrap: nowrap; white-space: nowrap; overflow: hidden; }
   .utility-strip__list a, .utility-strip__more-trigger { font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-on-yellow); transition: opacity 150ms var(--ease-out); background: transparent; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .utility-strip__list a:hover, .utility-strip__more-trigger:hover { opacity: 0.65; }
   .utility-strip__more { position: relative; }
