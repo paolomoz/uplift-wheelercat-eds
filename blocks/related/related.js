@@ -37,9 +37,7 @@ function buildCard({ path, title, image, modelName }) {
   return li;
 }
 
-export default async function decorate(block) {
-  if (!block.classList.contains('dynamic')) return;
-
+export async function decorateDynamic(block) {
   const template = getMetadata('template');
   const category = getMetadata('category');
   const here = window.location.pathname.replace(/\/$/, '');
@@ -66,3 +64,5 @@ export default async function decorate(block) {
   block.innerHTML = '';
   block.append(ul);
 }
+
+export default function decorate() { /* no-op for non-dynamic; cards.js handles standard styling */ }

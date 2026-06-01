@@ -1,7 +1,11 @@
 import { createOptimizedPicture } from '../../scripts/aem.js';
 
-export default function decorate(block) {
-  /* change to ul, li */
+export default async function decorate(block) {
+  if (block.classList.contains('dynamic')) {
+    const { decorateDynamic } = await import('../related/related.js');
+    return decorateDynamic(block);
+  }
+
   const ul = document.createElement('ul');
   [...block.children].forEach((row) => {
     const li = document.createElement('li');
@@ -14,4 +18,5 @@ export default function decorate(block) {
   });
   ul.querySelectorAll('picture > img').forEach((img) => img.closest('picture').replaceWith(createOptimizedPicture(img.src, img.alt, false, [{ width: '750' }])));
   block.replaceChildren(ul);
+  return undefined;
 }
