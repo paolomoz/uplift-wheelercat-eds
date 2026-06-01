@@ -484,8 +484,14 @@ ${metadata}
 `;
 }
 
+/* ─────────── Path helper ─────────── */
+// Mirror the source URL structure: /new/machines/<category>/<model>
+export function pagePath(data) {
+  return `new/machines/${data.categorySlug}/${data.modelSlug}`;
+}
+
 /* ─────────── DA push (PUT + preview + index) ─────────── */
-export async function pushToDA(slug, htmlPath, { publish = false } = {}) {
+export async function pushToDA(pagePathStr, htmlPath, { publish = false } = {}) {
   const envPath = '/Users/paolo/stardust/uplift-wheelercat-eds/.env';
   const env = readFileSync(envPath, 'utf8');
   const token = env.match(/^DA_TOKEN=(.+)$/m)?.[1]?.trim();
@@ -493,29 +499,26 @@ export async function pushToDA(slug, htmlPath, { publish = false } = {}) {
 
   const auth = { Authorization: `Bearer ${token}` };
 
-  // PUT to DA source
-  const daUrl = `https://admin.da.live/source/${DA_ORG}/${DA_REPO}/${slug}.html`;
+  const daUrl = `https://admin.da.live/source/${DA_ORG}/${DA_REPO}/${pagePathStr}.html`;
   const fd = new FormData();
-  fd.append('data', new Blob([readFileSync(htmlPath)], { type: 'text/html' }), `${slug}.html`);
+  fd.append('data', new Blob([readFileSync(htmlPath)], { type: 'text/html' }), `${pagePathStr.split('/').pop()}.html`);
   const putRes = await fetch(daUrl, { method: 'PUT', headers: auth, body: fd });
   if (!putRes.ok) return { ok: false, phase: 'put', status: putRes.status, body: await putRes.text() };
 
-  // Preview
   await new Promise(r => setTimeout(r, 1500));
-  const previewRes = await fetch(`https://admin.hlx.page/preview/${DA_ORG}/${DA_REPO}/main/${slug}`, { method: 'POST', headers: auth });
+  const previewRes = await fetch(`https://admin.hlx.page/preview/${DA_ORG}/${DA_REPO}/main/${pagePathStr}`, { method: 'POST', headers: auth });
   if (!previewRes.ok) return { ok: false, phase: 'preview', status: previewRes.status };
 
   let livePublished = false;
   if (publish) {
-    const liveRes = await fetch(`https://admin.hlx.page/live/${DA_ORG}/${DA_REPO}/main/${slug}`, { method: 'POST', headers: auth });
+    const liveRes = await fetch(`https://admin.hlx.page/live/${DA_ORG}/${DA_REPO}/main/${pagePathStr}`, { method: 'POST', headers: auth });
     livePublished = liveRes.ok;
-    // Trigger index after publish (query-index requires .live page)
-    await fetch(`https://admin.hlx.page/index/${DA_ORG}/${DA_REPO}/main/${slug}`, { method: 'POST', headers: auth });
+    await fetch(`https://admin.hlx.page/index/${DA_ORG}/${DA_REPO}/main/${pagePathStr}`, { method: 'POST', headers: auth });
   }
 
   return {
     ok: true,
-    livePreview: `${EDS_PREVIEW}/${slug}`,
+    livePreview: `${EDS_PREVIEW}/${pagePathStr}`,
     livePublished,
   };
 }
@@ -555,21 +558,21 @@ async function main() {
   }
 
   const html = renderDA(data);
-  const outPath = `${OUTPUT_DIR}/${data.modelSlug}.html`;
+  const path = pagePath(data);
+  const outPath = `${OUTPUT_DIR}/${path}.html`;
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, html);
 
   console.log(`✓ ${outPath}`);
   console.log(`  Title:     ${data.h1}`);
-  console.log(`  Category:  ${data.categorySlug}`);
-  console.log(`  Hero:      ${data.heroImage}`);
+  console.log(`  Path:      /${path}`);
   console.log(`  Specs:     ${data.specs.length} categories, ${data.specs.reduce((s, c) => s + c.rows.length, 0)} rows`);
   console.log(`  Videos:    ${data.videos.length}`);
   console.log(`  Attach:    ${data.relatedAttachments.length}`);
 
   if (push) {
     console.log(`\n▸ Pushing to DA + triggering preview${publish ? ' + publish + index' : ''}...`);
-    const result = await pushToDA(data.modelSlug, outPath, { publish });
+    const result = await pushToDA(path, outPath, { publish });
     if (result.ok) {
       console.log(`✓ Live: ${result.livePreview}`);
       if (publish && result.livePublished) console.log(`✓ Published to .live + indexed`);

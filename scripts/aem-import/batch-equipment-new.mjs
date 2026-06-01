@@ -22,7 +22,7 @@
 import { chromium } from 'playwright';
 import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'fs';
 import { dirname } from 'path';
-import { extractPage, validateSlots, renderDA, pushToDA, config } from './fill-equipment-new.mjs';
+import { extractPage, validateSlots, renderDA, pushToDA, pagePath, config } from './fill-equipment-new.mjs';
 
 const SITEMAP_URL = 'https://wheelercat.com/cat_new_machine-sitemap.xml';
 const RESULTS_PATH = `${config.OUTPUT_DIR}/_batch-results.json`;
@@ -59,15 +59,16 @@ async function processUrl(url, browser) {
     if (missing.length) return { url, ok: false, phase: 'validate', error: 'missing-slots', missing };
 
     const html = renderDA(data);
-    const outPath = `${config.OUTPUT_DIR}/${data.modelSlug}.html`;
+    const path = pagePath(data);
+    const outPath = `${config.OUTPUT_DIR}/${path}.html`;
     mkdirSync(dirname(outPath), { recursive: true });
     writeFileSync(outPath, html);
 
-    const push = await pushToDA(data.modelSlug, outPath, { publish: PUBLISH });
-    if (!push.ok) return { url, slug: data.modelSlug, ok: false, phase: push.phase || 'push', ...push };
+    const push = await pushToDA(path, outPath, { publish: PUBLISH });
+    if (!push.ok) return { url, path, ok: false, phase: push.phase || 'push', ...push };
 
     return {
-      url, slug: data.modelSlug, ok: true,
+      url, path, ok: true,
       livePreview: push.livePreview,
       published: push.livePublished,
       fields: {
@@ -93,7 +94,7 @@ async function runPool(urls, concurrency) {
   const tick = (r) => {
     processed += 1;
     const status = r.ok ? '✓' : '✗';
-    const label = r.slug || (r.url ? r.url.split('/').filter(Boolean).pop() : '?');
+    const label = r.path || (r.url ? r.url.split('/').filter(Boolean).pop() : '?');
     const tail = r.ok ? `  ${r.fields.specCount}cats/${r.fields.rowCount}rows` : '  — ' + (r.phase || '?') + ': ' + (r.error || '');
     console.log(`  [${processed}/${total}] ${status} ${label}${tail}`);
   };
@@ -127,8 +128,10 @@ async function main() {
   if (SKIP_EXISTING) {
     const before = urls.length;
     urls = urls.filter(u => {
-      const slug = u.split('/').filter(Boolean).pop();
-      return !existsSync(`${config.OUTPUT_DIR}/${slug}.html`);
+      const segs = u.replace(/^https?:\/\/[^/]+\//, '').split('/').filter(Boolean);
+      const category = segs[2];
+      const model = segs[3];
+      return !existsSync(`${config.OUTPUT_DIR}/new/machines/${category}/${model}.html`);
     });
     console.log(`  Skip-existing: ${before - urls.length} already in output dir, ${urls.length} to process`);
   }

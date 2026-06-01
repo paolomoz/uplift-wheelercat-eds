@@ -225,6 +225,7 @@ ${data.features.map(f => `          <li>${escapeHTML(f)}</li>`).join('\n')}
     <div><div>title</div><div>${escapeHTML(data.h1)} - Wheeler Machinery Co.</div></div>
     <div><div>description</div><div>${escapeHTML(desc)}</div></div>
     <div><div>template</div><div>${THEME}</div></div>
+    <div><div>category</div><div>${escapeHTML(data.categorySlug || '')}</div></div>
   </div>
 </div>`;
 
@@ -250,30 +251,38 @@ ${metadata}
 `;
 }
 
-/* ─────────── DA push (optional) ─────────── */
-export async function pushToDA(slug, htmlPath) {
+/* ─────────── Path helper ─────────── */
+// Mirror source URL: /used-equipment/<category>/<unit>
+export function pagePath(data) {
+  return `used-equipment/${data.categorySlug}/${data.unitSlug}`;
+}
+
+/* ─────────── DA push (PUT + preview + index) ─────────── */
+export async function pushToDA(pagePathStr, htmlPath, { publish = false } = {}) {
   const envPath = '/Users/paolo/stardust/uplift-wheelercat-eds/.env';
   const env = readFileSync(envPath, 'utf8');
   const token = env.match(/^DA_TOKEN=(.+)$/m)?.[1]?.trim();
   if (!token) return { ok: false, error: 'no DA_TOKEN' };
 
-  const daUrl = `https://admin.da.live/source/${DA_ORG}/${DA_REPO}/${slug}.html`;
-  const putRes = await fetch(daUrl, {
-    method: 'PUT',
-    headers: { Authorization: `Bearer ${token}` },
-    body: (() => {
-      const fd = new FormData();
-      fd.append('data', new Blob([readFileSync(htmlPath)], { type: 'text/html' }), `${slug}.html`);
-      return fd;
-    })(),
-  });
+  const auth = { Authorization: `Bearer ${token}` };
+  const daUrl = `https://admin.da.live/source/${DA_ORG}/${DA_REPO}/${pagePathStr}.html`;
+  const fd = new FormData();
+  fd.append('data', new Blob([readFileSync(htmlPath)], { type: 'text/html' }), `${pagePathStr.split('/').pop()}.html`);
+  const putRes = await fetch(daUrl, { method: 'PUT', headers: auth, body: fd });
   if (!putRes.ok) return { ok: false, phase: 'put', status: putRes.status, body: await putRes.text() };
 
-  const previewUrl = `https://admin.hlx.page/preview/${DA_ORG}/${DA_REPO}/main/${slug}`;
-  const previewRes = await fetch(previewUrl, { method: 'POST', headers: { Authorization: `Bearer ${token}` } });
+  await new Promise(r => setTimeout(r, 1200));
+  const previewRes = await fetch(`https://admin.hlx.page/preview/${DA_ORG}/${DA_REPO}/main/${pagePathStr}`, { method: 'POST', headers: auth });
   if (!previewRes.ok) return { ok: false, phase: 'preview', status: previewRes.status };
 
-  return { ok: true, livePreview: `${EDS_PREVIEW}/${slug}` };
+  let livePublished = false;
+  if (publish) {
+    const liveRes = await fetch(`https://admin.hlx.page/live/${DA_ORG}/${DA_REPO}/main/${pagePathStr}`, { method: 'POST', headers: auth });
+    livePublished = liveRes.ok;
+    await fetch(`https://admin.hlx.page/index/${DA_ORG}/${DA_REPO}/main/${pagePathStr}`, { method: 'POST', headers: auth });
+  }
+
+  return { ok: true, livePreview: `${EDS_PREVIEW}/${pagePathStr}`, livePublished };
 }
 
 export const config = { OUTPUT_DIR, EDS_PREVIEW, DA_ORG, DA_REPO };
@@ -311,25 +320,26 @@ async function main() {
   }
 
   const html = renderDA(data);
-  const outSlug = data.unitSlug;
-  const outPath = `${OUTPUT_DIR}/${outSlug}.html`;
+  const path = pagePath(data);
+  const outPath = `${OUTPUT_DIR}/${path}.html`;
   mkdirSync(dirname(outPath), { recursive: true });
   writeFileSync(outPath, html);
 
   console.log(`✓ ${outPath}`);
   console.log(`  Title:     ${data.h1}`);
+  console.log(`  Path:      /${path}`);
   console.log(`  Price:     ${data.price ? '$' + data.price : '—'}`);
   console.log(`  Hours:     ${data.hours || '—'}`);
-  console.log(`  Serial:    ${data.serial || '—'}`);
-  console.log(`  Location:  ${data.location || '—'}`);
   console.log(`  Features:  ${data.features.length}`);
   console.log(`  Images:    ${data.images.length} unique`);
 
+  const publish = args.includes('--publish');
   if (push) {
-    console.log(`\n▸ Pushing to DA + triggering preview...`);
-    const result = await pushToDA(outSlug, outPath);
+    console.log(`\n▸ Pushing to DA + triggering preview${publish ? ' + publish + index' : ''}...`);
+    const result = await pushToDA(path, outPath, { publish });
     if (result.ok) {
       console.log(`✓ Live: ${result.livePreview}`);
+      if (publish && result.livePublished) console.log(`✓ Published to .live + indexed`);
     } else {
       console.error(`✗ DA push failed:`, result);
       process.exit(3);
