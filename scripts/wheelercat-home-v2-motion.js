@@ -77,7 +77,14 @@
     animList.forEach(({ el }) => { el.style.opacity = el.style.transform = el.style.willChange = ''; });
     animList.length = 0;
 
+    const viewportH = window.innerHeight;
     document.querySelectorAll('[data-anim]').forEach((el) => {
+      // Skip elements already in the initial viewport — their reveal would
+      // contribute to CLS, and they don't need a scroll-triggered reveal
+      // (they're visible immediately).
+      const rect = el.getBoundingClientRect();
+      if (rect.top < viewportH * 0.9) return;
+
       const parent = el.closest('.section, .cards-wrapper, .text-wrapper');
       let stagger = 0;
       if (parent) {
