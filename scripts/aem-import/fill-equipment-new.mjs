@@ -74,8 +74,22 @@ export async function extractPage(url, browser) {
       .sort((a, b) => (b.naturalWidth * b.naturalHeight) - (a.naturalWidth * a.naturalHeight))[0];
     const heroImage = heroEl ? heroEl.src.replace(/wid=\d+&hei=\d+/, 'wid=916&hei=574') : null;
 
+    // Spec value normalizer: clean Cat's awkward unit encoding.
+    //   "1500/rpm" → "1500 rpm"  (digit-slash-letter)
+    //   "5.4in"    → "5.4 in"   (digit-letter, missing space)
+    //   "2104lbf·ft" → "2104 lbf·ft"
+    // Leaves "mile/h", "lbf·ft", "in²" untouched.
+    const cleanValue = (v) => v
+      .replace(/(\d)\/([a-zA-Z])/g, '$1 $2')
+      .replace(/(\d(?:[.,]\d+)?)([a-zA-Z])/g, '$1 $2')
+      .replace(/\bm3\b/g, 'm³').replace(/\bin2\b/g, 'in²').replace(/\byd3\b/g, 'yd³').replace(/\bft3\b/g, 'ft³')
+      .replace(/\s+/g, ' ')
+      .trim();
+
     // Spec categories — inside the "Specifications" parent nested-accordion,
-    // each direct-child nested-accordion is one category.
+    // each direct-child nested-accordion is one category. Note (N) rows are
+    // truncated disclaimers in Cat's HTML (data-english capped at 255 chars);
+    // skipped here as they break the label/value rhythm.
     const specs = [];
     const specRoot = Array.from(document.querySelectorAll('.nested-accordion'))
       .find(el => el.querySelector(':scope > h3')?.textContent?.trim() === 'Specifications');
@@ -85,17 +99,15 @@ export async function extractPage(url, browser) {
         if (!title) return;
         const rows = [];
         cat.querySelectorAll(':scope > .comment > ul > li').forEach((li) => {
-          // Each li has <p>Label <span data-english="X" data-metric="Y">X</span></p>
-          // Or for Note items: <p>Note (N) <span>prose</span></p>
           const p = li.querySelector('p');
           if (!p) return;
           const span = p.querySelector('span');
-          const value = (span?.getAttribute('data-english') || span?.textContent || '').trim();
-          // Label = the p's text minus the span text
+          const rawValue = (span?.getAttribute('data-english') || span?.textContent || '').trim();
           let label = p.textContent.replace(span?.textContent || '', '').trim();
           label = label.replace(/\s+/g, ' ');
           if (!label) return;
-          rows.push({ label, value });
+          if (/^Note\s*\(/i.test(label)) return; // skip truncated disclaimers
+          rows.push({ label, value: cleanValue(rawValue) });
         });
         if (rows.length) specs.push({ title, rows });
       });
@@ -203,19 +215,32 @@ function rewriteHref(href) {
 export function renderDA(data) {
   const slug = data.modelSlug;
 
-  /* Hero key facts: pull from the Engine category (or first category if no Engine). */
-  const engineCat = data.specs.find(c => /^engine$/i.test(c.title)) || data.specs[0];
-  const keyFactNames = ['Engine Model', 'Engine Power', 'Operating Weight', 'Bucket Capacity', 'Net Power', 'Gross Power'];
+  /* Hero / stat-strip key facts. Only rows whose value starts with a digit
+     qualify (a stat strip needs monumental numbers, not "Cat® C18"). Picked
+     in priority order from Engine + Operating Specifications + Hydraulic
+     Cycle, taking the first 4 numeric matches. */
+  const keyFactPriority = [
+    'Engine Power',
+    'Operating Weight',
+    'Bucket Capacity',
+    'Rated Payload',
+    'Hydraulic Cycle',
+    'Net Power',
+    'Gross Power',
+    'Peak Torque',
+  ];
+  const isNumeric = (v) => /^[\d.,\-–]/.test(v) && v.length < 30;
   const keyFacts = [];
-  // Try Engine + Operating Specifications
-  const opsCat = data.specs.find(c => /operating\s+specifications/i.test(c.title));
-  [engineCat, opsCat].filter(Boolean).forEach((cat) => {
-    cat.rows.forEach((row) => {
-      const matchedName = keyFactNames.find(name => row.label.toLowerCase().includes(name.toLowerCase()));
-      if (matchedName && !keyFacts.find(k => k.matchedName === matchedName) && keyFacts.length < 4) {
-        keyFacts.push({ matchedName, label: matchedName.toUpperCase(), value: row.value });
+  const candidateCats = data.specs.filter(c => /engine|operating|hydraulic|payload/i.test(c.title));
+  keyFactPriority.forEach((name) => {
+    if (keyFacts.length >= 4) return;
+    for (const cat of candidateCats) {
+      const row = cat.rows.find(r => r.label.toLowerCase().includes(name.toLowerCase()) && isNumeric(r.value));
+      if (row && !keyFacts.find(k => k.matchedName === name)) {
+        keyFacts.push({ matchedName: name, label: name.toUpperCase(), value: row.value });
+        break;
       }
-    });
+    }
   });
 
   const breadcrumb = `<div>
@@ -244,13 +269,25 @@ export function renderDA(data) {
   </div>
 </div>`;
 
-  /* At-a-glance stat strip: re-use the same 4 key facts from the hero, but
-     promote to monumental Oswald numbers. Use the value's numeric part as the
-     big number, and the unit (split from value) as the strong tag. */
+  /* At-a-glance stat strip — display tuning:
+     - Strip any "(metric alternative)" parenthetical so the split works
+     - Add thousands commas to bare integers >= 1000  (Cat's data-english is unformatted)
+     - Restore m³ / in² superscripts that data-english renders as m3 / in2 */
+  const formatStripValue = (raw) => {
+    let v = raw.replace(/\s*\([^)]*\)\s*$/, '').trim();
+    v = v.replace(/m3\b/g, 'm³').replace(/in2\b/g, 'in²').replace(/yd3\b/g, 'yd³');
+    return v;
+  };
+  const withCommas = (numStr) => {
+    if (numStr.includes(',') || numStr.includes('.') || /[-–]/.test(numStr)) return numStr;
+    const n = parseInt(numStr, 10);
+    if (Number.isNaN(n) || n < 1000) return numStr;
+    return n.toLocaleString('en-US');
+  };
   const statRows = keyFacts.map((k) => {
-    // Split value like "580 hp" → number "580", unit "hp"; "112,574 lb" → "112,574"+"lb"
-    const m = k.value.match(/^([\d.,\-–]+)\s*([^\d]*)$/);
-    const num = m ? m[1] : k.value;
+    const cleaned = formatStripValue(k.value);
+    const m = cleaned.match(/^([\d.,\-–]+)\s*(.*)$/);
+    const num = withCommas(m ? m[1] : cleaned);
     const unit = m && m[2] ? m[2].trim() : '';
     return `    <div>
       <div><p>${escapeHTML(num)}${unit ? `<strong>${escapeHTML(unit)}</strong>` : ''}</p><p>${escapeHTML(k.matchedName)}</p></div>
