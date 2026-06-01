@@ -14,6 +14,13 @@ body.appear {
   display: block;
 }
 
+/* Reserve chrome height in the GLOBAL stylesheet so the header doesn't
+   jump from 0 → ~220px when the per-theme CSS loads. Per-theme CSS may
+   refine this with theme-specific tokens; this is the safe baseline.
+   Mobile is taller because the dept-row + utility-strip wrap. */
+.header-wrapper { min-height: 173px; background: #272727; }
+@media (max-width: 768px) { .header-wrapper { min-height: 224px; } }
+
 /* Section visibility lifecycle used by aem.js decorateSections when
    running on non-overlay pages. Harmless on overlay pages because the
    overlay skips decorateSections entirely. */
