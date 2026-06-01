@@ -711,6 +711,51 @@
     display: inline-flex; align-items: center;
   }
 
+  /* Static text-only service grid — same dark-tile treatment as the hub's
+     fallback state but authored explicitly (no dynamic block). Useful for
+     hub pages like /service that list capabilities without per-item images. */
+  .cards.services > ul {
+    display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--sp-md); margin: var(--sp-xxl) auto 0; padding: 0; list-style: none;
+    max-width: 1240px;
+  }
+  .cards.services > ul > li {
+    background: var(--color-surface-dark);
+    color: var(--color-text-on-dark);
+    border-radius: var(--r-card);
+    border-left: 4px solid var(--color-cat-yellow);
+    padding: var(--sp-xl) var(--sp-lg);
+    min-height: 140px;
+    display: flex; flex-direction: column; justify-content: space-between;
+    transition: transform 200ms var(--ease-out), background 200ms;
+  }
+  .cards.services > ul > li:hover { transform: translateY(-2px); background: #1a1a1a; }
+  .cards.services > ul > li .cards-card-body { display: contents; }
+  .cards.services > ul > li h3 {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 1rem; line-height: 1.15; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--color-text-on-dark); margin: 0;
+    text-wrap: balance;
+  }
+  .cards.services > ul > li h3 a { color: inherit; }
+  .cards.services > ul > li p.button-wrapper { margin: var(--sp-md) 0 0; padding: 0; border: none; }
+  .cards.services > ul > li p.button-wrapper a.button.primary,
+  .cards.services > ul > li p strong > a {
+    background: transparent; color: var(--color-cat-yellow); border: none; padding: 0;
+    font-family: var(--font-display); font-weight: 700; font-size: 0.7rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cards.services > ul > li p.button-wrapper a.button.primary::after,
+  .cards.services > ul > li p strong > a::after {
+    content: "›"; font-weight: 700; font-size: 1.25rem; line-height: 0.7;
+    transition: transform 200ms;
+  }
+  .cards.services > ul > li:hover p.button-wrapper a.button.primary::after,
+  .cards.services > ul > li:hover p strong > a::after { transform: translateX(2px); }
+  @media (max-width: 1024px) { .cards.services > ul { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px)  { .cards.services > ul { grid-template-columns: 1fr; } }
+
   /* Hub variant — photo-tile grid of category-listing links. Each tile
      shows a representative model photo (sourced dynamically by the block
      JS from a child detail page's hero image) with category name + CTA
