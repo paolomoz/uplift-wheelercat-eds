@@ -56,16 +56,31 @@ export async function decorateDynamic(block) {
   const category = getMetadata('category');
   const here = window.location.pathname.replace(/\/$/, '');
 
-  if (!template || !category) {
+  if (!category) {
     block.closest('.section')?.remove();
     return;
   }
 
+  // .cards.related (detail-page sibling list) filters by same template +
+  // same category. .cards.listing (category-listing page) filters by URL
+  // prefix + category — listings use one theme but list pages from
+  // potentially different detail templates (e.g., a /used-equipment/<cat>/
+  // listing rendered with the equipment-new theme but listing pages from
+  // the equipment-used template).
+  const prefixMatch = here.match(/^(\/[^/]+(?:\/machines)?)\//);
+  const parentPrefix = prefixMatch ? prefixMatch[1] + '/' : null;
+
   const all = await loadIndex();
-  const candidates = all.filter((row) => row.template === template
-    && row.category === category
-    && (row.pageType || 'detail') !== 'listing'
-    && row.path.replace(/\/$/, '') !== here);
+  const candidates = all.filter((row) => {
+    if (row.category !== category) return false;
+    if ((row.pageType || 'detail') === 'listing') return false;
+    if (row.path.replace(/\/$/, '') === here) return false;
+    if (isListing) {
+      return parentPrefix ? row.path.startsWith(parentPrefix) : true;
+    }
+    if (!template) return false;
+    return row.template === template;
+  });
 
   const items = dedupeBySlug(candidates)
     .sort((a, b) => (a.modelName || a.title || a.path).localeCompare(b.modelName || b.title || b.path))
