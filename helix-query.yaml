@@ -31,7 +31,7 @@ indices:
         value: |
           attribute(el, "content")
       pageType:
-        select: head > meta[name="pageType"]
+        select: head > meta[name="pagetype"]
         value: |
           attribute(el, "content")
       modelName:
