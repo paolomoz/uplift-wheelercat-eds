@@ -47,10 +47,22 @@ export async function decorateDynamic(block) {
     return;
   }
 
-  const items = (await loadIndex())
-    .filter((row) => row.template === template
-      && row.category === category
-      && row.path.replace(/\/$/, '') !== here)
+  // Prefer nested paths over orphaned flat-path duplicates. A nested path
+  // has at least one slash after the leading /. We only include flat-path
+  // entries when no nested duplicate exists in the index.
+  const all = await loadIndex();
+  const nestedByModel = new Map();
+  all.forEach((row) => {
+    if (row.template !== template || row.category !== category) return;
+    const slug = row.path.split('/').pop();
+    const isNested = row.path.split('/').filter(Boolean).length > 1;
+    const existing = nestedByModel.get(slug);
+    if (!existing || (isNested && !existing.isNested)) {
+      nestedByModel.set(slug, { ...row, isNested });
+    }
+  });
+  const items = [...nestedByModel.values()]
+    .filter((row) => row.path.replace(/\/$/, '') !== here)
     .slice(0, MAX_ITEMS);
 
   if (items.length === 0) {
