@@ -73,20 +73,39 @@ export async function extractCategory(section, categorySlug, browser) {
   const data = await page.evaluate(() => {
     const h1 = document.querySelector('h1')?.textContent?.trim() || null;
 
-    // Intro paragraph: first <p> in main content after h1, that's substantive
+    // Intro paragraph: sentence-ish prose, NOT a spec row.
+    // Heuristics that reject spec rows like "Maximum Gross Power N/A":
+    //   - contains "N/A" → spec
+    //   - 2+ runs of 5+ consecutive whitespace chars → table cell rendered as text
+    //   - no period/colon → not a sentence
+    //   - all-uppercase words > 40% → spec heading row
+    const isSpecRow = (s) => {
+      if (/\bN\/A\b/i.test(s)) return true;
+      if ((s.match(/\s{5,}/g) || []).length > 1) return true;
+      if (!/[.:!?]/.test(s)) return true;
+      const words = s.split(/\s+/).filter(w => /[a-zA-Z]/.test(w));
+      const upper = words.filter(w => w === w.toUpperCase() && w.length > 1).length;
+      if (words.length && upper / words.length > 0.4) return true;
+      return false;
+    };
     let intro = null;
     const candidates = Array.from(document.querySelectorAll('main p, .entry-content p, article p'));
     for (const p of candidates) {
-      const text = p.textContent?.trim();
-      if (text && text.length > 80 && text.length < 800 && !/^\W/.test(text)) {
+      const text = p.textContent?.trim().replace(/\s+/g, ' ');
+      if (text && text.length > 80 && text.length < 800 && !isSpecRow(text)) {
         intro = text;
         break;
       }
     }
 
-    // Hero image: largest scene7-or-uploaded image
+    // Hero image: largest scene7-or-uploaded image with a category-y aspect
+    // (wider than tall). Excludes the sitewide CTA/contact banners and
+    // square-ish thumbnails.
     const heroEl = Array.from(document.querySelectorAll('img'))
-      .filter(i => (i.src.includes('scene7') || i.src.includes('/uploads/')) && i.naturalWidth >= 600)
+      .filter(i => i.src.includes('scene7') || i.src.match(/wp-content\/uploads\/.*\/[A-Z]/))
+      .filter(i => i.naturalWidth >= 600)
+      .filter(i => !/contact-banner|cta-|footer-|nav-|logo|icon/i.test(i.src))
+      .filter(i => i.naturalWidth / i.naturalHeight > 1.2)
       .sort((a, b) => (b.naturalWidth * b.naturalHeight) - (a.naturalWidth * a.naturalHeight))[0];
     const heroImage = heroEl ? heroEl.src : null;
 

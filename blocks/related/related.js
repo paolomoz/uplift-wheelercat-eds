@@ -82,9 +82,10 @@ export async function decorateDynamic(block) {
   block.innerHTML = '';
   block.append(ul);
 
-  // Surface the count for the title bar
-  const countEl = block.closest('.section')?.querySelector('[data-listing-count]');
-  if (countEl) countEl.textContent = String(items.length);
+  // Surface the count anywhere on the page (typically in a sibling hero band)
+  document.querySelectorAll('[data-listing-count]').forEach((el) => {
+    el.textContent = String(items.length);
+  });
 }
 
 export default function decorate() { /* no-op for non-dynamic; cards.js handles standard styling */ }
