@@ -146,7 +146,7 @@ export function renderDA(data) {
       <div>
         <p>${escapeHTML(cfg.sectionLabel)}</p>
         <h1>${escapeHTML(data.h1.toUpperCase())}</h1>
-        <p data-listing-count-line="">Showing <strong data-listing-count="">…</strong> models</p>
+        <p><strong><code>LISTING_COUNT</code></strong> models available</p>
 ${data.intro ? `        <p>${escapeHTML(data.intro)}</p>\n` : ''}      </div>
     </div>
   </div>

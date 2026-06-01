@@ -82,9 +82,13 @@ export async function decorateDynamic(block) {
   block.innerHTML = '';
   block.append(ul);
 
-  // Surface the count anywhere on the page (typically in a sibling hero band)
-  document.querySelectorAll('[data-listing-count]').forEach((el) => {
-    el.textContent = String(items.length);
+  // Surface the count by replacing the LISTING_COUNT marker token in any
+  // <code> element (DA preserves <code>'s textContent but strips inline
+  // data-* attributes, so a sentinel text token is the most reliable hook).
+  document.querySelectorAll('code').forEach((el) => {
+    if (el.textContent.trim() === 'LISTING_COUNT') {
+      el.outerHTML = String(items.length);
+    }
   });
 }
 
