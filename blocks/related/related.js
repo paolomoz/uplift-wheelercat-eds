@@ -109,8 +109,22 @@ export async function decorateDynamic(block) {
       if (previewImage) {
         const imageDiv = document.createElement('div');
         imageDiv.className = 'cards-card-image';
-        const picture = createOptimizedPicture(previewImage, label, false, [{ width: '500' }]);
-        imageDiv.append(picture);
+        // DA media-bus paths (/media_<hash>.<ext>) can go through EDS
+        // optimization. External URLs (e.g., scene7 CDN heroes injected
+        // as og:image) render as-is — EDS optimization would rewrite the
+        // host and break the request.
+        const isDAMedia = /^\/media_[a-f0-9]+\./.test(previewImage);
+        if (isDAMedia) {
+          imageDiv.append(createOptimizedPicture(previewImage, label, false, [{ width: '500' }]));
+        } else {
+          const pic = document.createElement('picture');
+          const img = document.createElement('img');
+          img.src = previewImage;
+          img.alt = label;
+          img.loading = 'lazy';
+          pic.append(img);
+          imageDiv.append(pic);
+        }
         li.appendChild(imageDiv);
       }
       const body = document.createElement('div');
