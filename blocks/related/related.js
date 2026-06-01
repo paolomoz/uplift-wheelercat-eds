@@ -87,8 +87,13 @@ export async function decorateDynamic(block) {
       }
       return img;
     });
+    // DA stores the same media at path-prefixed URLs (e.g.,
+    // /used-equipment/<cat>/media_<hash>.jpg) — strings differ but the
+    // hash is the same. Dedupe by filename + query (drop the directory).
+    const imageKey = (src) => src ? (src.split('/').pop() || src) : null;
     const imageCounts = candidates.reduce((acc, src) => {
-      if (src) acc[src] = (acc[src] || 0) + 1;
+      const k = imageKey(src);
+      if (k) acc[k] = (acc[k] || 0) + 1;
       return acc;
     }, {});
 
@@ -99,7 +104,7 @@ export async function decorateDynamic(block) {
 
       // Reject placeholder images (shared across ≥3 categories)
       const candidate = candidates[i];
-      const previewImage = candidate && imageCounts[candidate] < 3 ? candidate : null;
+      const previewImage = candidate && imageCounts[imageKey(candidate)] < 3 ? candidate : null;
 
       if (previewImage) {
         const imageDiv = document.createElement('div');
