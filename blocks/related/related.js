@@ -73,21 +73,33 @@ export async function decorateDynamic(block) {
       return;
     }
 
-    const ul = document.createElement('ul');
-    items.forEach((item) => {
-      const li = document.createElement('li');
-      const label = (item.modelName || item.title || item.path).replace(/\s*[—–]\s*Wheeler.*$/i, '').trim();
-
-      // Dynamic preview image: use a representative detail page's image
-      // from the same category (first one found in the index). Listings
-      // rarely have their own og:image; their child details always do.
-      let previewImage = item.image && !item.image.includes('default-meta-image') ? item.image : null;
-      if (!previewImage) {
+    // First pass: pick a candidate preview image per item, then count
+    // how often each image appears. Images shared across many categories
+    // are placeholders ("photo coming soon" stock) — drop them to the
+    // text-only fallback so they don't visually duplicate.
+    const candidates = items.map((item) => {
+      let img = item.image && !item.image.includes('default-meta-image') ? item.image : null;
+      if (!img) {
         const child = all.find(r => r.category === item.category
           && (r.pageType || 'detail') !== 'listing'
           && r.image && !r.image.includes('default-meta-image'));
-        if (child) previewImage = child.image;
+        if (child) img = child.image;
       }
+      return img;
+    });
+    const imageCounts = candidates.reduce((acc, src) => {
+      if (src) acc[src] = (acc[src] || 0) + 1;
+      return acc;
+    }, {});
+
+    const ul = document.createElement('ul');
+    items.forEach((item, i) => {
+      const li = document.createElement('li');
+      const label = (item.modelName || item.title || item.path).replace(/\s*[—–]\s*Wheeler.*$/i, '').trim();
+
+      // Reject placeholder images (shared across ≥3 categories)
+      const candidate = candidates[i];
+      const previewImage = candidate && imageCounts[candidate] < 3 ? candidate : null;
 
       if (previewImage) {
         const imageDiv = document.createElement('div');
