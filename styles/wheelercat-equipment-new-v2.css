@@ -519,21 +519,21 @@
     padding: var(--sp-xxl) var(--sp-xl);
     max-width: 1100px;
     margin: 0 auto;
-  }
-  .specs.at-a-glance.block ul {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: var(--sp-lg);
-    margin: 0; padding: 0; list-style: none;
   }
-  .specs.at-a-glance.block li {
-    display: block; padding: 0; background: none; border: none;
+  /* DA emits each authored row as <div><div>...</div></div>. The outer .block
+     is the 4-col grid; each inner cell renders one stat. */
+  .specs.at-a-glance.block > div {
     border-left: 3px solid var(--color-cat-yellow);
     padding-left: var(--sp-lg);
+    display: block;
   }
-  .specs.at-a-glance.block li:hover { transform: none; box-shadow: none; }
-  /* DA shape: <li><p>value</p><p>label</p></li> — first p is value, second is label */
-  .specs.at-a-glance.block li > p:first-child {
+  .specs.at-a-glance.block > div > div {
+    display: block;
+  }
+  .specs.at-a-glance.block > div > div > p:first-child {
     font-family: "Oswald", "Roboto Condensed", "Roboto", system-ui, sans-serif;
     font-weight: 700;
     font-size: clamp(2rem, 3.6vw, 3.4rem);
@@ -543,14 +543,14 @@
     margin: 0 0 var(--sp-sm);
     border: none; padding: 0; text-transform: none;
   }
-  .specs.at-a-glance.block li > p:first-child strong {
+  .specs.at-a-glance.block > div > div > p:first-child strong {
     color: var(--color-cat-yellow);
     font-size: 0.5em;
     font-weight: 700;
     margin-left: 0.2em;
     letter-spacing: 0.04em;
   }
-  .specs.at-a-glance.block li > p:last-child {
+  .specs.at-a-glance.block > div > div > p:last-child {
     font-family: var(--font-display); font-weight: 700;
     font-size: 0.7rem; letter-spacing: 0.18em;
     text-transform: uppercase; color: rgba(255,255,255,0.65);
@@ -699,13 +699,13 @@
 
 @layer responsive {
   @media (max-width: 1024px) {
-    .specs.at-a-glance.block ul { grid-template-columns: repeat(2, 1fr); }
-    .specs.at-a-glance.block li > p:first-child { font-size: 2rem; }
+    .specs.at-a-glance.block { grid-template-columns: repeat(2, 1fr); }
+    .specs.at-a-glance.block > div > div > p:first-child { font-size: 2rem; }
     .media.gallery.block > ul { grid-template-columns: repeat(2, 1fr); }
     .cards.related > ul { grid-template-columns: repeat(2, 1fr); }
   }
   @media (max-width: 640px) {
-    .specs.at-a-glance.block ul { grid-template-columns: 1fr; }
+    .specs.at-a-glance.block { grid-template-columns: 1fr; }
     .specs.accordions.block details > ul { grid-template-columns: 1fr; }
     .media.gallery.block > ul { grid-template-columns: 1fr; }
     .cards.related > ul { grid-template-columns: 1fr; }
