@@ -672,6 +672,47 @@
     gap: var(--sp-lg);
     margin-top: var(--sp-xxl);
   }
+
+  /* Hub variant — tile grid of category-listing links (no image). Wider
+     grid because tiles are taller-than-wide text-only blocks. */
+  .cards.hub > ul {
+    display: grid; grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-md); margin: var(--sp-xxl) auto 0; padding: 0; list-style: none;
+    max-width: 1100px;
+  }
+  .cards.hub > ul > li {
+    background: var(--color-surface-dark);
+    color: var(--color-text-on-dark);
+    border-radius: var(--r-card);
+    padding: var(--sp-xl) var(--sp-lg);
+    border-left: 4px solid var(--color-cat-yellow);
+    transition: transform 200ms var(--ease-out), background 200ms;
+    display: flex; flex-direction: column; justify-content: space-between;
+    min-height: 140px;
+  }
+  .cards.hub > ul > li:hover { transform: translateY(-2px); background: #1a1a1a; }
+  .cards.hub > ul > li .cards-card-body { display: contents; }
+  .cards.hub > ul > li h3 {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 1.05rem; line-height: 1.15; letter-spacing: 0.04em;
+    text-transform: uppercase; color: var(--color-text-on-dark); margin: 0;
+    text-wrap: balance;
+  }
+  .cards.hub > ul > li h3 a { color: inherit; }
+  .cards.hub > ul > li p.button-wrapper { margin: var(--sp-md) 0 0; padding: 0; border: none; }
+  .cards.hub > ul > li p.button-wrapper a.button.primary {
+    background: transparent; color: var(--color-cat-yellow); border: none; padding: 0;
+    font-family: var(--font-display); font-weight: 700; font-size: 0.72rem;
+    letter-spacing: 0.1em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 6px;
+  }
+  .cards.hub > ul > li p.button-wrapper a.button.primary::after {
+    content: "›"; font-weight: 700; font-size: 1.25rem; line-height: 0.7;
+    transition: transform 200ms;
+  }
+  .cards.hub > ul > li:hover p.button-wrapper a.button.primary::after { transform: translateX(2px); }
+  @media (max-width: 1024px) { .cards.hub > ul { grid-template-columns: repeat(2, 1fr); } }
+  @media (max-width: 640px) { .cards.hub > ul { grid-template-columns: 1fr; } }
   .cards:is(.related, .listing) > ul > li {
     position: relative; aspect-ratio: 3/4; border-radius: var(--r-card);
     overflow: hidden;

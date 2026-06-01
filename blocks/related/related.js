@@ -52,9 +52,45 @@ function dedupeBySlug(rows) {
 
 export async function decorateDynamic(block) {
   const isListing = block.classList.contains('listing');
+  const isHub = block.classList.contains('hub');
   const template = getMetadata('template');
   const category = getMetadata('category');
   const here = window.location.pathname.replace(/\/$/, '');
+
+  // Hub mode: list every "listing" page nested under the current hub's URL.
+  // E.g., a hub at /new lists every /new/machines/<cat> listing. The depth
+  // doesn't matter — the URL prefix match is sufficient.
+  if (isHub) {
+    const all = await loadIndex();
+    const hubPath = here.replace(/\/$/, '') + '/';
+    const items = all
+      .filter(r => (r.pageType || 'detail') === 'listing')
+      .filter(r => r.path.startsWith(hubPath))
+      .sort((a, b) => (a.modelName || a.title || a.path).localeCompare(b.modelName || b.title || b.path));
+
+    if (items.length === 0) {
+      block.closest('.section')?.remove();
+      return;
+    }
+
+    const ul = document.createElement('ul');
+    items.forEach((item) => {
+      const li = document.createElement('li');
+      const label = (item.modelName || item.title || item.path).replace(/\s*[—–]\s*Wheeler.*$/i, '').trim();
+      li.innerHTML = `<div class="cards-card-body">
+        <h3><a href="${item.path}">${label}</a></h3>
+        <p class="button-wrapper"><a href="${item.path}" class="button primary">View Models</a></p>
+      </div>`;
+      ul.append(li);
+    });
+    block.innerHTML = '';
+    block.append(ul);
+
+    document.querySelectorAll('code').forEach((el) => {
+      if (el.textContent.trim() === 'LISTING_COUNT') el.outerHTML = String(items.length);
+    });
+    return;
+  }
 
   if (!category) {
     block.closest('.section')?.remove();
