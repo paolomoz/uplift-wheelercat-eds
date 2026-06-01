@@ -673,6 +673,44 @@
     margin-top: var(--sp-xxl);
   }
 
+  /* Empty-state for category listings with zero detail children — keeps the
+     section visible with a clear next step instead of just blanking out. */
+  .cards.listing.empty {
+    max-width: 720px; margin: var(--sp-xxl) auto 0;
+    padding: var(--sp-xxl) var(--sp-xl);
+    background: var(--color-warm-stone);
+    border-left: 4px solid var(--color-cat-yellow);
+    border-radius: var(--r-card);
+    text-align: left;
+  }
+  .cards.listing.empty .cards-card-body { display: block; }
+  .cards.listing.empty p {
+    font-family: var(--font-body); font-size: 1rem; line-height: 1.5;
+    color: var(--color-body); margin: 0 0 var(--sp-md);
+  }
+  .cards.listing.empty p:first-child {
+    font-family: var(--font-display); font-weight: 700;
+    font-size: 1.25rem; color: var(--color-heading);
+    text-transform: uppercase; letter-spacing: 0.04em;
+  }
+  .cards.listing.empty p.button-wrapper {
+    margin: var(--sp-lg) 0 0;
+    display: flex; gap: var(--sp-md); flex-wrap: wrap;
+  }
+  .cards.listing.empty p.button-wrapper a.button.primary {
+    background: var(--color-surface-dark); color: var(--color-cat-yellow);
+    border-color: var(--color-surface-dark); border-radius: var(--r-pill);
+    padding: 12px 24px;
+  }
+  .cards.listing.empty p.button-wrapper a.button.secondary {
+    background: transparent; color: var(--color-surface-dark);
+    border: 1px solid var(--color-surface-dark); border-radius: var(--r-pill);
+    padding: 12px 24px;
+    font-family: var(--font-display); font-weight: 700; font-size: 0.875rem;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    display: inline-flex; align-items: center;
+  }
+
   /* Hub variant — photo-tile grid of category-listing links. Each tile
      shows a representative model photo (sourced dynamically by the block
      JS from a child detail page's hero image) with category name + CTA

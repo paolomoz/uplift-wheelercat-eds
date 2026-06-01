@@ -213,16 +213,30 @@ export async function decorateDynamic(block) {
     }
   }
 
-  // Always process the LISTING_COUNT sentinel (even when items.length === 0)
-  // so the visible "X models available" text never shows the literal token.
+  // Always process the LISTING_COUNT sentinel — when zero items, use the
+  // word "No" so the surrounding text reads "No models available" cleanly.
   document.querySelectorAll('code').forEach((el) => {
     if (el.textContent.trim() === 'LISTING_COUNT') {
-      el.outerHTML = String(items.length);
+      el.outerHTML = items.length === 0 ? 'No' : String(items.length);
     }
   });
 
   if (items.length === 0) {
-    block.closest('.section')?.remove();
+    // Friendly empty state — keep the section visible and offer paths out
+    // (back to the section hub + contact). Better than a confusing
+    // "0 models" with nothing else on the page.
+    const isNewSection = here.startsWith('/new/');
+    const hubHref = isNewSection ? '/new' : '/used-equipment';
+    const hubLabel = isNewSection ? 'all New Equipment' : 'all Used Equipment';
+    block.classList.add('empty');
+    block.innerHTML = `<div class="cards-card-body">
+      <p>No models in this category are currently listed.</p>
+      <p>The model lineup may be evolving, or detail pages might live under a related category.</p>
+      <p class="button-wrapper">
+        <a href="${hubHref}" class="button primary">Browse ${hubLabel}</a>
+        <a href="/contact" class="button secondary">Contact Sales</a>
+      </p>
+    </div>`;
     return;
   }
 
