@@ -1,0 +1,40 @@
+version: 1
+indices:
+  default:
+    include:
+      - '/**'
+    exclude:
+      - '/drafts/**'
+      - '/fragments/**'
+      - '/nav'
+      - '/footer'
+    target: /query-index.json
+    properties:
+      title:
+        select: head > meta[property="og:title"]
+        value: |
+          attribute(el, "content")
+      description:
+        select: head > meta[name="description"]
+        value: |
+          attribute(el, "content")
+      image:
+        select: head > meta[property="og:image"]
+        value: |
+          match(attribute(el, "content"), "https?://[^/]+(/.*)")
+      template:
+        select: head > meta[name="template"]
+        value: |
+          attribute(el, "content")
+      category:
+        select: head > meta[name="category"]
+        value: |
+          attribute(el, "content")
+      modelName:
+        select: main h1
+        value: |
+          textContent(el)
+      lastModified:
+        select: none
+        value: |
+          parseTimestamp(headers["last-modified"], "EEE, dd MMM yyyy hh:mm:ss z")
