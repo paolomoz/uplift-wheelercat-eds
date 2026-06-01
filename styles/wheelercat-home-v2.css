@@ -223,8 +223,12 @@
   a.button.primary:hover { background: var(--color-surface-dark); color: var(--color-cat-yellow); border-color: var(--color-surface-dark); }
   p.button-wrapper { margin: 0; }
 
-  /* Hero — full-bleed with bg image cell + text cell */
-  .hero.block { position: relative; display: grid; grid-template-columns: 1fr; min-height: 600px; align-items: center; background: var(--color-surface-dark); color: var(--color-text-on-dark); overflow: hidden; }
+  /* Hero — full-bleed with bg image cell + text cell. align-items: start
+     anchors text to the top of the hero so font-swap line-wrap changes
+     don't shift element positions vertically (only their bottom edges
+     move). With align-items: center, a font-swap that shrinks text height
+     would visually move every text element up by ~half the delta. */
+  .hero.block { position: relative; display: grid; grid-template-columns: 1fr; min-height: 600px; align-items: start; background: var(--color-surface-dark); color: var(--color-text-on-dark); overflow: hidden; }
   .hero.block > div { display: contents; }
   .hero.block > div > div:first-child {
     position: relative; z-index: 2;
