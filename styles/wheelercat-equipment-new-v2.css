@@ -557,29 +557,18 @@
     margin: 0;
   }
 
-  /* The accordion category list — authored as a separate block:
-     <div class="specs accordions"> with nested rows per category.
-     We use native <details>/<summary> wrapped in EDS cards. */
-  .specs.accordions.block > ul {
-    list-style: none; margin: var(--sp-xxl) auto 0; padding: 0;
-    display: flex; flex-direction: column;
-    max-width: 1100px;
+  /* The accordion category list — JS wraps each <h3> + <ul> pair authored
+     in DA into <details><summary><h3></h3></summary><ul></ul></details>.
+     Inner wrapper is the EDS-injected <div><div>. */
+  .specs.accordions.block > div > div {
+    max-width: 1100px; margin: var(--sp-xxl) auto 0;
     border-top: 1px solid rgba(39,39,39,0.12);
   }
-  .specs.accordions.block > ul > li {
-    background: var(--color-page);
-    border: none;
-    border-bottom: 1px solid rgba(39,39,39,0.12);
-    border-radius: 0;
-    padding: 0;
+  .specs.accordions.block details {
     display: block;
-    flex-direction: column;
+    background: var(--color-page);
+    border-bottom: 1px solid rgba(39,39,39,0.12);
   }
-  .specs.accordions.block > ul > li:hover { transform: none; box-shadow: none; }
-  /* Each li holds <details><summary><h3>Category</h3>(rowCount)</summary><div>specs</div></details>
-     Authored with EDS, the structure ends up as ul>li>cards-card-body>(h3+details).
-     Use the details element directly. */
-  .specs.accordions.block details { display: block; }
   .specs.accordions.block summary {
     display: flex; align-items: center; justify-content: space-between;
     width: 100%;
@@ -611,30 +600,27 @@
     color: var(--color-text-on-yellow);
     border-color: var(--color-cat-yellow);
   }
-  .specs.accordions.block details > div {
-    padding: 0 var(--sp-xl) var(--sp-xl);
+  /* The label/value list inside each accordion — JS leaves the original ul/li/p shape in place */
+  .specs.accordions.block details > ul {
+    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-md) var(--sp-xl);
+    margin: 0; padding: 0 var(--sp-xl) var(--sp-xl); list-style: none; width: 100%;
     animation: spec-fade-in 280ms var(--ease-out);
   }
   @keyframes spec-fade-in { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
-  /* The label/value list inside each accordion — uses the same ul:has shape from hero specs */
-  .specs.accordions.block details ul {
-    display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: var(--sp-md) var(--sp-xl);
-    margin: 0; padding: 0; list-style: none; width: 100%;
-  }
-  .specs.accordions.block details ul > li {
+  .specs.accordions.block details > ul > li {
     padding: var(--sp-sm) 0;
     border: none; border-bottom: 1px solid rgba(39,39,39,0.06);
     border-radius: 0; background: none;
     display: block; flex-direction: column;
   }
-  .specs.accordions.block details ul > li:hover { transform: none; box-shadow: none; }
-  .specs.accordions.block details ul > li > p:first-child {
+  .specs.accordions.block details > ul > li:hover { transform: none; box-shadow: none; }
+  .specs.accordions.block details > ul > li > p:first-child {
     font-family: var(--font-display); font-weight: 700;
     font-size: 0.72rem; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--color-body); margin: 0 0 2px;
   }
-  .specs.accordions.block details ul > li > p:last-child {
+  .specs.accordions.block details > ul > li > p:last-child {
     font-size: 0.95rem; line-height: 1.5; color: var(--color-heading);
     font-weight: 400; margin: 0;
   }
@@ -720,7 +706,7 @@
   }
   @media (max-width: 640px) {
     .specs.at-a-glance.block ul { grid-template-columns: 1fr; }
-    .specs.accordions.block details ul { grid-template-columns: 1fr; }
+    .specs.accordions.block details > ul { grid-template-columns: 1fr; }
     .media.gallery.block > ul { grid-template-columns: 1fr; }
     .cards.related > ul { grid-template-columns: 1fr; }
     .cards.related > ul > li { aspect-ratio: 16/10; }
