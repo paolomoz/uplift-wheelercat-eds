@@ -77,10 +77,30 @@ export async function decorateDynamic(block) {
     items.forEach((item) => {
       const li = document.createElement('li');
       const label = (item.modelName || item.title || item.path).replace(/\s*[—–]\s*Wheeler.*$/i, '').trim();
-      li.innerHTML = `<div class="cards-card-body">
-        <h3><a href="${item.path}">${label}</a></h3>
-        <p class="button-wrapper"><a href="${item.path}" class="button primary">View Models</a></p>
-      </div>`;
+
+      // Dynamic preview image: use a representative detail page's image
+      // from the same category (first one found in the index). Listings
+      // rarely have their own og:image; their child details always do.
+      let previewImage = item.image && !item.image.includes('default-meta-image') ? item.image : null;
+      if (!previewImage) {
+        const child = all.find(r => r.category === item.category
+          && (r.pageType || 'detail') !== 'listing'
+          && r.image && !r.image.includes('default-meta-image'));
+        if (child) previewImage = child.image;
+      }
+
+      if (previewImage) {
+        const imageDiv = document.createElement('div');
+        imageDiv.className = 'cards-card-image';
+        const picture = createOptimizedPicture(previewImage, label, false, [{ width: '500' }]);
+        imageDiv.append(picture);
+        li.appendChild(imageDiv);
+      }
+      const body = document.createElement('div');
+      body.className = 'cards-card-body';
+      body.innerHTML = `<h3><a href="${item.path}">${label}</a></h3>
+        <p class="button-wrapper"><a href="${item.path}" class="button primary">View Models</a></p>`;
+      li.appendChild(body);
       ul.append(li);
     });
     block.innerHTML = '';
