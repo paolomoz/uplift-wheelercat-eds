@@ -93,12 +93,19 @@ export default function decorate(block) {
     items.push({ label, href, isLast: i === segments.length - 1 });
   });
 
-  // Replace the leaf label with the page's actual title (often more
-  // human-readable than the slug — e.g., "988 Wheel Loader" vs slug
-  // "988-wheel-loader"; "Cedar City, UT" vs "cedar-city").
+  // Replace the leaf label with the page's actual title for slugs that
+  // DON'T have an override. For overridden slugs (hub pages, info pages
+  // with a canonical short label), keep the override — the page title
+  // tends to be marketing-verbose ("Careers at Wheeler" vs "Careers";
+  // "Heavy Construction Equipment for Sale in UT" vs "Heavy Construction").
   if (items.length > 1) {
     const last = items[items.length - 1];
-    last.label = leafLabel(last.label);
+    const lastSlug = segments[segments.length - 1];
+    const hasOverride = LABEL_OVERRIDES[lastSlug]
+      || (segments.length > 1 && LABEL_OVERRIDES[`${segments[segments.length - 2]}/${lastSlug}`]);
+    if (!hasOverride) {
+      last.label = leafLabel(last.label);
+    }
   }
 
   const p = document.createElement('p');
