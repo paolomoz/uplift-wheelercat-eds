@@ -21,6 +21,20 @@ body.appear {
 .header-wrapper { min-height: 173px; background: #272727; }
 @media (max-width: 768px) { .header-wrapper { min-height: 224px; } }
 
+/* Same reservation for the footer fragment — it loads async via decorateBlock
+   and would otherwise shift the bottom 300+px of the page when it injects. */
+.footer-wrapper { min-height: 320px; background: #272727; }
+@media (max-width: 768px) { .footer-wrapper { min-height: 420px; } }
+
+/* Dynamic blocks (hub/listing/related) fetch /query-index.json and inject
+   cards async. Without a reservation, main grows after first paint and
+   pushes the footer (and everything between) — CLS cascade. Reserve a
+   reasonable viewport-fraction so the post-fetch render rarely needs to
+   grow beyond it. Small-category hubs may have a bit of empty space; the
+   trade-off is worth it for sub-0.1 CLS sitewide. */
+main .cards.hub.dynamic.block,
+main .cards.listing.dynamic.block { min-height: 60vh; }
+
 /* Section visibility lifecycle used by aem.js decorateSections when
    running on non-overlay pages. Harmless on overlay pages because the
    overlay skips decorateSections entirely. */
