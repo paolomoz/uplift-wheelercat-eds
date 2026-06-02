@@ -26,15 +26,11 @@ body.appear {
 .footer-wrapper { min-height: 320px; background: #272727; }
 @media (max-width: 768px) { .footer-wrapper { min-height: 420px; } }
 
-/* Dynamic blocks (hub/listing/related) fetch /query-index.json and inject
-   cards async. Without a reservation, main grows after first paint and
-   pushes the footer (and everything between) — CLS cascade. Reserve a
-   tall placeholder so the post-fetch render rarely needs to grow beyond
-   it. Selector intentionally omits `.block` because that class is added
-   only after aem.js decoration — by which time the layout has already
-   shifted. */
-main .cards.hub.dynamic,
-main .cards.listing.dynamic { min-height: 120vh; }
+/* Reserve at least one viewport of main content so the footer fragment
+   doesn't briefly sit inside the viewport during initial paint, then
+   shift off-screen when main content (blocks, fragments, cards) populates.
+   Without this, every page records a giant footer-shift event. */
+main { min-height: 100vh; }
 
 /* Section visibility lifecycle used by aem.js decorateSections when
    running on non-overlay pages. Harmless on overlay pages because the
