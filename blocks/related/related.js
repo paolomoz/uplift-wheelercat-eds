@@ -68,14 +68,16 @@ export async function decorateDynamic(block) {
   const category = getMetadata('category');
   const here = window.location.pathname.replace(/\/$/, '');
 
-  // Hub mode: list every "listing" page nested under the current hub's URL.
-  // E.g., a hub at /new lists every /new/machines/<cat> listing. The depth
-  // doesn't matter — the URL prefix match is sufficient.
+  // Hub mode: list every non-detail page (listing, location, info, etc.)
+  // nested under the current hub's URL. E.g., a hub at /new lists every
+  // /new/machines/<cat> listing; a hub at /about/locations lists every
+  // /about/locations/<branch> location page.
   if (isHub) {
     const all = await loadIndex();
     const hubPath = here.replace(/\/$/, '') + '/';
+    const SUB_TYPES = new Set(['listing', 'location', 'info', 'industry']);
     const items = all
-      .filter(r => (r.pageType || 'detail') === 'listing')
+      .filter(r => SUB_TYPES.has(r.pageType))
       .filter(r => r.path.startsWith(hubPath))
       .sort((a, b) => (a.modelName || a.title || a.path).localeCompare(b.modelName || b.title || b.path));
 
