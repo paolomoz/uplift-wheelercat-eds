@@ -244,13 +244,7 @@ export function renderDA(data) {
   });
 
   const breadcrumb = `<div>
-  <div class="breadcrumb">
-    <div>
-      <div>
-        <p><a href="/">Home</a><em>›</em><a href="/new/">New Equipment</a><em>›</em><a href="/new/machines/${data.categorySlug}/">${escapeHTML(data.categoryLabel)}</a><em>›</em>${escapeHTML(data.h1)}</p>
-      </div>
-    </div>
-  </div>
+  <div class="breadcrumb"><div><div></div></div></div>
 </div>`;
 
   const hero = `<div>

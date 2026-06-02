@@ -126,13 +126,7 @@ export function renderDA(data) {
   const galleryImgs = data.images.slice(1, 13); // up to 12 thumbs
 
   const breadcrumb = `<div>
-  <div class="breadcrumb">
-    <div>
-      <div>
-        <p><a href="/">Home</a><em>›</em><a href="/used-equipment/">Used Equipment</a><em>›</em><a href="/used-equipment/${data.categorySlug}/">${escapeHTML(data.category)}</a><em>›</em>${escapeHTML(data.h1)}</p>
-      </div>
-    </div>
-  </div>
+  <div class="breadcrumb"><div><div></div></div></div>
 </div>`;
 
   /* Specs as ul/li/p — author the shape DA would convert to, bypassing
@@ -298,8 +292,8 @@ async function main() {
   const push = args.includes('--push');
 
   // Derive URL from slug (used-equipment__a__b → /used-equipment/a/b/)
-  const path = slug.replace(/__/g, '/');
-  const url = `https://wheelercat.com/${path}/`;
+  const sourcePath = slug.replace(/__/g, '/');
+  const url = `https://wheelercat.com/${sourcePath}/`;
 
   console.log(`▸ Filling ${slug}`);
   console.log(`  Source: ${url}`);

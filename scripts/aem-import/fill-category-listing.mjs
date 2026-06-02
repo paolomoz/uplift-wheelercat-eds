@@ -131,13 +131,7 @@ export function renderDA(data) {
   const listingPath = cfg.listingPathFn(data.categorySlug);
 
   const breadcrumb = `<div>
-  <div class="breadcrumb">
-    <div>
-      <div>
-        <p><a href="/">Home</a><em>›</em><a href="${cfg.parentPath}">${escapeHTML(cfg.sectionLabel)}</a><em>›</em>${escapeHTML(data.h1)}</p>
-      </div>
-    </div>
-  </div>
+  <div class="breadcrumb"><div><div></div></div></div>
 </div>`;
 
   const headerBand = `<div>
