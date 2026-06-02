@@ -32,8 +32,13 @@
     --r-primary: 5px; --r-card: 8px; --r-pill: 999px;
     --container-max: 1400px;
     --shadow-card: rgba(0,0,0,0.18) 0 6px 16px 0;
-    --font-display: "Roboto Condensed", "Roboto", system-ui, sans-serif;
-    --font-body: "Roboto", system-ui, sans-serif;
+    /* CLS-safe font chains — each web font has a metric-matched local()
+       fallback (defined at the bottom of @layer fonts) that renders Arial
+       with size-adjust + ascent/descent overrides so the swap from
+       fallback → web-font produces no layout shift. */
+    --font-display: "Roboto Condensed", "Roboto Condensed Fallback", "Arial Narrow", "Arial", system-ui, sans-serif;
+    --font-body: "Roboto", "Roboto Fallback", "Arial", system-ui, sans-serif;
+    --font-oswald: "Oswald", "Oswald Fallback", "Impact", "Arial Narrow", "Arial", system-ui, sans-serif;
     --font-icon: "icomoon";
     --ease-out: cubic-bezier(0.25, 0.46, 0.45, 0.94);
     --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
@@ -47,6 +52,13 @@
   @font-face { font-family: "Roboto"; font-weight: 700; font-style: normal; font-display: swap; src: url("/assets/wheelercat-home/fonts/KFO7CnqEu92Fr1ME7kSn66aGLdTylUAMa3yUBHMdazQ.woff2") format("woff2"); }
   @font-face { font-family: "icomoon"; src: url("/assets/wheelercat-home/fonts/icomoon.ttf") format("truetype"); font-weight: normal; font-style: normal; font-display: block; }
   @font-face { font-family: "Oswald"; font-weight: 200 700; font-style: normal; font-display: swap; src: url("/assets/wheelercat-home/fonts/TK3IWkUHHAIjg75cFRf3bXL8LICs1_Fv40pKlN4NNSeSASz7FmlWHYg.woff2") format("woff2"); }
+
+  /* CLS-safe fallback fonts — values from Capsize-derived font metrics
+     tables. Each renders local("Arial") with ascent/descent/size overrides
+     so the web-font swap-in doesn't change box dimensions. */
+  @font-face { font-family: "Roboto Fallback"; src: local("Arial"); ascent-override: 92.55%; descent-override: 24.34%; line-gap-override: 0%; size-adjust: 100.30%; }
+  @font-face { font-family: "Roboto Condensed Fallback"; src: local("Arial"); ascent-override: 95.94%; descent-override: 25.25%; line-gap-override: 0%; size-adjust: 100.27%; }
+  @font-face { font-family: "Oswald Fallback"; src: local("Arial"); ascent-override: 96.39%; descent-override: 26.16%; line-gap-override: 0%; size-adjust: 90.83%; }
 }
 
 /* ───── reset ───── */
@@ -65,9 +77,11 @@
   :root { --utility-strip-h: 41px; }
   .header-wrapper { position: sticky; top: calc(0px - var(--utility-strip-h)); z-index: 50; }
 
-  .utility-strip { background: var(--color-cat-yellow); color: var(--color-text-on-yellow); border-bottom: 1px solid rgba(39,39,39,0.15); position: relative; z-index: 51; }
+  /* Locked height + nowrap on the list so font-swap line-wrap changes don't
+     grow/shrink the strip and shift everything below (CLS trap §4). */
+  .utility-strip { height: var(--utility-strip-h); background: var(--color-cat-yellow); color: var(--color-text-on-yellow); border-bottom: 1px solid rgba(39,39,39,0.15); position: relative; z-index: 51; overflow: hidden; box-sizing: border-box; }
   .utility-strip__inner { display: flex; justify-content: flex-end; align-items: center; padding: 8px 0; gap: var(--sp-lg); flex-wrap: wrap; max-width: var(--container-max); margin: 0 auto; padding-left: var(--sp-lg); padding-right: var(--sp-lg); }
-  .utility-strip__list { display: inline-flex; gap: var(--sp-lg); list-style: none; margin: 0; padding: 0; align-items: center; }
+  .utility-strip__list { display: inline-flex; gap: var(--sp-lg); list-style: none; margin: 0; padding: 0; align-items: center; flex-wrap: nowrap; white-space: nowrap; overflow: hidden; }
   .utility-strip__list a, .utility-strip__more-trigger { font-family: var(--font-display); font-weight: 700; font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-text-on-yellow); background: transparent; border: 0; padding: 0; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; }
   .utility-strip__list a:hover, .utility-strip__more-trigger:hover { opacity: 0.65; }
   .utility-strip__more { position: relative; }
@@ -126,7 +140,8 @@
   main .section > div { width: 100%; max-width: var(--container-max); margin: 0 auto; padding-left: var(--sp-lg); padding-right: var(--sp-lg); }
   main .section.full-bleed > div { max-width: none; padding: 0; }
 
-  .icon { font-family: var(--font-icon) !important; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; speak: never; display: inline-block; }
+  /* Reserve 1em × 1em box so icon-font swap-in doesn't shift surrounding text. */
+  .icon { font-family: var(--font-icon) !important; font-style: normal; font-weight: normal; font-variant: normal; text-transform: none; line-height: 1; speak: never; display: inline-block; min-width: 1em; min-height: 1em; }
   .icon > img { width: 1em; height: 1em; vertical-align: -0.15em; display: inline-block; }
   .icon:has(> img)::before { content: none !important; }
   .icon-phone::before { content: "\e90b" !important; }
